@@ -11,19 +11,23 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=binh.nguyen@aalto.fi
 
-### Change to the work directory
+fullpath=$1
+material=$2
+
 echo ${SLURM_ARRAY_TASK_ID}
-cd /scratch/project_2004956/Binh/PH1GeneticLargeRVE/simulations/${SLURM_ARRAY_TASK_ID}
+
+### Change to the work directory
+cd ${fullpath}/${SLURM_ARRAY_TASK_ID}
 
 ulimit -s unlimited
 
 source /projappl/project_2004956/DAMASK/damask2.0.2/DAMASK/DAMASK_env.sh
 PATH=$PATH:/projappl/project_2004956/DAMASK/damask2.0.2/DAMASK/processing/post
-postResults.py --cr texture,f,p --time RVE_1_40_D_tensionX.spectralOut
-cd /scratch/project_2004956/Binh/PH1GeneticLargeRVE/simulations/${SLURM_ARRAY_TASK_ID}/postProc
+postResults.py --cr texture,f,p --time ${material}_tensionX.spectralOut
+cd ${fullpath}/${SLURM_ARRAY_TASK_ID}/postProc
 
 
-addCauchy.py RVE_1_40_D_tensionX.txt
-addStrainTensors.py --left --logarithmic RVE_1_40_D_tensionX.txt
-addMises.py -s Cauchy RVE_1_40_D_tensionX.txt
-addMises.py -e 'ln(V)' RVE_1_40_D_tensionX.txt
+addCauchy.py ${material}_tensionX.txt
+addStrainTensors.py --left --logarithmic ${material}_tensionX.txt
+addMises.py -s Cauchy ${material}_tensionX.txt
+addMises.py -e 'ln(V)' ${material}_tensionX.txt

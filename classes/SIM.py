@@ -5,37 +5,74 @@ import shutil
 from .preprocessing import *
 
 
-class SIM_DB:
+class SIM:
     def __init__(
         self,
         info=None
     ):
-        self.filename = 0
-        self.filename2params = {}
+        self.fileNumber = 0
+        self.fileNumber2params = {}
         self.simulations = {}
         self.strain = None
         self.info=info
     
-    def submit_array_jobs(self, info, start=None):
+    def submit_array_jobs(self, start=None):
         """
         Run the simulation and postprocessing.
-        Array jobs will submit multiple simulations up until filename:int.
+        Array jobs will submit multiple simulations from starting number up until fileNumber.
         code = 0 if success
         code = 1 if errors occurred
         """
+        material = self.info["material"]
+        CPLaw = self.info['CPLaw']
+        curveIndex = self.info['curveIndex']
+        algorithm = self.info['algorithm']
+        projectPath = self.info['projectPath']
+        fullpath = f"{projectPath}/simulations_{material}/{CPLaw}{curveIndex}_{algorithm}"
         if start:
-            code = os.system(f'sh array_runsim.sh {self.filename} {start}')
+            code = os.system(f'sh array_runsim.sh {self.fileNumber} {start} {fullpath} {material}')
         else:
-            code = os.system(f'sh array_runsim.sh {self.filename} {1}')
+            code = os.system(f'sh array_runsim.sh {self.fileNumber} {1} {fullpath} {material}')
         return code
     
     def make_new_job(self, params, path):
         material = self.info["material"]
-        shutil.copytree(f"./template_{material}/DB", path) # <== Path to DAMASK simulation setup folder.
-        self.filename2params[path] = params
-        self.edit_material_parameters(params, path)
+        CPLaw = self.info['CPLaw']
+        shutil.copytree(f"./template_{material}/{CPLaw}", path) # <== Path to DAMASK simulation setup folder.
+        self.fileNumber2params[path] = params
+        if self.info["CPLaw"] == "PH":
+            self.edit_material_parameters_PH(params, path)
+        if self.info["CPLaw"] == "DB":
+            self.edit_material_parameters_DB(params, path)
     
-    def edit_material_parameters(self, params, job_path):
+    # edit params for PH model of RVE_1_40_D
+    def edit_material_parameters_PH(self, params, job_path):
+        # Edit the material.config file.
+        def a_edit(num):
+            return f'a_slip                  {num}\n'
+
+        def h0_edit(num):
+            return f'h0_slipslip             {num}\n'
+
+        def tau0_edit(num):
+            return f'tau0_slip               {num}         # per family\n'
+
+        def tausat_edit(num):
+            return f'tausat_slip             {num}         # per family\n'
+
+        path = f'{job_path}/material.config'
+        with open(path) as f:
+            lines = f.readlines()
+
+        lines[33] = a_edit(params[0])
+        lines[34] = h0_edit(params[1])
+        lines[31] = tau0_edit(params[2])
+        lines[32] = tausat_edit(params[3])
+        with open(f'{job_path}/material.config', 'w') as f:
+            f.writelines(lines)
+
+    # edit params for PH model of RVE_1_40_D
+    def edit_material_parameters_DB(self, params, job_path):
         # Edit the material.config file.
         def dipole_edit(num):
             return f'Cedgedipmindistance {num}             # Adj. parameter controlling the minimum dipole distance [in b]\n'
@@ -76,14 +113,35 @@ class SIM_DB:
         material = self.info["material"]
         curveIndex = self.info['curveIndex']
         algorithm = self.info['algorithm']
+        CPLaw = self.info['CPLaw']
         n_params = self.get_grid()
+        fileNumber = str(self.fileNumber)
         for params in n_params:
-            self.filename += 1
-            path = f'./simulations_{material}/DB{curveIndex}_{algorithm}/{str(self.filename)}'
+            self.fileNumber += 1
+            path = f'./simulations_{material}/{CPLaw}{curveIndex}_{algorithm}/{fileNumber}'
             self.make_new_job(params, path)
         self.submit_array_jobs()
         self.strain = self.save_outputs()
 
+    def run_initial_simulations_manual(self, tupleParams):
+        """
+        Runs N simulations according to get_grid().
+        Used when initializing a response surface.
+        """
+        material = self.info["material"]
+        curveIndex = self.info['curveIndex']
+        algorithm = self.info['algorithm']
+        CPLaw = self.info['CPLaw']
+        n_params = tupleParams
+        fileNumber = str(self.fileNumber)
+        for params in n_params:
+            self.fileNumber += 1
+            path = f'./simulations_{material}/{CPLaw}{curveIndex}_{algorithm}/{fileNumber}'
+            self.make_new_job(params, path)
+        self.submit_array_jobs()
+        self.strain = self.save_outputs()
+    
+    
     def run_single_test(self, params):
         """
         Runs a single simulation with 'params'.
@@ -92,10 +150,13 @@ class SIM_DB:
         material = self.info["material"]
         curveIndex = self.info['curveIndex']
         algorithm = self.info['algorithm']
-        self.filename += 1
-        path = f'./simulations_{material}/DB{curveIndex}_{algorithm}/{str(self.filename)}'
+        CPLaw = self.info['CPLaw']
+        projectPath = self.info['projectPath']
+        self.fileNumber += 1
+        fileNumber = str(self.fileNumber)
+        path = f'./simulations_{material}/{CPLaw}{curveIndex}_{algorithm}/{fileNumber}'
         self.make_new_job(params, path)
-        self.submit_array_jobs(start=self.filename)
+        self.submit_array_jobs(start=self.fileNumber)
         self.save_single_output(path, params)
     
     def randrange_float(self, start, stop, step):
@@ -105,19 +166,16 @@ class SIM_DB:
     def get_grid(self):
         points = []
         np.random.seed(20)
-        for _ in range(self.initialSims):
-            dipole = round(self.randrange_float(self.param_range['dipole']['low'], self.param_range['dipole']['high'], self.param_range['dipole']['step']), 0)
-            islip = round(self.randrange_float(self.param_range['islip']['low'], self.param_range['islip']['high'], self.param_range['islip']['step']), 0)
-            omega = round(self.randrange_float(self.param_range['omega']['low'], self.param_range['omega']['high'], self.param_range['omega']['step']), 0)
-            p = round(self.randrange_float(self.param_range['p']['low'], self.param_range['p']['high'], self.param_range['p']['step']), 2)
-            q = round(self.randrange_float(self.param_range['q']['low'], self.param_range['q']['high'], self.param_range['q']['step']), 2)
-            tausol = round(self.randrange_float(self.param_range['tausol']['low'], self.param_range['tausol']['high'], self.param_range['tausol']['step']), 2)            
-            points.append((dipole, islip, omega, p, q, tausol))
+        for _ in range(self.info['initialSims']):    
+            candidateParam = []
+            for parameter in range(self.info['param_range']):
+                candidateParam.append(round(self.randrange_float(self.info['param_range'][parameter]['low'], self.info['param_range'][parameter]['high'], self.info['param_range'][parameter]['step']), self.info['param_range'][parameter]['round']))
+            points.append(tuple(candidateParam))
         return points
     
     def save_outputs(self):
         true_strains = []
-        for (path, params) in self.filename2params.items():
+        for (path, params) in self.fileNumber2params.items():
             path2txt = f'{path}/postProc/'
             files = [f for f in os.listdir(path2txt) if os.path.isfile(os.path.join(path2txt, f))]
             print("path2txt is:", path2txt)

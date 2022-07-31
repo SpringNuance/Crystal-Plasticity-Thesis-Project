@@ -12,7 +12,9 @@
 
 # Note: the parameters should be ordered alphabetically for Bayesian algorithm
 # If the initial_simulations.npy or simulations.npy file do not contain the data 
-# of the parameters alphabetically, please use rearrange.py file to fix it
+# of the parameters alphabetically, please use helpernpy.ipynb file to rearrange the 
+# order of parameters so that the parameters are in correct order. You can also use helper.npy
+# to see the contents of npy file
 
 # Please change for the paramater ranges below according to your range and step size.
 # if you need to use only one, just change one, such as PH1, and then go to optimize.py 
@@ -21,7 +23,7 @@
 # In other words, you need to change Phenomenological algorithm, Ph1 curve simulations,
 # PH1 curve genetic and PH1 curve Bayesian
 
-# Phenomenological algorithm
+# Phenomenological parameters
 # For simulations
 param_ranges_PH = [
 # PH1 curve
