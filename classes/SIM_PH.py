@@ -24,7 +24,7 @@ class SIM_PH:
         code = 1 if errors occurred
         """
         if start:
-            code = os.system(f'sh array_runsim.sh {self.filename} {start}')
+            code = os.system(f'sh array_runsim.sh {self.filename} {start} ')
         else:
             code = os.system(f'sh array_runsim.sh {self.filename} {1}')
         return code
