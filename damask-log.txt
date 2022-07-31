@@ -1,0 +1,282 @@
+
+ <<<+-  DAMASK_spectral  -+>>>
+
+ Roters et al., Computational Materials Science, 2018
+
+ Version: v2.0.2
+ Date:    14/07/2022
+ Time:    22:46:01
+
+ MPI processes:    4
+
+ <<<+-  DAMASK_interface init  -+>>>
+ Compiled with 
+ Intel(R) Fortran Intel(R) 64 Compiler for applications running on Intel(R) 64, 
+ Version 19.0.4.243 Build 20190416
+ With options  
+ -I/users/lizinan1/damask2.0.2/petsc-3.9.4/include -I/users/lizinan1/damask2.0.2
+ /petsc-3.9.4/linux-gnu-intel/include -I/users/lizinan1/damask2.0.2/fftw-3.3.8/d
+ eploy_avx/include -I/appl/spack/install-tree/intel-19.0.4/hpcx-mpi-2.4.0-keuon4
+ /include -I/appl/spack/install-tree/intel-19.0.4/hpcx-mpi-2.4.0-keuon4/lib -gnu
+ -prefix=/appl/spack/install-tree/gcc-4.8.5/gcc-8.3.0-qzmzn5/bin/ -Xlinker -rpat
+ h=/appl/spack/install-tree/gcc-4.8.5/gcc-8.3.0-qzmzn5/lib64 -DDAMASKVERSION="v2
+ .0.2" -DFLOAT=8 -DINT=4 -DPETSc -DSpectral -qopenmp -parallel -stand f08 -stand
+ ard-semantics -assume nostd_mod_proc_name -O2 -fpp -ftz -diag-disable 5268 -war
+ n declarations,general,usage,interfaces,ignore_loc,alignments,unused -real-size
+  64 -integer-size 32 -c -o CMakeFiles/DAMASK_INTERFACE.dir/spectral_interface.f
+ 90.o
+ Compiled on Feb 18 2020 at 09:56:19
+ 
+ Host name:              r01c02.bullx
+ User name:              nguyenb5
+ Command line call:      /projappl/project_2004956/DAMASK/damask2.0.2/DAMASK/bin/DAMASK_spectral -l tensionX.load -g RVE_1_40_D.geom
+ Geometry argument:      RVE_1_40_D.geom
+ Loadcase argument:      tensionX.load
+ Working directory:      /scratch/project_2004956/Binh/PHProjectLargeRVE/
+ Geometry file:          RVE_1_40_D.geom
+ Loadcase file:          tensionX.load
+ Solver job name:        RVE_1_40_D_tensionX
+ Append to result file:  F
+
+
+ <<<+-  prec init  -+>>>
+ Compiled with 
+ Intel(R) Fortran Intel(R) 64 Compiler for applications running on Intel(R) 64, 
+ Version 19.0.4.243 Build 20190416
+ With options  
+ -I/users/lizinan1/damask2.0.2/petsc-3.9.4/include -I/users/lizinan1/damask2.0.2
+ /petsc-3.9.4/linux-gnu-intel/include -I/users/lizinan1/damask2.0.2/fftw-3.3.8/d
+ eploy_avx/include -I/appl/spack/install-tree/intel-19.0.4/hpcx-mpi-2.4.0-keuon4
+ /include -I/appl/spack/install-tree/intel-19.0.4/hpcx-mpi-2.4.0-keuon4/lib -gnu
+ -prefix=/appl/spack/install-tree/gcc-4.8.5/gcc-8.3.0-qzmzn5/bin/ -Xlinker -rpat
+ h=/appl/spack/install-tree/gcc-4.8.5/gcc-8.3.0-qzmzn5/lib64 -DDAMASKVERSION="v2
+ .0.2" -DFLOAT=8 -DINT=4 -DPETSc -DSpectral -qopenmp -parallel -stand f08 -stand
+ ard-semantics -assume nostd_mod_proc_name -O2 -fpp -ftz -diag-disable 5268 -war
+ n declarations,general,usage,interfaces,ignore_loc,alignments,unused -real-size
+  64 -integer-size 32 -c -o CMakeFiles/PREC.dir/prec.f90.o
+ Compiled on Feb 18 2020 at 09:56:18
+ 
+ Bytes for pReal:      8
+ Bytes for pInt:       4
+ Bytes for pLongInt:   8
+
+ <<<+-  IO init  -+>>>
+ Current time: 22:46:01  
+ Compiled with 
+ Intel(R) Fortran Intel(R) 64 Compiler for applications running on Intel(R) 64, 
+ Version 19.0.4.243 Build 20190416
+ With options  
+ -I/users/lizinan1/damask2.0.2/petsc-3.9.4/include -I/users/lizinan1/damask2.0.2
+ /petsc-3.9.4/linux-gnu-intel/include -I/users/lizinan1/damask2.0.2/fftw-3.3.8/d
+ eploy_avx/include -I/appl/spack/install-tree/intel-19.0.4/hpcx-mpi-2.4.0-keuon4
+ /include -I/appl/spack/install-tree/intel-19.0.4/hpcx-mpi-2.4.0-keuon4/lib -gnu
+ -prefix=/appl/spack/install-tree/gcc-4.8.5/gcc-8.3.0-qzmzn5/bin/ -Xlinker -rpat
+ h=/appl/spack/install-tree/gcc-4.8.5/gcc-8.3.0-qzmzn5/lib64 -DDAMASKVERSION="v2
+ .0.2" -DFLOAT=8 -DINT=4 -DPETSc -DSpectral -qopenmp -parallel -stand f08 -stand
+ ard-semantics -assume nostd_mod_proc_name -O2 -fpp -ftz -diag-disable 5268 -war
+ n declarations,general,usage,interfaces,ignore_loc,alignments,unused -real-size
+  64 -integer-size 32 -c -o CMakeFiles/IO.dir/IO.f90.o
+ Compiled on Feb 18 2020 at 09:56:21
+ 
+
+ <<<+-  numerics init  -+>>>
+ Current time: 22:46:01  
+ Compiled with 
+ Intel(R) Fortran Intel(R) 64 Compiler for applications running on Intel(R) 64, 
+ Version 19.0.4.243 Build 20190416
+ With options  
+ -I/users/lizinan1/damask2.0.2/petsc-3.9.4/include -I/users/lizinan1/damask2.0.2
+ /petsc-3.9.4/linux-gnu-intel/include -I/users/lizinan1/damask2.0.2/fftw-3.3.8/d
+ eploy_avx/include -I/appl/spack/install-tree/intel-19.0.4/hpcx-mpi-2.4.0-keuon4
+ /include -I/appl/spack/install-tree/intel-19.0.4/hpcx-mpi-2.4.0-keuon4/lib -gnu
+ -prefix=/appl/spack/install-tree/gcc-4.8.5/gcc-8.3.0-qzmzn5/bin/ -Xlinker -rpat
+ h=/appl/spack/install-tree/gcc-4.8.5/gcc-8.3.0-qzmzn5/lib64 -DDAMASKVERSION="v2
+ .0.2" -DFLOAT=8 -DINT=4 -DPETSc -DSpectral -qopenmp -parallel -stand f08 -stand
+ ard-semantics -assume nostd_mod_proc_name -O2 -fpp -ftz -diag-disable 5268 -war
+ n declarations,general,usage,interfaces,ignore_loc,alignments,unused -real-size
+  64 -integer-size 32 -c -o CMakeFiles/NUMERICS.dir/numerics.f90.o
+ Compiled on Feb 18 2020 at 09:56:23
+ 
+ using standard values
+
+ relevantStrain:          1.0E-07
+ defgradTolerance:        1.0E-07
+ iJacoStiffness:                1
+ iJacoLpresiduum:               1
+ pert_Fg:                 1.0E-07
+ pert_method:                   1
+ nCryst:                       20
+ subStepMinCryst:         1.0E-03
+ subStepSizeCryst:        2.5E-01
+ stepIncreaseCryst:       1.5E+00
+ subStepSizeLp:           5.0E-01
+ subStepSizeLi:           5.0E-01
+ nState:                       10
+ nStress:                      40
+ rTol_crystalliteState:   1.0E-06
+ rTol_crystalliteStress:  1.0E-06
+ aTol_crystalliteStress:  1.0E-08
+ integrator:                    1        1
+ timeSyncing:                   F
+ use ping pong scheme:          T
+ unitlength:              1.0E+00
+
+ nHomog:                       20
+ subStepMinHomog:         1.0E-03
+ subStepSizeHomog:        2.5E-01
+ stepIncreaseHomog:       1.5E+00
+ nMPstate:                     10
+
+ aTol_RGC:                1.0E+04
+ rTol_RGC:                1.0E-03
+ aMax_RGC:                1.0E+10
+ rMax_RGC:                1.0E+02
+ perturbPenalty_RGC:      1.0E-07
+ relevantMismatch_RGC:    1.0E-05
+ viscosityrate_RGC:       1.0E+00
+ viscositymodulus_RGC:    0.0E+00
+ maxrelaxation_RGC:       1.0E+00
+ maxVolDiscrepancy_RGC:   1.0E-05
+ volDiscrepancyMod_RGC:   1.0E+12
+ discrepancyPower_RGC:    5.0E+00
+
+ random_seed:                           0
+
+ random seed will be generated!
+
+ charLength:              1.0E+00
+ residualStiffness:       1.0E-06
+ number of threads:             1
+
+ itmax:                       250
+ itmin:                         1
+ maxCutBack:                    3
+ maxStaggeredIter:             10
+ vacancyPolyOrder:             10
+ hydrogenPolyOrder:            10
+ err_struct_tolAbs:       1.0E-10
+ err_struct_tolRel:       1.0E-04
+ err_thermal_tolabs:      1.0E-02
+ err_thermal_tolrel:      1.0E-06
+ err_damage_tolabs:       1.0E-02
+ err_damage_tolrel:       1.0E-06
+ err_vacancyflux_tolabs:  1.0E-08
+ err_vacancyflux_tolrel:  1.0E-06
+ err_porosity_tolabs:     1.0E-02
+ err_porosity_tolrel:     1.0E-06
+ err_hydrogenflux_tolabs  1.0E-08
+ err_hydrogenflux_tolrel  1.0E-06
+ vacancyBoundPenalty:     1.0E+04
+ hydrogenBoundPenalty:    1.0E+04
+ continueCalculation:           F
+ memory_efficient:              T
+ divergence_correction:         2
+ spectral_derivative:    continuous
+ fftw_timelimit:                F
+ fftw_plan_mode:         FFTW_PATIENT
+ fftw_planner_flag:            32
+ update_gamma:                  F
+
+ err_stress_tolAbs:       1.0E+03
+ err_stress_tolRel:       1.0E-02
+ err_div_tolAbs:          1.0E-10
+ err_div_tolRel:          5.0E-04
+ err_curl_tolAbs:         1.0E-10
+ err_curl_tolRel:         5.0E-04
+ polarAlpha:              1.0E+00
+ polarBeta:               1.0E+00
+ spectral solver:        basicpetsc
+ PETSc_options:          -mech_snes_type ngmres -damage_snes_type ngmres -thermal_snes_type ngmres 
+
+ <<<+-  debug init  -+>>>
+ Current time: 22:46:01  
+ Compiled with 
+ Intel(R) Fortran Intel(R) 64 Compiler for applications running on Intel(R) 64, 
+ Version 19.0.4.243 Build 20190416
+ With options  
+ -I/users/lizinan1/damask2.0.2/petsc-3.9.4/include -I/users/lizinan1/damask2.0.2
+ /petsc-3.9.4/linux-gnu-intel/include -I/users/lizinan1/damask2.0.2/fftw-3.3.8/d
+ eploy_avx/include -I/appl/spack/install-tree/intel-19.0.4/hpcx-mpi-2.4.0-keuon4
+ /include -I/appl/spack/install-tree/intel-19.0.4/hpcx-mpi-2.4.0-keuon4/lib -gnu
+ -prefix=/appl/spack/install-tree/gcc-4.8.5/gcc-8.3.0-qzmzn5/bin/ -Xlinker -rpat
+ h=/appl/spack/install-tree/gcc-4.8.5/gcc-8.3.0-qzmzn5/lib64 -DDAMASKVERSION="v2
+ .0.2" -DFLOAT=8 -DINT=4 -DPETSc -DSpectral -qopenmp -parallel -stand f08 -stand
+ ard-semantics -assume nostd_mod_proc_name -O2 -fpp -ftz -diag-disable 5268 -war
+ n declarations,general,usage,interfaces,ignore_loc,alignments,unused -real-size
+  64 -integer-size 32 -c -o CMakeFiles/DEBUG.dir/debug.f90.o
+ Compiled on Feb 18 2020 at 09:56:27
+ 
+
+ <<<+-  math init  -+>>>
+ Current time: 22:46:01  
+ Compiled with 
+ Intel(R) Fortran Intel(R) 64 Compiler for applications running on Intel(R) 64, 
+ Version 19.0.4.243 Build 20190416
+ With options  
+ -I/users/lizinan1/damask2.0.2/petsc-3.9.4/include -I/users/lizinan1/damask2.0.2
+ /petsc-3.9.4/linux-gnu-intel/include -I/users/lizinan1/damask2.0.2/fftw-3.3.8/d
+ eploy_avx/include -I/appl/spack/install-tree/intel-19.0.4/hpcx-mpi-2.4.0-keuon4
+ /include -I/appl/spack/install-tree/intel-19.0.4/hpcx-mpi-2.4.0-keuon4/lib -gnu
+ -prefix=/appl/spack/install-tree/gcc-4.8.5/gcc-8.3.0-qzmzn5/bin/ -Xlinker -rpat
+ h=/appl/spack/install-tree/gcc-4.8.5/gcc-8.3.0-qzmzn5/lib64 -DDAMASKVERSION="v2
+ .0.2" -DFLOAT=8 -DINT=4 -DPETSc -DSpectral -qopenmp -parallel -stand f08 -stand
+ ard-semantics -assume nostd_mod_proc_name -O2 -fpp -ftz -diag-disable 5268 -war
+ n declarations,general,usage,interfaces,ignore_loc,alignments,unused -real-size
+  64 -integer-size 32 -c -o CMakeFiles/DAMASK_MATH.dir/math.f90.o
+ Compiled on Feb 18 2020 at 09:56:29
+ 
+ size  of random seed:     2
+ value of random seed:     1    1850303186
+ value of random seed:     2    1850303186
+ start of random sequence: 
+                           0.82262534458337
+                           0.93514205398367
+                           0.60217719719981
+                           0.16829270837124
+
+
+ <<<+-  FEsolving init  -+>>>
+ Current time: 22:46:01  
+ Compiled with 
+ Intel(R) Fortran Intel(R) 64 Compiler for applications running on Intel(R) 64, 
+ Version 19.0.4.243 Build 20190416
+ With options  
+ -I/users/lizinan1/damask2.0.2/petsc-3.9.4/include -I/users/lizinan1/damask2.0.2
+ /petsc-3.9.4/linux-gnu-intel/include -I/users/lizinan1/damask2.0.2/fftw-3.3.8/d
+ eploy_avx/include -I/appl/spack/install-tree/intel-19.0.4/hpcx-mpi-2.4.0-keuon4
+ /include -I/appl/spack/install-tree/intel-19.0.4/hpcx-mpi-2.4.0-keuon4/lib -gnu
+ -prefix=/appl/spack/install-tree/gcc-4.8.5/gcc-8.3.0-qzmzn5/bin/ -Xlinker -rpat
+ h=/appl/spack/install-tree/gcc-4.8.5/gcc-8.3.0-qzmzn5/lib64 -DDAMASKVERSION="v2
+ .0.2" -DFLOAT=8 -DINT=4 -DPETSc -DSpectral -qopenmp -parallel -stand f08 -stand
+ ard-semantics -assume nostd_mod_proc_name -O2 -fpp -ftz -diag-disable 5268 -war
+ n declarations,general,usage,interfaces,ignore_loc,alignments,unused -real-size
+  64 -integer-size 32 -c -o CMakeFiles/FEsolving.dir/FEsolving.f90.o
+ Compiled on Feb 18 2020 at 09:56:28
+ 
+
+ <<<+-  mesh init  -+>>>
+ Current time: 22:46:01  
+ Compiled with 
+ Intel(R) Fortran Intel(R) 64 Compiler for applications running on Intel(R) 64, 
+ Version 19.0.4.243 Build 20190416
+ With options  
+ -I/users/lizinan1/damask2.0.2/petsc-3.9.4/include -I/users/lizinan1/damask2.0.2
+ /petsc-3.9.4/linux-gnu-intel/include -I/users/lizinan1/damask2.0.2/fftw-3.3.8/d
+ eploy_avx/include -I/appl/spack/install-tree/intel-19.0.4/hpcx-mpi-2.4.0-keuon4
+ /include -I/appl/spack/install-tree/intel-19.0.4/hpcx-mpi-2.4.0-keuon4/lib -gnu
+ -prefix=/appl/spack/install-tree/gcc-4.8.5/gcc-8.3.0-qzmzn5/bin/ -Xlinker -rpat
+ h=/appl/spack/install-tree/gcc-4.8.5/gcc-8.3.0-qzmzn5/lib64 -DDAMASKVERSION="v2
+ .0.2" -DFLOAT=8 -DINT=4 -DPETSc -DSpectral -qopenmp -parallel -stand f08 -stand
+ ard-semantics -assume nostd_mod_proc_name -O2 -fpp -ftz -diag-disable 5268 -war
+ n declarations,general,usage,interfaces,ignore_loc,alignments,unused -real-size
+  64 -integer-size 32 -c -o CMakeFiles/MESH.dir/mesh.f90.o
+ Compiled on Feb 18 2020 at 09:56:33
+ 
+WARNING! There are options you set that were not used!
+WARNING! could be spelling mistake, etc!
+Option left: name:-g value: RVE_1_40_D.geom
+Option left: name:-l value: tensionX.load
+
+DAMASK terminated on:
+Date:               14/07/2022
+Time:               22:46:01

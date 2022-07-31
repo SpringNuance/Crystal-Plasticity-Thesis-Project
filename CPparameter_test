@@ -1,0 +1,18 @@
+
+Lmod is automatically replacing "intel/19.0.4" with "gcc/8.3.0".
+
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) hpcx-mpi/2.4.0     2) intel-mkl/2019.0.4
+
+
+Lmod is automatically replacing "gcc/8.3.0" with "pgi/19.7".
+
+
+Inactive Modules:
+  1) hpcx-mpi/2.4.0     2) intel-mkl/2019.0.4
+
+0
+0
+0
+0
