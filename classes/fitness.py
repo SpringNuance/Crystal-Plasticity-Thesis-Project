@@ -18,10 +18,9 @@ def D4(exp_stress, sim_stress, strainobj):
 
 def closeYield(exp_stress, sim_stress):
     expYieldStress = exp_stress[0]
-    simYieldStress = sim_stress[0]
-    upper = expYieldStress * 1.02
+    simYieldStress = sim_stress[0] 
+    upper = expYieldStress * 1.02 
     lower = expYieldStress * 0.98 
-     
     if simYieldStress >= lower and simYieldStress <= upper:
         return 0
     else:

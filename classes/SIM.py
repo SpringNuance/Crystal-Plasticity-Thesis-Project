@@ -95,17 +95,18 @@ class SIM:
         path = f'{job_path}/material.config'
         with open(path) as f:
             lines = f.readlines()
-        lines[66] = dipole_edit(params[0])
-        lines[62] = islip_edit(params[1])
-        lines[65] = omega_edit(params[2])
-        lines[58] = p_edit(params[3])
-        lines[59] = q_edit(params[4])
-        lines[49] = tausat_edit(params[5])
+        index = self.info["editLinesDB"]
+        lines[index[0]] = dipole_edit(params[0])
+        lines[index[1]] = islip_edit(params[1])
+        lines[index[2]] = omega_edit(params[2])
+        lines[index[3]] = p_edit(params[3])
+        lines[index[4]] = q_edit(params[4])
+        lines[index[5]] = tausat_edit(params[5])
 
         with open(f'{job_path}/material.config', 'w') as f:
             f.writelines(lines)
     
-    def run_initial_simulations(self):
+    def run_initial_simulations_auto(self):
         """
         Runs N simulations according to get_grid().
         Used when initializing a response surface.
@@ -115,9 +116,9 @@ class SIM:
         algorithm = self.info['algorithm']
         CPLaw = self.info['CPLaw']
         n_params = self.get_grid()
-        fileNumber = str(self.fileNumber)
         for params in n_params:
             self.fileNumber += 1
+            fileNumber = str(self.fileNumber)
             path = f'./simulations_{material}/{CPLaw}{curveIndex}_{algorithm}/{fileNumber}'
             self.make_new_job(params, path)
         self.submit_array_jobs()
@@ -132,10 +133,10 @@ class SIM:
         curveIndex = self.info['curveIndex']
         algorithm = self.info['algorithm']
         CPLaw = self.info['CPLaw']
-        n_params = tupleParams
-        fileNumber = str(self.fileNumber)
+        n_params = tupleParams[0 : self.info['initialSims']]
         for params in n_params:
             self.fileNumber += 1
+            fileNumber = str(self.fileNumber)
             path = f'./simulations_{material}/{CPLaw}{curveIndex}_{algorithm}/{fileNumber}'
             self.make_new_job(params, path)
         self.submit_array_jobs()

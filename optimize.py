@@ -10,10 +10,17 @@ from scipy.interpolate import interp1d
 from classes.SIM import *
 from classes.preprocessing import *
 from classes.fitness import *
-from classes.param_range import *
-from classes.rounding import *
+from classes.param_ranges import *
+from classes.helper import *
 from os import path
 import time
+
+###########################################################
+#                                                         #
+#         CRYSTAL PLASTICITY PARAMETER CALIBRATION        #
+#   Tools required: DAMASK and Finnish Supercomputer CSC  #
+#                                                         #
+###########################################################
 
 # -------------------------------------------------------------------
 #   Stage 0: Choose the CP model, the optimization algorithm, number of initial simulations,
@@ -45,17 +52,40 @@ material = "RVE_1_40_D"
 method = "auto"
 # method = "manual"
 
+if material == "RVE_1_40_D":
+    param_ranges = param_ranges_RVE_1_40_D
+    # These number are obtained from material.config files, where each number is the line number of the parameter minus 1
+    # For example, the line of the parameter alpha in RVE_1_40_D in the material.config file template is 34 => 33
+    # Lines of   alpha, h0, tau0, taucs 
+    editlinesPH = [33,  34,  31,   32]
+    # Lines of   dipole, islip, omega, p,  q, tausol
+    editLinesDB = [66,    62,    65,  58,  59,  49]
+    # This RVE is large so needs more nodes to run
+    nodes = 8
+elif material == "512grains512":
+    param_ranges = param_ranges_512grains512
+    # Lines of   alpha, h0, tau0, taucs 
+    editlinesPH = [54,  46,  36,   37]
+    # Lines of   dipole, islip, omega, p,  q, tausol
+    editLinesDB = [48,    44,    47,  40,  41,  31]
+    # This RVE is small so needs fewer nodes to run
+    nodes = 4
+
+param_range = param_ranges[CPLaw][curveIndex - 1] # param_range is used for SIM object
+param_range_no_round = param_range_no_round_func(param_range) # param_range_no_round is used to be fed to GA
+param_range_no_step = param_range_no_step_func(param_range_no_round) # param_range_no_step is used to be fed to BA
+print("param_range is:")
+print(param_range)
+print("param_no_round is:")
+print(param_range_no_round)
+print("param_range_no_step is:")
+print(param_range_no_step)
+
 if CPLaw == "PH":
-    param_range = param_ranges_PH[curveIndex - 1]
-    param_range_no_round = param_ranges_no_round_PH[curveIndex - 1]
-    param_range_no_step = param_ranges_no_step_PH[curveIndex - 1]
     numberOfParams = 4
     convertUnit = 1
 elif CPLaw == "DB":
     numberOfParams = 6
-    param_range = param_ranges_DB[curveIndex - 1]
-    param_range_no_round = param_ranges_no_round_DB[curveIndex - 1]
-    param_range_no_step = param_ranges_no_step_DB[curveIndex - 1]
     convertUnit = 1e-6 # In DAMASK simulation, stress unit is Pa instead of MPa
 
 print("Welcome to Crystal Plasticity Parameter Calibration")
@@ -79,7 +109,10 @@ info = {
     'curveIndex': curveIndex,
     'projectPath': projectPath,
     'algorithm': algorithm,
-    'material': material
+    'material': material,
+    'nodes': nodes, 
+    'editLinesPH': editlinesPH,
+    'editLinesDB': editLinesDB
 }
 sim = SIM(info)
 
@@ -114,14 +147,14 @@ if initial_simulations_completed:
     sim.fileNumber = len(sim.simulations)
 else: 
     # If we havent run the initial simulations
-    print("Running Initial Simulations...")
+    print("Running initial simulations...")
     if method == "auto":
-        sim.run_initial_simulations()
+        sim.run_initial_simulations_auto()
     elif method == "manual":
         manualParams = np.load(f'manualParams/{CPLaw}{curveIndex}.npy', allow_pickle=True).tolist()
         tupleParams = list(map(lambda x: tuple(x), manualParams))
         sim.run_initial_simulations_manual(tupleParams)
-    np.save('results_{material}/{CPLaw}{curveIndex}_{algorithm}/initial_simulations.npy', sim.simulations)
+    np.save(f'results_{material}/{CPLaw}{curveIndex}_{algorithm}/initial_simulations.npy', sim.simulations)
     print(f"Done. {len(sim.simulations)} simulations completed.")
 
 exp_curve = pd.read_csv(f'targets_{material}/{CPLaw}{curveIndex}.csv')   # <--- Target curve file path.
