@@ -1,0 +1,31 @@
+Putty commands: 
+
+login as: nguyenb5 <CSC username>
+
+password: <your CSC password> 
+
+### Going to your project folder 
+cd /scratch/project_2004956/Binh/DB1GeneticLargeRVE
+
+### Activate env python
+source damask_py/bin/activate
+
+### Install the required libraries. 
+### You only need to run this on the first time. 
+pip install -r requirements.txt
+
+### Running otimization. Please change optimize.py and param_ranges.py files
+### according to your configurations before running this command  
+python optimize.py
+
+### You can run this command to see your partitions and job submit limit, etc
+sacctmgr list user <CSC username> withassoc
+
+### To check your job queues:
+squeue -A <CSC username>
+
+### To cancel job files
+scancel <jobid>
+
+# you can run this to enter interactive nodes on CSC but it is not required to run optimize.py
+sinteractive -i

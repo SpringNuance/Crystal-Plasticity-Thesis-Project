@@ -12,7 +12,7 @@
 #SBATCH --mail-user=binh.nguyen@aalto.fi
  
 ### Change to the work directory
-cd /scratch/project_2004956/Binh/PH1GeneticLargeRVE/template
+cd /scratch/project_2004956/Binh/CrystalPlasticityProject
 
 ### load modules and execute 
 module load intel/19.0.4

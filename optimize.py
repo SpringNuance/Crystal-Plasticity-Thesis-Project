@@ -1,19 +1,16 @@
 # External libraries
 import pandas as pd
 import numpy as np
-import pygad
-import bayes_opt 
 from sklearn.neural_network import MLPRegressor
-from sklearn.metrics import mean_squared_error
-from scipy.interpolate import interp1d
 # Our classes
-from classes.SIM import *
-from classes.preprocessing import *
-from classes.fitness import *
-from classes.param_ranges import *
-from classes.helper import *
+from modules.SIM import *
+from modules.preprocessing import *
+from modules.fitness import *
+from modules.param_ranges import *
+from modules.helper import *
+from optimization.GA import *
+from optimization.BA import *
 from os import path
-import time
 
 ###########################################################
 #                                                         #
@@ -42,7 +39,8 @@ initialSims = 30 # Please change this
 curveIndex = 1 # Please change this
 
 # Type the project path folder
-projectPath = "/scratch/project_2004956/Binh/CrystalPlasticityProject"
+# projectPath = "/scratch/project_2004956/Binh/CrystalPlasticityProject"
+projectPath = "/scratch/project_2004956/Binh/DB1GeneticLargeRVE"
 
 # Type the material name
 material = "RVE_1_40_D"
@@ -54,39 +52,44 @@ method = "auto"
 
 if material == "RVE_1_40_D":
     param_ranges = param_ranges_RVE_1_40_D
+    default_yield_values = default_yield_RVE_1_40_D 
     # These number are obtained from material.config files, where each number is the line number of the parameter minus 1
     # For example, the line of the parameter alpha in RVE_1_40_D in the material.config file template is 34 => 33
     # Lines of   alpha, h0, tau0, taucs 
     editlinesPH = [33,  34,  31,   32]
     # Lines of   dipole, islip, omega, p,  q, tausol
     editLinesDB = [66,    62,    65,  58,  59,  49]
-    # This RVE is large so needs more nodes to run
-    nodes = 8
+    # This RVE is large so needs to run heavy job files
+    mode = "heavy"
 elif material == "512grains512":
     param_ranges = param_ranges_512grains512
+    default_yield_values = default_yield_512grains512 
     # Lines of   alpha, h0, tau0, taucs 
     editlinesPH = [54,  46,  36,   37]
     # Lines of   dipole, islip, omega, p,  q, tausol
     editLinesDB = [48,    44,    47,  40,  41,  31]
-    # This RVE is small so needs fewer nodes to run
-    nodes = 4
+    # This RVE is small so needs to run light job files
+    mode = "light"
 
 param_range = param_ranges[CPLaw][curveIndex - 1] # param_range is used for SIM object
 param_range_no_round = param_range_no_round_func(param_range) # param_range_no_round is used to be fed to GA
 param_range_no_step = param_range_no_step_func(param_range_no_round) # param_range_no_step is used to be fed to BA
-print("param_range is:")
-print(param_range)
-print("param_no_round is:")
-print(param_range_no_round)
-print("param_range_no_step is:")
-print(param_range_no_step)
+default_yield_value = default_yield_values[CPLaw][curveIndex - 1]
+# print("param_range is:")
+# print(param_range)
+# print("param_no_round is:")
+# print(param_range_no_round)
+# print("param_range_no_step is:")
+# print(param_range_no_step)
 
 if CPLaw == "PH":
     numberOfParams = 4
     convertUnit = 1
+    # tau0 is the main param affecting yield stress in PH model
 elif CPLaw == "DB":
     numberOfParams = 6
-    convertUnit = 1e-6 # In DAMASK simulation, stress unit is Pa instead of MPa
+    convertUnit = 1e-6 # In DAMASK simulation, stress unit is Pa instead of MPa in DB model
+    # p, q, tausol is the main param affecting yield stress in DB model
 
 print("Welcome to Crystal Plasticity Parameter Calibration")
 print("The configurations you have chosen: ")
@@ -96,10 +99,14 @@ print("The target curve:", target_curve)
 print("Number of fitting parameters in", CPLaw, "law:", numberOfParams)
 print("Range and step of parameters: ")
 print(param_range_no_round)
+print("Default values of hardening parameters for yield stress optimization:")
+print(default_yield_value)
 print("Number of initial simulations:", initialSims)
 print("Chosen optimization algorithm:", algorithm)
 print("Material under study:",material)
 print("The optimization process is", method)
+print("The path to your main project folder is: ")
+print(projectPath)
 # Initialize the SIM object.
 info = {
     'param_range': param_range,
@@ -110,7 +117,7 @@ info = {
     'projectPath': projectPath,
     'algorithm': algorithm,
     'material': material,
-    'nodes': nodes, 
+    'mode': mode, 
     'editLinesPH': editlinesPH,
     'editLinesDB': editLinesDB
 }
@@ -118,6 +125,7 @@ sim = SIM(info)
 
 # -------------------------------------------------------------------
 #   Stage 1: Running initial simulations/Loading progress and preparing data
+#   Manual variables to be changed: initial_simulations_completed, dropUpperEnd
 # -------------------------------------------------------------------
 
 print("--------------------------------")
@@ -131,8 +139,8 @@ if initial_simulations_completed:
     # initial_simulations.npy contains only the initial simulations data in a dictionary
     # simulations.npy contains all the initial simulations plus the iterations. 
     # If you want to see the content of these npy file, please use the file helpernpy.ipynb
-    if path.exists("results_{material}/{CPLaw}{curveIndex}_{algorithm}/simulations.npy"):
-        full_data = np.load('results_{material}/{CPLaw}{curveIndex}_{algorithm}/simulations.npy', allow_pickle=True)
+    if path.exists(f"results_{material}/{CPLaw}{curveIndex}_{algorithm}/simulations.npy"):
+        full_data = np.load(f'results_{material}/{CPLaw}{curveIndex}_{algorithm}/simulations.npy', allow_pickle=True)
         full_data = full_data.tolist()
         sim.simulations = full_data
         print(f"{len(initial_data)} initial simulations completed.")
@@ -146,33 +154,48 @@ if initial_simulations_completed:
     sim.strain = np.array(allstrains).mean(axis=0)
     sim.fileNumber = len(sim.simulations)
 else: 
+    # If you have run initial simulations and completed preprocessing, but CSC fails at postprocessing stage, 
+    # you can continue to run postprocessing by setting preprocessing_completed to True. 
+    # For normal process, just set it to False
+    preprocessing_completed = False # Please change this
     # If we havent run the initial simulations
     print("Running initial simulations...")
-    if method == "auto":
-        sim.run_initial_simulations_auto()
-    elif method == "manual":
-        manualParams = np.load(f'manualParams/{CPLaw}{curveIndex}.npy', allow_pickle=True).tolist()
-        tupleParams = list(map(lambda x: tuple(x), manualParams))
-        sim.run_initial_simulations_manual(tupleParams)
+    if preprocessing_completed: 
+        sim.run_initial_simulations_post()
+    else:
+        if method == "auto":
+            sim.run_initial_simulations_auto()
+        elif method == "manual":
+            manualParams = np.load(f'manualParams_{material}/{CPLaw}{curveIndex}.npy', allow_pickle=True).tolist()
+            tupleParams = list(map(lambda x: tuple(x), manualParams))
+            sim.run_initial_simulations_manual(tupleParams)
     np.save(f'results_{material}/{CPLaw}{curveIndex}_{algorithm}/initial_simulations.npy', sim.simulations)
     print(f"Done. {len(sim.simulations)} simulations completed.")
 
 exp_curve = pd.read_csv(f'targets_{material}/{CPLaw}{curveIndex}.csv')   # <--- Target curve file path.
 exp_stress = exp_curve.iloc[:,0] # Getting the experimental stress
 exp_strain = exp_curve.iloc[:,1] # Getting the experimental strain
-interpolatedFunction = interp1d(exp_strain, exp_stress) # interpolated function fits the experimental data
 # The common strain points of experimental and simulated curves will be lying between 0.002 (strain of yield stress)
 # and the maximum strain value of experimental curve 
 x_min, x_max = 0.002, exp_strain.max() 
 # prune will be a list of True and False, which indicate which index of the strain to choose from
-prune = np.logical_and(sim.strain > x_min, sim.strain < x_max)
+prune = np.logical_and(sim.strain >= x_min, sim.strain <= x_max)
 # sim.strain is the average strains of the initial simulations 
 # Therefore sim.strain is the same for all simulated curves. Now it is pruned
 sim.strain = sim.strain[prune]
-# exp_target is now the refined experimental stress values for comparison such as fitness and MSE, 
-# after being pruned and interpolated at the pruned simulated stress values
-exp_target = interpolatedFunction(sim.strain).reshape(-1) * convertUnit
-
+# If the error: ValueError: A value in x_new is above the interpolation range occurs,
+# it is due to the the strain value of some simulated curves is higher than the last stress value
+# of the interpolated strain so it lies outside the range. You can increase the dropUpperEnd number to reduce the
+# range of the simulated curves so their stress can be interpolated
+dropUpperEnd = 2 # Please change this
+# interpolatedStrain will be the interpolating strain for all curves (experimental, initial simulation and iterated simulation)
+interpolatedStrain = sim.strain[:-dropUpperEnd]
+# print(interpolatedStrain)
+# for (strain, stress) in sim.simulations.values():
+#     print(strain[-1])
+# exp_target is now the refined interpolated experimental stress values for comparison 
+exp_target = interpolatedStressFunction(exp_stress, exp_strain, interpolatedStrain).reshape(-1) * convertUnit
+# print(exp_target)
 print("Experimental and simulated curves preparation completed")
 
 # -------------------------------------------------------------------
@@ -180,7 +203,7 @@ print("Experimental and simulated curves preparation completed")
 # -------------------------------------------------------------------
 
 print("--------------------------------")
-print("Stage 2: Initialize and train the RSM (MLP)")
+print("Stage 2: Initialize and train the RSM (MLP) with the initial data")
 
 # -----------------------------------------
 #  Initialize Response Surface Module (MLP)
@@ -188,264 +211,73 @@ print("Stage 2: Initialize and train the RSM (MLP)")
 # MLP with 1 hidden layer of 15 nodes. 
 mlp = MLPRegressor(hidden_layer_sizes=[15], solver='adam', max_iter=100000, shuffle=True)
 print("Fitting response surface...")
-# Input layer of four parameters
+# Input layer of fitting parameters (4 for PH and 6 for DB)
 X = np.array(list(sim.simulations.keys()))
-# Input layer of the size of the pruned stresses
-y = np.array([stress[prune] * convertUnit for (_, stress) in sim.simulations.values()])
+# Output layer of the size of the interpolated stresses
+y = np.array([interpolatedStressFunction(simStress, simStrain, interpolatedStrain) * convertUnit for (simStrain, simStress) in sim.simulations.values()])
 # Train the MLP
 mlp.fit(X,y)
+# Example of last parameter 
+# print(X[-1])
+# print(type(X))
+# print(X.shape)
+# Example of stress values at last parameter
+# print(y[-1])
+# print(type(y))
+# print(y.shape)
 print("MLP training finished")
 
-# -------------------------------------------------------------------
-#   Stage 3: Initialize and run optimization algorithm
-# -------------------------------------------------------------------
 
-print("--------------------------------")
-print("Stage 3: Initialize and run optimization algorithm")
-if algorithm == "GA":
-    # -------------------------------
-    #      Initialize GA
-    # -------------------------------
+# -----------------------------------------------------------------------
+if algorithm == "GA": 
+    # Set yield_stress_optimization_completed to False if you havent finished optimizing the yield stress yet
+    # If you have obtained the optimized yield stress parameters already and has a saved file partial_result.npy, you can continue
+    yield_stress_optimization_completed = False # Please change this 
+    if yield_stress_optimization_completed:
+        partialResult = np.load(f'results_{material}/{CPLaw}{curveIndex}_{algorithm}/partial_result.npy', allow_pickle=True)
+        partialResult = partialResult.tolist()
+        # -------------------------------------------------------------------
+        #   Stage 4: Optimize the hardening parameters with GA
+        # -------------------------------------------------------------------
+        print("--------------------------------")
+        print("Stage 4: Optimize the hardening parameters with genetic algorithm")
+        fullResult = HardeningOptimizationGA(CPLaw, material, param_range_no_round, mlp, exp_target, interpolatedStrain, sim, param_range, curveIndex, algorithm, convertUnit, numberOfParams, partialResult)
+    else:
+        # -------------------------------------------------------------------
+        #   Stage 3: Optimize the yield stress parameters with GA
+        # -------------------------------------------------------------------
+        print("--------------------------------")
+        print("Stage 3: Optimize the yield stress parameters with genetic algorithm")
+        partialResult = YieldStressOptimizationGA(CPLaw, material, param_range_no_round, default_yield_value, mlp, exp_target, interpolatedStrain, sim, param_range, curveIndex, algorithm, convertUnit, numberOfParams)
+        # -------------------------------------------------------------------
+        #   Stage 4: Optimize the hardening parameters with GA
+        # -------------------------------------------------------------------
 
-    # Initialize fitness function
-    def fitness(solution, solution_idx):
-        predicted_sim_stress = mlp.predict(solution.reshape((1,numberOfParams))).reshape(-1)
-        chromosomefit = chromosomefitness(exp_target, predicted_sim_stress, sim.strain, w1, w2, w3, w4)
-        fitnessScore = 1/chromosomefit
-        return fitnessScore
+        print("--------------------------------")
+        print("Stage 4: Optimize the hardening parameters with genetic algorithm")
+        fullResult = HardeningOptimizationGA(CPLaw, material, param_range_no_round, mlp, exp_target, interpolatedStrain, sim, param_range, curveIndex, algorithm, convertUnit, numberOfParams, partialResult)
 
-    # Initialize GA Optimizer
-    num_generations = 100 # Number of generations.
-    num_parents_mating = 500 # Number of solutions to be selected as parents in the mating pool.
-    sol_per_pop = 1000 # Number of solutions in the population.
-    if CPLaw == "PH":
-        gene_space = [param_range_no_round['alpha'], param_range_no_round['h0'], param_range_no_round['tau'], param_range_no_round['taucs']]
-    elif CPLaw == "DB":
-        gene_space = [param_range_no_round['dipole'], param_range_no_round['islip'], param_range_no_round['omega'], param_range_no_round['p'], param_range_no_round['q'], param_range_no_round['tausol']]
-    num_genes = numberOfParams
-    last_fitness = 0
-    keep_parents = 1
-    crossover_type = "single_point"
-    mutation_type = "random"
-    mutation_percent_genes = 25
-    
-    def on_generation(ga_instance):
-        global last_fitness
-        generation = ga_instance.generations_completed
-        fitness = ga_instance.best_solution(pop_fitness=ga_instance.last_generation_fitness)[1]
-        change = ga_instance.best_solution(pop_fitness=ga_instance.last_generation_fitness)[1] - last_fitness
-        last_fitness = ga_instance.best_solution(pop_fitness=ga_instance.last_generation_fitness)[1]
-
-    ga_instance = pygad.GA(num_generations=num_generations,
-                        num_parents_mating=num_parents_mating,
-                        sol_per_pop=sol_per_pop,
-                        num_genes=num_genes,
-                        fitness_func=fitness,
-                        on_generation=on_generation,
-                        gene_space=gene_space,
-                        crossover_type=crossover_type,
-                        mutation_type=mutation_type,
-                        mutation_percent_genes=mutation_percent_genes)
-    
-    # Helper functions
-    def output_results(ga_instance):
-        # Returning the details of the best solution in a dictionary.
-        solution, solution_fitness, solution_idx = ga_instance.best_solution(ga_instance.last_generation_fitness)
-        best_solution_generation = ga_instance.best_solution_generation
-        fitness = 1/solution_fitness
-        if CPLaw == "PH":
-            solution_dict = {
-                'alpha': solution[0],
-                'h0': solution[1],
-                'tau0': solution[2],
-                'taucs': solution[3]
-            }
-        elif CPLaw == "DB":
-            solution_dict = {
-                'dipole': solution[0],
-                'islip': solution[1],
-                'omega': solution[2],
-                'p': solution[3],
-                'q': solution[4], 
-                'tausol': solution[5]
-            }
-        values = (solution_dict, solution_fitness, solution_idx, best_solution_generation, fitness)
-        keys = ("solution", "solution_fitness", "solution_idx", "best_solution_generation", "fitness")
-        output = dict(zip(keys, values))
-        return output
-    
-    def print_results(results):
-        print(f"Parameters of the best solution : {results['solution']}")
-        print(f"Fitness value of the best solution = {results['solution_fitness']}")
-        print(f"Index of the best solution : {results['solution_idx']}")
-        print(f"Fitness given by the MLP estimate: {results['fitness']}")
-        print(f"Best fitness value reached after {results['best_solution_generation']} generations.")
-    
-    # -------------------------------
-    #      End of GA
-    # -------------------------------
-
+# -----------------------------------------------------------------------
 elif algorithm == "BA":
-    # -------------------------------
-    #      Initialize BA
-    # -------------------------------
-
-    # Initialize surrogate function
-    if CPLaw == "PH":
-        def surrogate(alpha, h0, tau, taucs):
-            params = {
-                'alpha': alpha,
-                'h0': h0,
-                'tau': tau,
-                'taucs': taucs
-            }
-            # Rounding is required because BA only deals with continuous values.
-            # Rounding help BA probe at discrete parameters with correct step size
-            alpha, h0, tau, taucs = round_params(params, param_range)
-            solution = np.array([alpha, h0, tau, taucs])
-            predicted_sim_stress = mlp.predict(solution.reshape((1, numberOfParams))).reshape(-1)
-            chromosomefit = chromosomefitness(exp_target, predicted_sim_stress, sim.strain, w1, w2, w3, w4)
-            fitnessScore = 1/chromosomefit
-            return fitnessScore
-    elif CPLaw == "DB":
-        def surrogate(dipole, islip, omega, p, q, tausol):
-            params = {
-                'dipole': dipole,
-                'islip': islip,
-                'omega': omega,
-                'p': p,
-                'q': q, 
-                'tausol': tausol
-            }
-            # Rounding is required because BA only deals with continuous values.
-            # Rounding help BA probe at discrete parameters with correct step size
-            dipole, islip, omega, p, q, tausol = round_params(params, param_range)
-            solution = np.array([dipole, islip, omega, p, q, tausol])
-            predicted_sim_stress = mlp.predict(solution.reshape((1, numberOfParams))).reshape(-1)
-            chromosomefit = chromosomefitness(exp_target, predicted_sim_stress, sim.strain, w1, w2, w3, w4)
-            fitnessScore = 1/chromosomefit
-            return fitnessScore
-
-    # Initialize BA Optimizer
-    ba_instance = bayes_opt.BayesianOptimization(f = surrogate,
-                                    pbounds = param_range_no_step, verbose = 2,
-                                    random_state = 4)
-
-    def optimize_process(X, y):    
-        yFitness = list(map(lambda sim_stress: 1/chromosomefitness(exp_target, sim_stress.reshape(-1), sim.strain, w1, w2, w3, w4), y))
-        pairs = list(zip(X, yFitness))
-
-        for pair in pairs:
-            ba_instance.register(
-                params=pair[0],
-                target=pair[1],
-            )
-        
-        # There are two ways of using BA: the sequential or automatic way. 
-        # To use sequential way, comment out automatic way, from init_points = ... until after the loop
-        # TO use automatic way, comment out sequential way, from iterations = ... until after the loop
-        # Sequential way  
-        '''
-        iterations = 100
-        utility = bayes_opt.UtilityFunction(kind="ucb", kappa=2.5, xi = 1)
-        for _ in range(iterations):
-            next_point = ba_instance.suggest(utility)
-            target = surrogate(**next_point)
-            ba_instance.register(params=next_point, target=target)
-        '''
-        # Automatic way
-        init_points = 15
-        iterations = 15
-        for i in range(10):
-            ba_instance.maximize(
-                init_points = init_points, 
-                n_iter = iterations,    
-                # What follows are GP regressor parameters
-                alpha=1,
-                n_restarts_optimizer=5)
-            ba_instance.set_gp_params(normalize_y=True)    
-        results = output_results(ba_instance)
-        return results
-
-    # Helper functions
-    def output_results(ba_instance):
-        # Returning the details of the best solution in a dictionary.
-        solution = round_params(ba_instance.max["params"])
-        solution_fitness = ba_instance.max["target"]
-        fitness = 1/solution_fitness
-        values = (solution, solution_fitness, fitness)
-        keys = ("solution", "solution_fitness", "fitness")
-        output = dict(zip(keys, values))
-        return output
-
-    def print_results(results):
-        print(f"Parameters of the best solution : {results['solution']}")
-        print(f"Fitness value of the best solution = {results['solution_fitness']}")
-        print(f"Fitness given by the MLP estimate: {results['fitness']}")
+    # -------------------------------------------------------------------
+    #   Stage 3: Optimize the yield stress parameters with BA
+    # -------------------------------------------------------------------
     
-    # -------------------------------
-    #      End of BA
-    # -------------------------------
-
-if algorithm == "GA":
-    print("Optimizing using GA...")
-    ga_instance.run()
-    results = output_results(ga_instance)
-    while tuple(results['solution']) in sim.simulations.keys():
-        print("Parameters already probed. Algorithm need to run again to obtain new parameters")
-        ga_instance.run()
-        results = output_results(ga_instance)
-    print_results(results)
-elif algorithm == "BA":
-    print("Optimizing using BA...")
-    results = optimize_process(X, y)
-    while tuple(results['solution']) in sim.simulations.keys():
-        print("Parameters already probed. Algorithm need to run again to obtain new parameters")
-        results = optimize_process(X, y)
-    print_results(results)
-
-# Wait a moment so that you can check the parameters predicted by the algorithm
-time.sleep(10)
-
-# -------------------------------------------------------------------
-#   Stage 4: Running iterative optimization loop
-# -------------------------------------------------------------------
-
-print("--------------------------------")
-print("Stage 4: Running iterative optimization loop")
-
-# Iterative optimization.
-while not insideFivePercentStd(exp_target, y[-1]) or not closeYield(exp_target, y[-1]):
-    sim.run_single_test(tuple(results['solution']))
-    np.save(f'results/{CPLaw}{curveIndex}_{algorithm}/simulations.npy', sim.simulations)
-    y = np.array([stress[prune] * convertUnit for (_, stress) in sim.simulations.values()])
-    X = np.array(list(sim.simulations.keys()))
-    mlp.fit(X,y)
-    loss = mean_squared_error(y[-1], exp_target)
-    print(f"MSE LOSS = {loss}")
     print("--------------------------------")
-    if algorithm == "GA":
-        print("Optimizing using GA...")
-        ga_instance.run()
-        results = output_results(ga_instance)
-        while tuple(results['solution']) in sim.simulations.keys():
-            print("Parameters already probed. Algorithm need to run again to obtain new parameters")
-            ga_instance.run()
-            results = output_results(ga_instance)
-        print_results(results)
-    elif algorithm == "BA":
-        print("Optimizing using BA...")
-        results = optimize_process(X, y)
-        while tuple(results['solution']) in sim.simulations.keys():
-            print("Parameters already probed. Algorithm need to run again to obtain new parameters")
-            results = optimize_process(X, y)
-        print_results(results)
-    # Wait a moment so that you can check the parameters predicted by the algorithm
-    time.sleep(60)
+    print("Stage 3: Optimize the yield stress parameters with Bayesian algorithm")
+    partialResult = YieldStressOptimizationBA(CPLaw, param_range_no_round, mlp, exp_target, interpolatedStrain, sim, param_range, curveIndex, algorithm, convertUnit, numberOfParams)
+    
+    # -------------------------------------------------------------------
+    #   Stage 3: Optimize the hardening parameters with GA
+    # -------------------------------------------------------------------
+
+    print("--------------------------------")
+    print("Stage 4: Optimize the hardening parameters with Bayesian algorithm")
+    fullResult = HardeningOptimizationBA()
 
 print("--------------------------------")
 print("Stage 5: CP Parameter Calibration completed")
-print("Final parameter solution: ", results['solution'])
-print(f"MSE of the final solution : {loss}")
+print("The final parameter solution is: ")
+print(fullResult)
 
 # python optimize.py

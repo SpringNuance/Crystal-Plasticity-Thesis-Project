@@ -1,18 +1,18 @@
 #!/bin/bash -l
 # created: Feb 14, 2020 2:22 PM
 # author: lizinan1
-#SBATCH --account=project_2001353
-#SBATCH --partition=large
-#SBATCH --time=24:00:00
-#SBATCH -N 8
+#SBATCH --account=project_2004956
+#SBATCH --partition=small
+#SBATCH --time=6:00:00
+#SBATCH --ntasks=8
 #SBATCH --cpus-per-task=1
-#SBATCH -J DB0
-#SBATCH -e DB0
+#SBATCH -J CPparameter_test
+#SBATCH -e CPparameter_test
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user=rongfei.juan@aalto.fi
+#SBATCH --mail-user=binh.nguyen@aalto.fi
  
 ### Change to the work directory
-cd /scratch/project_2001353/Rongfei/DBlinear/0/1calibrated/55q1.5
+cd /scratch/project_2004956/Binh/CrystalPlasticityProject
 
 ### load modules and execute 
 module load intel/19.0.4
