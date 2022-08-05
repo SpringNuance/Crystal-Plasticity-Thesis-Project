@@ -26,7 +26,7 @@ from os import path
 
 # Type "PH" for phenomenological law
 # Type "DB" for dislocation-based law
-CPLaw = "PH" # Please change this
+CPLaw = "DB" # Please change this
 
 # Type "GA" for genetic algorithm
 # Type "BA" for Bayesian algorithm
@@ -49,6 +49,14 @@ material = "RVE_1_40_D"
 # Type automatic or manual methods
 method = "auto"
 # method = "manual"
+
+# Setting the weights of the four hardening objective functions:  
+weights = {"w1": 0.9, "w2": 0.025, "w3": 0.05, "w4": 0.025}
+# Define the yield stress deviation percentage for the first stage of yield stress optimization
+yieldStressDev = 2
+
+# Define the hardening deviation percentage for the second stage of hardening optimization
+hardeningDev = 5
 
 if material == "RVE_1_40_D":
     param_ranges = param_ranges_RVE_1_40_D
@@ -82,30 +90,45 @@ default_yield_value = default_yield_values[CPLaw][curveIndex - 1]
 # print("param_range_no_step is:")
 # print(param_range_no_step)
 
+# The default stress unit is in MPa
 if CPLaw == "PH":
     numberOfParams = 4
+    # In PH model, the unit is in MPa so no need to convert unit
     convertUnit = 1
-    # tau0 is the main param affecting yield stress in PH model
+    
 elif CPLaw == "DB":
     numberOfParams = 6
+    # In DB model, the unit is in Pa so it needs to be converted to MPa
     convertUnit = 1e-6 # In DAMASK simulation, stress unit is Pa instead of MPa in DB model
-    # p, q, tausol is the main param affecting yield stress in DB model
 
-print("Welcome to Crystal Plasticity Parameter Calibration")
-print("The configurations you have chosen: ")
-print("CP Law:", CPLaw)
+# tau0 is the main param affecting yield stress in PH model
+# p, q, tausol is the main param affecting yield stress in DB model
+print("\nWelcome to Crystal Plasticity Parameter Calibration")
+print("\nThe configurations you have chosen: ")
+print("\nMaterial under study:", material)
+if CPLaw == "PH":
+    law = "phenomenological law"
+elif CPLaw == "DB":
+    law = "dislocation-based law"
+print("\nCP Law:", law)
 target_curve = f"{CPLaw}{curveIndex}"
-print("The target curve:", target_curve)
-print("Number of fitting parameters in", CPLaw, "law:", numberOfParams)
-print("Range and step of parameters: ")
+print("\nThe target curve:", target_curve)
+print("\nNumber of fitting parameters in", CPLaw, "law:", numberOfParams)
+print("\nRange and step of parameters: ")
 print(param_range_no_round)
-print("Default values of hardening parameters for yield stress optimization:")
+print("\nDefault values of hardening parameters for yield stress optimization:")
 print(default_yield_value)
-print("Number of initial simulations:", initialSims)
-print("Chosen optimization algorithm:", algorithm)
-print("Material under study:",material)
-print("The optimization process is", method)
-print("The path to your main project folder is: ")
+print("\nNumber of initial simulations:", initialSims)
+print("\nChosen optimization algorithm:", algorithm)
+print("\nThe optimization process is", method)
+yieldStressDevPercent = f"{yieldStressDev}%"
+print("\nThe yield stress deviation percentage is", yieldStressDevPercent)
+hardeningDevPercent = f"{hardeningDev}%"
+print("\nThe hardening deviation percentage is", hardeningDevPercent)
+print("\nThe weights of w1, w2, w3, w4 of hardening objective functions are:")
+print(weights)
+print("\nThe optimization process is", method)
+print("\nThe path to your main project folder is: ")
 print(projectPath)
 # Initialize the SIM object.
 info = {
@@ -209,14 +232,13 @@ print("Stage 2: Initialize and train the RSM (MLP) with the initial data")
 #  Initialize Response Surface Module (MLP)
 # -----------------------------------------
 # MLP with 1 hidden layer of 15 nodes. 
-mlp = MLPRegressor(hidden_layer_sizes=[15], solver='adam', max_iter=100000, shuffle=True)
+
 print("Fitting response surface...")
 # Input layer of fitting parameters (4 for PH and 6 for DB)
 X = np.array(list(sim.simulations.keys()))
 # Output layer of the size of the interpolated stresses
 y = np.array([interpolatedStressFunction(simStress, simStrain, interpolatedStrain) * convertUnit for (simStrain, simStress) in sim.simulations.values()])
 # Train the MLP
-mlp.fit(X,y)
 # Example of last parameter 
 # print(X[-1])
 # print(type(X))
@@ -225,10 +247,55 @@ mlp.fit(X,y)
 # print(y[-1])
 # print(type(y))
 # print(y.shape)
+inputSize = X.shape[1]
+outputSize = y.shape[1]
+print("Input layer size is:", inputSize)
+print("Output layer size is:", outputSize)
+# print(outputSize)
+hiddenLayerSize = round((2/3) * inputSize + outputSize)
+print("Hidden layer size is:", hiddenLayerSize)
+mlp = MLPRegressor(hidden_layer_sizes=[hiddenLayerSize], solver='adam', max_iter=100000, shuffle=True)
+mlp.fit(X,y)
+
 print("MLP training finished")
 
-
+# ----------------------------------------------------------------------
+# Optimization stage
 # -----------------------------------------------------------------------
+yieldStressOptimizeInfo = {
+    "material": material,
+    "CPLaw": CPLaw,
+    "curveIndex": curveIndex,
+    "yieldStressDev": yieldStressDev,
+    "algorithm": algorithm,
+    "convertUnit": convertUnit,
+    "numberOfParams": numberOfParams,
+    "param_range": param_range,
+    "param_range_no_round": param_range_no_round,
+    "exp_target": exp_target,
+    "default_yield_value": default_yield_value,
+    "interpolatedStrain": interpolatedStrain,
+    "sim": sim,
+    "mlp": mlp,
+}
+
+hardeningOptimizeInfo = {
+    "material": material,
+    "CPLaw": CPLaw,
+    "curveIndex": curveIndex,
+    "hardeningDev": hardeningDev,
+    "algorithm": algorithm,
+    "weights": weights,
+    "convertUnit": convertUnit,
+    "numberOfParams": numberOfParams,
+    "param_range": param_range,
+    "param_range_no_round": param_range_no_round,
+    "exp_target": exp_target,
+    "interpolatedStrain": interpolatedStrain,
+    "sim": sim,
+    "mlp": mlp,
+}
+
 if algorithm == "GA": 
     # Set yield_stress_optimization_completed to False if you havent finished optimizing the yield stress yet
     # If you have obtained the optimized yield stress parameters already and has a saved file partial_result.npy, you can continue
@@ -241,21 +308,22 @@ if algorithm == "GA":
         # -------------------------------------------------------------------
         print("--------------------------------")
         print("Stage 4: Optimize the hardening parameters with genetic algorithm")
-        fullResult = HardeningOptimizationGA(CPLaw, material, param_range_no_round, mlp, exp_target, interpolatedStrain, sim, param_range, curveIndex, algorithm, convertUnit, numberOfParams, partialResult)
+        hardeningOptimizeInfo["partialResult"] = partialResult
+        fullResult = HardeningOptimizationGA(hardeningOptimizeInfo)
     else:
         # -------------------------------------------------------------------
         #   Stage 3: Optimize the yield stress parameters with GA
         # -------------------------------------------------------------------
         print("--------------------------------")
         print("Stage 3: Optimize the yield stress parameters with genetic algorithm")
-        partialResult = YieldStressOptimizationGA(CPLaw, material, param_range_no_round, default_yield_value, mlp, exp_target, interpolatedStrain, sim, param_range, curveIndex, algorithm, convertUnit, numberOfParams)
+        partialResult = YieldStressOptimizationGA(yieldStressOptimizeInfo)
         # -------------------------------------------------------------------
         #   Stage 4: Optimize the hardening parameters with GA
         # -------------------------------------------------------------------
-
         print("--------------------------------")
         print("Stage 4: Optimize the hardening parameters with genetic algorithm")
-        fullResult = HardeningOptimizationGA(CPLaw, material, param_range_no_round, mlp, exp_target, interpolatedStrain, sim, param_range, curveIndex, algorithm, convertUnit, numberOfParams, partialResult)
+        hardeningOptimizeInfo["partialResult"] = partialResult
+        fullResult = HardeningOptimizationGA(hardeningOptimizeInfo)
 
 # -----------------------------------------------------------------------
 elif algorithm == "BA":

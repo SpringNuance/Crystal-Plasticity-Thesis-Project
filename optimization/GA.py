@@ -77,7 +77,22 @@ def print_resultsFullGA(results):
 last_fitness = 0
 keep_parents = 1
 
-def YieldStressOptimizationGA(CPLaw, material, param_range_no_round, default_yield_value, mlp, exp_target, interpolatedStrain, sim, param_range, curveIndex, algorithm, convertUnit, numberOfParams):
+def YieldStressOptimizationGA(yieldStressOptimizeInfo):
+    material = yieldStressOptimizeInfo["material"]
+    CPLaw = yieldStressOptimizeInfo["CPLaw"]
+    curveIndex = yieldStressOptimizeInfo["curveIndex"] 
+    yieldStressDev = yieldStressOptimizeInfo["yieldStressDev"] 
+    algorithm = yieldStressOptimizeInfo["algorithm"] 
+    convertUnit = yieldStressOptimizeInfo["convertUnit"] 
+    numberOfParams = yieldStressOptimizeInfo["numberOfParams"] 
+    param_range = yieldStressOptimizeInfo["param_range"] 
+    param_range_no_round = yieldStressOptimizeInfo["param_range_no_round"] 
+    exp_target = yieldStressOptimizeInfo["exp_target"] 
+    default_yield_value = yieldStressOptimizeInfo["default_yield_value"] 
+    interpolatedStrain = yieldStressOptimizeInfo["interpolatedStrain"] 
+    sim = yieldStressOptimizeInfo["sim"] 
+    mlp = yieldStressOptimizeInfo["mlp"] 
+    
     # -------------------------------
     #      Initialize GA
     # -------------------------------
@@ -117,10 +132,10 @@ def YieldStressOptimizationGA(CPLaw, material, param_range_no_round, default_yie
                         mutation_type="random",
                         mutation_num_genes=1)
 
-    print("The experimental yield stress is: ", exp_target[0])
+    print("The experimental yield stress is: ", exp_target[0], "MPa")
     rangeSimYield = (exp_target[0]* 0.98, exp_target[0] * 1.02) 
-    print("The simulated yield stress should lie in the range of", rangeSimYield)
-    print("Maximum deviation:", exp_target[0] * 0.02)
+    print("The simulated yield stress should lie in the range of", rangeSimYield, "MPa")
+    print("Maximum deviation:", exp_target[0] * 0.02, "MPa")
     print("#### Iteration", sim.fileNumber, "####")
     partialResult = list(sim.simulations.keys())[-1]
     partialResult = tupleOrListToDict(partialResult, CPLaw)
@@ -130,12 +145,12 @@ def YieldStressOptimizationGA(CPLaw, material, param_range_no_round, default_yie
     print("The initial candidate simulated yield stress: ")
     print(y[-1][0])
     # Iterative optimization.
-    while not checkCloseYield(exp_target, y[-1]):
+    while not insideYieldStressDev(exp_target, y[-1], yieldStressDev):
         print("#### Iteration", sim.fileNumber + 1, "####")
         ga_instance.run()
         partialResults = output_resultsPartialGA(ga_instance, param_range, default_yield_value, CPLaw)
         while tuple(partialResults['solution']) in sim.simulations.keys():
-            print("Parameters already probed. Algorithm need to run again to obtain new parameters")
+            print("Parameters already probed. Algorithm needs to run again to obtain new parameters")
             ga_instance.run()
             partialResults = output_resultsPartialGA(ga_instance, param_range, default_yield_value, CPLaw)
         print_resultsPartialGA(partialResults)
@@ -157,10 +172,30 @@ def YieldStressOptimizationGA(CPLaw, material, param_range_no_round, default_yie
     np.save(f'results_{material}/{CPLaw}{curveIndex}_{algorithm}/partial_result.npy', partialResult)
     return partialResult
 
-def HardeningOptimizationGA(CPLaw, material, param_range_no_round, mlp, exp_target, interpolatedStrain, sim, param_range, curveIndex, algorithm, convertUnit, numberOfParams, partialResult):
+def HardeningOptimizationGA(hardeningOptimizeInfo):
     # -------------------------------
     #      Initialize GA
     # -------------------------------
+    material = hardeningOptimizeInfo["material"]
+    CPLaw = hardeningOptimizeInfo["CPLaw"]
+    curveIndex = hardeningOptimizeInfo["curveIndex"] 
+    hardeningDev = hardeningOptimizeInfo["hardeningDev"] 
+    algorithm = hardeningOptimizeInfo["algorithm"] 
+    weights = hardeningOptimizeInfo["weights"]
+    convertUnit = hardeningOptimizeInfo["convertUnit"] 
+    numberOfParams = hardeningOptimizeInfo["numberOfParams"] 
+    param_range = hardeningOptimizeInfo["param_range"] 
+    param_range_no_round = hardeningOptimizeInfo["param_range_no_round"] 
+    exp_target = hardeningOptimizeInfo["exp_target"] 
+    interpolatedStrain = hardeningOptimizeInfo["interpolatedStrain"] 
+    sim = hardeningOptimizeInfo["sim"] 
+    mlp = hardeningOptimizeInfo["mlp"] 
+    partialResult = hardeningOptimizeInfo["partialResult"] 
+    w1 = weights["w1"]
+    w2 = weights["w2"]
+    w3 = weights["w3"]
+    w4 = weights["w4"]
+
     if CPLaw == "PH":
         gene_space = [param_range_no_round['alpha'], param_range_no_round['h0'], param_range_no_round['taucs']]
         numberOfHardeningParams = 3
@@ -202,12 +237,12 @@ def HardeningOptimizationGA(CPLaw, material, param_range_no_round, mlp, exp_targ
     print(partialResult)
     y = np.array([interpolatedStressFunction(simStress, simStrain, interpolatedStrain) * convertUnit for (simStrain, simStress) in sim.simulations.values()])
     # Iterative optimization.
-    while not insideFivePercentStd(exp_target, y[-1]):
+    while not insideHardeningDev(exp_target, y[-1], hardeningDev):
         print("#### Iteration", sim.fileNumber + 1, "####")
         ga_instance.run()
         fullResults = output_resultsFullGA(ga_instance, param_range, partialResult, CPLaw)
         while tuple(fullResults['solution']) in sim.simulations.keys():
-            print("Parameters already probed. Algorithm need to run again to obtain new parameters")
+            print("Parameters already probed. Algorithm needs to run again to obtain new parameters")
             ga_instance.run()
             fullResults = output_resultsFullGA(ga_instance, param_range, partialResult, CPLaw)
         print_resultsFullGA(fullResults)
@@ -221,14 +256,11 @@ def HardeningOptimizationGA(CPLaw, material, param_range_no_round, mlp, exp_targ
         mlp.fit(X, y)
         loss = sqrt(mean_squared_error(y[-1], exp_target))
         print(f"RMSE LOSS = {loss}")
-        print("--------------------------------")
-        # Wait a moment so that you can check the parameters predicted by the algorithm
-        time.sleep(30)
-        print("--------------------------------")
-        print("Hardening parameters optimization completed")
-        print("The full parameter solution is: ")
-        print(fullResult)
-        print("Succeeded iteration:", sim.fileNumber)
-        np.save(f'results_{material}/{CPLaw}{curveIndex}_{algorithm}/full_result.npy', fullResult)
+    print("--------------------------------")
+    print("Hardening parameters optimization completed")
+    print("The full parameter solution is: ")
+    print(fullResult)
+    print("Succeeded iteration:", sim.fileNumber)
+    np.save(f'results_{material}/{CPLaw}{curveIndex}_{algorithm}/full_result.npy', fullResult)
     return fullResult
 

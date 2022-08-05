@@ -1,0 +1,230 @@
+login as: nguyenb5
+nguyenb5@puhti.csc.fi's password:
+Last login: Thu Aug  4 18:03:10 2022 from dzc096yhbbxsg8ng-cp2y-3.rev.dnainterne                                                                                                             t.fi
+┌─ Welcome ───────────────────────────────────────────────────────────────────┐
+│         CSC - Tieteen tietotekniikan keskus - IT Center for Science         │
+│            ____        __    __  _                                          │
+│           / __ \__  __/ /_  / /_(_)   - -  -   -                            │
+│          / /_/ / / / / __ \/ __/ /   - -  -   -                             │
+│         / ____/ /_/ / / / / /_/ /   - -  -   -                              │
+│        /_/    \__,_/_/ /_/\__/_/   - -  -   -                               │
+│                                                                             │
+│      Puhti.csc.fi - Atos BullSequana X400 - 682 CPU nodes - 80 GPU nodes    │
+├─ Contact ───────────────────────────────────────────────────────────────────┤
+│ Servicedesk : 09-457 2821, servicedesk@csc.fi   Switchboard : 09-457 2001   │
+├─ User Guide ────────────────────────────────────────────────────────────────┤
+│ https://docs.csc.fi                                                         │
+├─ Manage my account ─────────────────────────────────────────────────────────┤
+│ https://my.csc.fi/                                                          │
+├─ Billing ───────────────────────────────────────────────────────────────────┤
+│ Billing has changed significantly from Sisu/Taito. CPU, GPU, Memory, local  │
+│ disk and lustre scratch space are all billed. See for details:              │
+│ https://docs.csc.fi/accounts/billing/                                       │
+├─ Software ──────────────────────────────────────────────────────────────────┤
+│ Available modules can be listed with command: module avail and module spider│
+├─ Main Partitions ───────────────────────────────────────────────────────────┤
+│   small       : 1-40 cores    3 days max runtime                            │
+│   large       : 2-1040 cores  3 days max runtime                            │
+│   hugemem     : 1-160 cores   3 days max runtime                            │
+│   longrun     : 1-40 cores   14 days max runtime                            │
+│   gpu         : 1-80 GPUs     3 days max runtime                            │
+│                                                                             │
+│ See https://docs.csc.fi/computing/running/batch-job-partitions/             │
+├─ Storage ───────────────────────────────────────────────────────────────────┤
+│ In Puhti there are three main disk areas:                                   │
+│   home     Personal home folder                                             │
+│   projappl Per project folder where applications and libraries can be stored│
+│   scratch  Per project folder for running jobs. Files are removed           │
+│            after 90 days (not yet activated).                               │
+│                                                                             │
+│ Run csc-workspaces to see your folders and quotas                           │
+│ See https://docs.csc.fi/computing/disk/ for details                         │
+├─ News ──────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  2019-11-25: 90-day /scratch cleaning is not active yet, we'll inform       │
+│              users later with more detailed information when it's activated.│
+│                                                                             │
+│  2020-11-19: Puhti outgoing internet traffic is coming from new addresses,  │
+│              puhti-nat-1.csc.fi and puhti-nat-2.csc.fi                      │
+│                                                                             │
+│  2021-10-13: Limits of the interactive partition have been increased.       │
+│              Max two jobs, 8 cores, 76 GiB memory and 720 GiB of NVMe.      │
+│                                                                             │
+│  2021-10-18: An easy-to-use web interface for Puhti is now open for beta    │
+│              test use at https://www.puhti.csc.fi. User documentation at    │
+│              https://docs.csc.fi/computing/webinterface                     │
+│                                                                             │
+│  2022-06-28: Fast NVMe drives has been added to multiple node types, it can │
+│              improve IO-intensive job performance a lot.                    │
+│              https://docs.csc.fi/support/whats-new/                         │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+cd /scratch/project_2004956/Binh/PH3GeneticLargeRVE
+source damask_py/bin/activate
+python optimize.py[nguyenb5@puhti-login2 ~]$ cd /scratch/project_2004956/Binh/PH                                                                                                             3GeneticLargeRVE
+[nguyenb5@puhti-login2 PH3GeneticLargeRVE]$ source damask_py/bin/activate
+(damask_py) [nguyenb5@puhti-login2 PH3GeneticLargeRVE]$ python optimize.py
+Welcome to Crystal Plasticity Parameter Calibration
+The configurations you have chosen:
+CP Law: PH
+The target curve: PH3
+Number of fitting parameters in PH law: 4
+Range and step of parameters:
+{'alpha': {'low': 0.1, 'high': 0.9, 'step': 0.1}, 'h0': {'low': 500, 'high': 150                                                                                                             0, 'step': 50}, 'tau0': {'low': 10, 'high': 50, 'step': 1}, 'taucs': {'low': 20,                                                                                                              'high': 300, 'step': 1}}
+Default values of hardening parameters for yield stress optimization:
+{'alpha': 0.5, 'h0': 800, 'taucs': 200}
+Number of initial simulations: 30
+Chosen optimization algorithm: GA
+Material under study: RVE_1_40_D
+The optimization process is auto
+The path to your main project folder is:
+/scratch/project_2004956/Binh/PH3GeneticLargeRVE
+--------------------------------
+Stage 1: Running initial simulations/Loading progress and preparing data
+30 initial simulations completed.
+No additional simulations completed.
+Experimental and simulated curves preparation completed
+--------------------------------
+Stage 2: Initialize and train the RSM (MLP) with the initial data
+Fitting response surface...
+MLP training finished
+--------------------------------
+Stage 3: Optimize the yield stress parameters with genetic algorithm
+The experimental yield stress is:  79.14993330122302
+The simulated yield stress should lie in the range of (77.56693463519855, 80.732                                                                                                             93196724748)
+Maximum deviation: 1.5829986660244604
+#### Iteration 30 ####
+The initial candidate partial result:
+{'alpha': 0.5, 'h0': 350, 'tau0': 10, 'taucs': 237}
+The initial candidate simulated yield stress:
+28.29988812197012
+#### Iteration 31 ####
+Parameters of the best partial solution : {'alpha': 0.5, 'h0': 800, 'tau0': 30,                                                                                                              'taucs': 200}
+Fitness value of the best solution = 56.603445017446646
+Index of the best solution : 0
+Fitness given by the MLP estimate: 0.017666769216816647
+Submitted batch job 12666198
+path2txt is: ./simulations_RVE_1_40_D/PH3_GA/31/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+The simulated yield stress:
+79.52907125519648
+--------------------------------
+Yield stress parameters optimization completed
+The partial parameter solution is:
+{'alpha': 0.5, 'h0': 800, 'tau0': 30, 'taucs': 200}
+Succeeded iteration: 31
+
+--------------------------------
+Stage 4: Optimize the hardening parameters with genetic algorithm
+The partial result and also initial candidate full result:
+{'alpha': 0.5, 'h0': 800, 'tau0': 30, 'taucs': 200}
+#### Iteration 32 ####
+Parameters of the best full solution : {'alpha': 0.4, 'h0': 850, 'tau0': 30, 'ta                                                                                                             ucs': 92}
+Fitness value of the best solution = 103.21686007955516
+Index of the best solution : 0
+Fitness given by the MLP estimate: 0.00968833966882196
+Submitted batch job 12666441
+path2txt is: ./simulations_RVE_1_40_D/PH3_GA/32/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+RMSE LOSS = 8.744231682407603
+--------------------------------
+#### Iteration 33 ####
+Parameters of the best full solution : {'alpha': 0.3, 'h0': 800, 'tau0': 30, 'ta                                                                                                             ucs': 90}
+Fitness value of the best solution = 131.5539543621644
+Index of the best solution : 0
+Fitness given by the MLP estimate: 0.0076014438702999955
+Submitted batch job 12666630
+
+
+path2txt is: ./simulations_RVE_1_40_D/PH3_GA/33/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+RMSE LOSS = 7.512720668737806
+--------------------------------
+#### Iteration 34 ####
+Parameters of the best full solution : {'alpha': 0.4, 'h0': 800, 'tau0': 30, 'taucs': 91}
+Fitness value of the best solution = 130.2223039589852
+Index of the best solution : 0
+Fitness given by the MLP estimate: 0.007679176067372912
+Submitted batch job 12666829
+
+
+path2txt is: ./simulations_RVE_1_40_D/PH3_GA/34/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+RMSE LOSS = 6.4496638094161085
+--------------------------------
+#### Iteration 35 ####
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+
+#### Iteration 35 ####
+Parameters of the best full solution : {'alpha': 0.4, 'h0': 650, 'tau0': 30, 'taucs': 89}
+Fitness value of the best solution = 39.99102271430667
+Index of the best solution : 0
+Fitness given by the MLP estimate: 0.02500561206308567
+Submitted batch job 12672096
+path2txt is: ./simulations_RVE_1_40_D/PH3_GA/35/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+RMSE LOSS = 3.1261716330210585
+--------------------------------

@@ -1,0 +1,263 @@
+login as: nguyenb5
+nguyenb5@puhti.csc.fi's password:
+Last login: Thu Aug  4 15:03:04 2022 from dzc096yhbbxsg8ng-cp2y-3.rev.dnainterne                                                                                                             t.fi
+┌─ Welcome ───────────────────────────────────────────────────────────────────┐
+│         CSC - Tieteen tietotekniikan keskus - IT Center for Science         │
+│            ____        __    __  _                                          │
+│           / __ \__  __/ /_  / /_(_)   - -  -   -                            │
+│          / /_/ / / / / __ \/ __/ /   - -  -   -                             │
+│         / ____/ /_/ / / / / /_/ /   - -  -   -                              │
+│        /_/    \__,_/_/ /_/\__/_/   - -  -   -                               │
+│                                                                             │
+│      Puhti.csc.fi - Atos BullSequana X400 - 682 CPU nodes - 80 GPU nodes    │
+├─ Contact ───────────────────────────────────────────────────────────────────┤
+│ Servicedesk : 09-457 2821, servicedesk@csc.fi   Switchboard : 09-457 2001   │
+├─ User Guide ────────────────────────────────────────────────────────────────┤
+│ https://docs.csc.fi                                                         │
+├─ Manage my account ─────────────────────────────────────────────────────────┤
+│ https://my.csc.fi/                                                          │
+├─ Billing ───────────────────────────────────────────────────────────────────┤
+│ Billing has changed significantly from Sisu/Taito. CPU, GPU, Memory, local  │
+│ disk and lustre scratch space are all billed. See for details:              │
+│ https://docs.csc.fi/accounts/billing/                                       │
+├─ Software ──────────────────────────────────────────────────────────────────┤
+│ Available modules can be listed with command: module avail and module spider│
+├─ Main Partitions ───────────────────────────────────────────────────────────┤
+│   small       : 1-40 cores    3 days max runtime                            │
+│   large       : 2-1040 cores  3 days max runtime                            │
+│   hugemem     : 1-160 cores   3 days max runtime                            │
+│   longrun     : 1-40 cores   14 days max runtime                            │
+│   gpu         : 1-80 GPUs     3 days max runtime                            │
+│                                                                             │
+│ See https://docs.csc.fi/computing/running/batch-job-partitions/             │
+├─ Storage ───────────────────────────────────────────────────────────────────┤
+│ In Puhti there are three main disk areas:                                   │
+│   home     Personal home folder                                             │
+│   projappl Per project folder where applications and libraries can be stored│
+│   scratch  Per project folder for running jobs. Files are removed           │
+│            after 90 days (not yet activated).                               │
+│                                                                             │
+│ Run csc-workspaces to see your folders and quotas                           │
+│ See https://docs.csc.fi/computing/disk/ for details                         │
+├─ News ──────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  2019-11-25: 90-day /scratch cleaning is not active yet, we'll inform       │
+│              users later with more detailed information when it's activated.│
+│                                                                             │
+│  2020-11-19: Puhti outgoing internet traffic is coming from new addresses,  │
+│              puhti-nat-1.csc.fi and puhti-nat-2.csc.fi                      │
+│                                                                             │
+│  2021-10-13: Limits of the interactive partition have been increased.       │
+│              Max two jobs, 8 cores, 76 GiB memory and 720 GiB of NVMe.      │
+│                                                                             │
+│  2021-10-18: An easy-to-use web interface for Puhti is now open for beta    │
+│              test use at https://www.puhti.csc.fi. User documentation at    │
+│              https://docs.csc.fi/computing/webinterface                     │
+│                                                                             │
+│  2022-06-28: Fast NVMe drives has been added to multiple node types, it can │
+│              improve IO-intensive job performance a lot.                    │
+│              https://docs.csc.fi/support/whats-new/                         │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+cd /scratch/project_2004956/Binh/PH1GeneticLargeRVE
+source damask_py/bin/activate
+python optimize.py[nguyenb5@puhti-login1 ~]$ cd /scratch/project_2004956/Binh/PH                                                                                                             1GeneticLargeRVE
+[nguyenb5@puhti-login1 PH1GeneticLargeRVE]$ source damask_py/bin/activate
+(damask_py) [nguyenb5@puhti-login1 PH1GeneticLargeRVE]$ python optimize.py
+Welcome to Crystal Plasticity Parameter Calibration
+The configurations you have chosen:
+CP Law: PH
+The target curve: PH1
+Number of fitting parameters in PH law: 4
+Range and step of parameters:
+{'alpha': {'low': 1.1, 'high': 3, 'step': 0.1}, 'h0': {'low': 100, 'high': 5000,                                                                                                              'step': 150}, 'tau0': {'low': 20, 'high': 100, 'step': 1}, 'taucs': {'low': 100                                                                                                             , 'high': 1000, 'step': 10}}
+Default values of hardening parameters for yield stress optimization:
+{'alpha': 1.5, 'h0': 800, 'taucs': 200}
+Number of initial simulations: 30
+Chosen optimization algorithm: GA
+Material under study: RVE_1_40_D
+The optimization process is auto
+The path to your main project folder is:
+/scratch/project_2004956/Binh/PH1GeneticLargeRVE
+--------------------------------
+Stage 1: Running initial simulations/Loading progress and preparing data
+30 initial simulations completed.
+7 additional simulations completed.
+Total: 37 simulations completed.
+Experimental and simulated curves preparation completed
+--------------------------------
+Stage 2: Initialize and train the RSM (MLP) with the initial data
+Fitting response surface...
+MLP training finished
+--------------------------------
+Stage 3: Optimize the yield stress parameters with genetic algorithm
+The experimental yield stress is:  130.2637694374846
+The simulated yield stress should lie in the range of (127.65849404873491, 132.8                                                                                                             690448262343)
+Maximum deviation: 2.6052753887496922
+#### Iteration 37 ####
+The initial candidate partial result:
+{'alpha': 57.0, 'h0': 120.0, 'tau0': 550.0, 'taucs': 1.1}
+The initial candidate simulated yield stress:
+134.505361267491
+#### Iteration 38 ####
+Parameters of the best partial solution : {'alpha': 1.5, 'h0': 850, 'tau0': 99,                                                                                                              'taucs': 200}
+Fitness value of the best solution = 0.0016528019935368214
+Index of the best solution : 0
+Fitness given by the MLP estimate: 605.0331521322199
+Submitted batch job 12665707
+path2txt is: ./simulations_RVE_1_40_D/PH1_GA/38/postProc/
+files is:
+[]
+Traceback (most recent call last):
+  File "optimize.py", line 251, in <module>
+    partialResult = YieldStressOptimizationGA(CPLaw, material, param_range_no_ro                                                                                                             und, default_yield_value, mlp, exp_target, interpolatedStrain, sim, param_range,                                                                                                              curveIndex, algorithm, convertUnit, numberOfParams)
+  File "/scratch/project_2004956/Binh/PH1GeneticLargeRVE/optimization/GA.py", li                                                                                                             ne 145, in YieldStressOptimizationGA
+    sim.run_single_test(tuple(partialResults['solution']))
+  File "/scratch/project_2004956/Binh/PH1GeneticLargeRVE/modules/SIM.py", line 2                                                                                                             74, in run_single_test
+    self.save_single_output(simPath, params)
+  File "/scratch/project_2004956/Binh/PH1GeneticLargeRVE/modules/SIM.py", line 3                                                                                                             14, in save_single_output
+    processed = preprocess(f'{path2txt}/{files[0]}')
+IndexError: list index out of range
+(damask_py) [nguyenb5@puhti-login1 PH1GeneticLargeRVE]$ python optimize.py
+Welcome to Crystal Plasticity Parameter Calibration
+The configurations you have chosen:
+CP Law: PH
+The target curve: PH1
+Number of fitting parameters in PH law: 4
+Range and step of parameters:
+{'alpha': {'low': 1.1, 'high': 3, 'step': 0.1}, 'h0': {'low': 100, 'high': 5000,                                                                                                              'step': 150}, 'tau0': {'low': 20, 'high': 100, 'step': 1}, 'taucs': {'low': 100                                                                                                             , 'high': 1000, 'step': 10}}
+Default values of hardening parameters for yield stress optimization:
+{'alpha': 1.5, 'h0': 800, 'taucs': 200}
+Number of initial simulations: 30
+Chosen optimization algorithm: GA
+Material under study: RVE_1_40_D
+The optimization process is auto
+The path to your main project folder is:
+/scratch/project_2004956/Binh/PH1GeneticLargeRVE
+--------------------------------
+Stage 1: Running initial simulations/Loading progress and preparing data
+30 initial simulations completed.
+No additional simulations completed.
+Experimental and simulated curves preparation completed
+--------------------------------
+Stage 2: Initialize and train the RSM (MLP) with the initial data
+Fitting response surface...
+MLP training finished
+--------------------------------
+Stage 3: Optimize the yield stress parameters with genetic algorithm
+The experimental yield stress is:  130.2637694374846
+The simulated yield stress should lie in the range of (127.65849404873491, 132.8                                                                                                             690448262343)
+Maximum deviation: 2.6052753887496922
+#### Iteration 30 ####
+The initial candidate partial result:
+{'alpha': 3.0, 'h0': 820, 'tau0': 58, 'taucs': 700}
+The initial candidate simulated yield stress:
+140.87915200100556
+#### Iteration 31 ####
+Parameters of the best partial solution : {'alpha': 1.5, 'h0': 850, 'tau0': 52,                                                                                                              'taucs': 200}
+Fitness value of the best solution = 3.3966175415702735
+Index of the best solution : 0
+Fitness given by the MLP estimate: 0.29441053864948685
+Submitted batch job 12666140
+path2txt is: ./simulations_RVE_1_40_D/PH1_GA/31/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+The simulated yield stress:
+126.4784211848654
+#### Iteration 32 ####
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters of the best partial solution : {'alpha': 1.5, 'h0': 850, 'tau0': 51,                                                                                                              'taucs': 200}
+Fitness value of the best solution = 0.6201748008877691
+Index of the best solution : 0
+Fitness given by the MLP estimate: 1.612448617016554
+Submitted batch job 12666420
+
+path2txt is: ./simulations_RVE_1_40_D/PH1_GA/32/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+The simulated yield stress:
+124.31519134655991
+#### Iteration 33 ####
+Parameters of the best partial solution : {'alpha': 1.5, 'h0': 850, 'tau0': 54, 'taucs': 200}
+Fitness value of the best solution = 0.9100422445228422
+Index of the best solution : 0
+Fitness given by the MLP estimate: 1.0988500874751423
+Submitted batch job 12666600
+
+path2txt is: ./simulations_RVE_1_40_D/PH1_GA/33/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+The simulated yield stress:
+130.80284344274565
+--------------------------------
+Yield stress parameters optimization completed
+The partial parameter solution is:
+{'alpha': 1.5, 'h0': 850, 'tau0': 54, 'taucs': 200}
+Succeeded iteration: 33
+
+--------------------------------
+Stage 4: Optimize the hardening parameters with genetic algorithm
+The partial result and also initial candidate full result:
+{'alpha': 1.5, 'h0': 850, 'tau0': 54, 'taucs': 200}
+#### Iteration 34 ####
+Parameters of the best full solution : {'alpha': 2.5, 'h0': 1150, 'tau0': 54, 'taucs': 170}
+Fitness value of the best solution = 22.26574151722301
+Index of the best solution : 0
+Fitness given by the MLP estimate: 0.044912045674583956
+Submitted batch job 12666800
+path2txt is: ./simulations_RVE_1_40_D/PH1_GA/34/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+RMSE LOSS = 12.515073151187316
+--------------------------------
+#### Iteration 35 ####
+Parameters already probed. Algorithm need to run again to obtain new parameters
+Parameters of the best full solution : {'alpha': 2.0, 'h0': 1150, 'tau0': 54, 'taucs': 160}
+Fitness value of the best solution = 16.159491989656377
+Index of the best solution : 0
+Fitness given by the MLP estimate: 0.06188313349454895
+Submitted batch job 12666887
+
+path2txt is: ./simulations_RVE_1_40_D/PH1_GA/35/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+RMSE LOSS = 23.45967463759728
+--------------------------------
+#### Iteration 36 ####
+Parameters of the best full solution : {'alpha': 1.7, 'h0': 700, 'tau0': 54, 'taucs': 160}
+Fitness value of the best solution = 45.1696333535856
+Index of the best solution : 0
+Fitness given by the MLP estimate: 0.022138767259234776
+Submitted batch job 12666954
+path2txt is: ./simulations_RVE_1_40_D/PH1_GA/36/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+RMSE LOSS = 10.577411914291133
+--------------------------------
+#### Iteration 37 ####
+Parameters of the best full solution : {'alpha': 1.3, 'h0': 700, 'tau0': 54, 'taucs': 130}                                                                                                             ucs': 130}
+Fitness value of the best solution = 52.07055313019286
+Index of the best solution : 0
+Fitness given by the MLP estimate: 0.01920471245042632
+Submitted batch job 12671403
+path2txt is: ./simulations_RVE_1_40_D/PH1_GA/37/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+RMSE LOSS = 3.9062013888476383
+--------------------------------
+--------------------------------
+Stage 5: CP Parameter Calibration completed
+The final parameter solution is:
+{'alpha': 1.3, 'h0': 700, 'tau0': 54, 'taucs': 130}
+(damask_py) [nguyenb5@puhti-login2 PH1GeneticLargeRVE]$
