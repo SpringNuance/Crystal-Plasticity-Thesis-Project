@@ -76,3 +76,22 @@ def tupleOrListToDict(params, CPLaw):
         newParams['q'] = params[4]
         newParams['tausol'] = params[5]
     return newParams
+
+def defaultParams(partialResult, CPLaw, default_yield_value):
+    if CPLaw == "PH":
+        solution_dict = {
+            'alpha': default_yield_value['alpha'],
+            'h0': default_yield_value['h0'],
+            'tau0': partialResult['tau0'],
+            'taucs': default_yield_value['taucs']
+        }
+    elif CPLaw == "DB":
+        solution_dict = {
+            'dipole': default_yield_value['dipole'],
+            'islip': default_yield_value['islip'],
+            'omega': default_yield_value['omega'],
+            'p': partialResult["p"],
+            'q': partialResult["q"], 
+            'tausol': partialResult["tausol"]
+        }
+    return solution_dict

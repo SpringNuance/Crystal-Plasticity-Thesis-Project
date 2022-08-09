@@ -34,7 +34,7 @@ param_ranges_RVE_1_40_D = {
     # PH1 curve
     {
         'alpha':{'low': 1.1, 'high': 3, 'step': 0.1, 'round': 1},
-        'h0':{'low': 100, 'high': 5000, 'step': 150, 'round': 0},
+        'h0':{'low': 100, 'high': 5000, 'step': 50, 'round': 0},
         'tau0':{'low': 20, 'high': 100, 'step': 1, 'round': 0},
         'taucs':{'low': 100, 'high': 1000, 'step': 10, 'round': 0} 
     },

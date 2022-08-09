@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.neural_network import MLPRegressor
+from sklearn.linear_model import LinearRegression
 # Our classes
 from modules.SIM import *
 from modules.preprocessing import *
@@ -26,11 +27,11 @@ from os import path
 
 # Type "PH" for phenomenological law
 # Type "DB" for dislocation-based law
-CPLaw = "DB" # Please change this
+CPLaw = "PH" # Please change this
 
 # Type "GA" for genetic algorithm
 # Type "BA" for Bayesian algorithm
-algorithm = "GA" # Please change this
+algorithm = "BA" # Please change this
 
 # Please choose the number of initial simulations
 initialSims = 30 # Please change this
@@ -40,8 +41,20 @@ curveIndex = 1 # Please change this
 
 # Type the project path folder
 # projectPath = "/scratch/project_2004956/Binh/CrystalPlasticityProject"
-projectPath = "/scratch/project_2004956/Binh/DB1GeneticLargeRVE"
 
+projectPath = "/scratch/project_2004956/Binh/PH1GeneticLargeRVE"
+# projectPath = "/scratch/project_2004956/Binh/PH2GeneticLargeRVE"
+# projectPath = "/scratch/project_2004956/Binh/PH31GeneticLargeRVE"
+# projectPath = "/scratch/project_2004956/Binh/DB1GeneticLargeRVE"
+# projectPath = "/scratch/project_2004956/Binh/DB2GeneticLargeRVE"
+# projectPath = "/scratch/project_2004956/Binh/DB3GeneticLargeRVE"
+
+# projectPath = "/scratch/project_2004956/Binh/PH1BayesLargeRVE"
+# projectPath = "/scratch/project_2004956/Binh/PH2BayesLargeRVE"
+# projectPath = "/scratch/project_2004956/Binh/PH31BayesLargeRVE"
+# projectPath = "/scratch/project_2004956/Binh/DB1BayesLargeRVE"
+# projectPath = "/scratch/project_2004956/Binh/DB2BayesLargeRVE"
+# projectPath = "/scratch/project_2004956/Binh/DB3BayesLargeRVE"
 # Type the material name
 material = "RVE_1_40_D"
 # material = "512grains512"
@@ -53,10 +66,12 @@ method = "auto"
 # Setting the weights of the four hardening objective functions:  
 weights = {"w1": 0.9, "w2": 0.025, "w3": 0.05, "w4": 0.025}
 # Define the yield stress deviation percentage for the first stage of yield stress optimization
-yieldStressDev = 2
+yieldStressDevTrue = 2  # deviation for the real simulated result
+yieldStressDevPredict = 10  # deviation predicted by the MLP
 
 # Define the hardening deviation percentage for the second stage of hardening optimization
-hardeningDev = 5
+hardeningDevTrue = 5  # deviation for the real simulated result
+hardeningDevPredict = 25  # deviation predicted by the MLP
 
 if material == "RVE_1_40_D":
     param_ranges = param_ranges_RVE_1_40_D
@@ -121,10 +136,12 @@ print(default_yield_value)
 print("\nNumber of initial simulations:", initialSims)
 print("\nChosen optimization algorithm:", algorithm)
 print("\nThe optimization process is", method)
-yieldStressDevPercent = f"{yieldStressDev}%"
-print("\nThe yield stress deviation percentage is", yieldStressDevPercent)
-hardeningDevPercent = f"{hardeningDev}%"
-print("\nThe hardening deviation percentage is", hardeningDevPercent)
+yieldStressDevTruePercent = f"{yieldStressDevTrue}%"
+yieldStressDevPredictPercent = f"{yieldStressDevPredict}%"
+print("\nThe true and predict yield stress deviation percentage is:", yieldStressDevTruePercent,"and",yieldStressDevPredictPercent)
+hardeningDevTruePercent = f"{hardeningDevTrue}%"
+hardeningDevPredictPercent = f"{hardeningDevPredict}%"
+print("\nThe true and predict hardening deviation percentage is", hardeningDevTruePercent,"and",hardeningDevPredictPercent)
 print("\nThe weights of w1, w2, w3, w4 of hardening objective functions are:")
 print(weights)
 print("\nThe optimization process is", method)
@@ -211,11 +228,10 @@ sim.strain = sim.strain[prune]
 # of the interpolated strain so it lies outside the range. You can increase the dropUpperEnd number to reduce the
 # range of the simulated curves so their stress can be interpolated
 dropUpperEnd = 2 # Please change this
+dropLowerEnd = 0 # Please change this
 # interpolatedStrain will be the interpolating strain for all curves (experimental, initial simulation and iterated simulation)
 interpolatedStrain = sim.strain[:-dropUpperEnd]
-# print(interpolatedStrain)
-# for (strain, stress) in sim.simulations.values():
-#     print(strain[-1])
+interpolatedStrain = interpolatedStrain[dropLowerEnd:]
 # exp_target is now the refined interpolated experimental stress values for comparison 
 exp_target = interpolatedStressFunction(exp_stress, exp_strain, interpolatedStrain).reshape(-1) * convertUnit
 # print(exp_target)
@@ -231,32 +247,23 @@ print("Stage 2: Initialize and train the RSM (MLP) with the initial data")
 # -----------------------------------------
 #  Initialize Response Surface Module (MLP)
 # -----------------------------------------
-# MLP with 1 hidden layer of 15 nodes. 
 
-print("Fitting response surface...")
+print("Fitting response surface method (multilayer perceptron)...")
 # Input layer of fitting parameters (4 for PH and 6 for DB)
 X = np.array(list(sim.simulations.keys()))
 # Output layer of the size of the interpolated stresses
 y = np.array([interpolatedStressFunction(simStress, simStrain, interpolatedStrain) * convertUnit for (simStrain, simStress) in sim.simulations.values()])
-# Train the MLP
-# Example of last parameter 
-# print(X[-1])
-# print(type(X))
-# print(X.shape)
-# Example of stress values at last parameter
-# print(y[-1])
-# print(type(y))
-# print(y.shape)
 inputSize = X.shape[1]
 outputSize = y.shape[1]
 print("Input layer size is:", inputSize)
 print("Output layer size is:", outputSize)
-# print(outputSize)
-hiddenLayerSize = round((2/3) * inputSize + outputSize)
-print("Hidden layer size is:", hiddenLayerSize)
-mlp = MLPRegressor(hidden_layer_sizes=[hiddenLayerSize], solver='adam', max_iter=100000, shuffle=True)
-mlp.fit(X,y)
-
+hiddenSize1 = inputSize + round((1/2) * (outputSize - inputSize))
+hiddenSize2 = inputSize + round((2/3) * (outputSize - inputSize))
+hiddenSize = [hiddenSize1, hiddenSize2]
+# hiddenSize = round((2/3) * inputSize + outputSize)
+print("Hidden layer size is:", hiddenSize)
+mlp = MLPRegressor(hidden_layer_sizes=hiddenSize, solver='adam', max_iter=100000, shuffle=True)
+mlp.fit(X, y)
 print("MLP training finished")
 
 # ----------------------------------------------------------------------
@@ -266,40 +273,45 @@ yieldStressOptimizeInfo = {
     "material": material,
     "CPLaw": CPLaw,
     "curveIndex": curveIndex,
-    "yieldStressDev": yieldStressDev,
+    "yieldStressDevTrue": yieldStressDevTrue,
+    "yieldStressDevPredict": yieldStressDevPredict,
     "algorithm": algorithm,
     "convertUnit": convertUnit,
     "numberOfParams": numberOfParams,
     "param_range": param_range,
     "param_range_no_round": param_range_no_round,
+    "param_range_no_step": param_range_no_step,
     "exp_target": exp_target,
     "default_yield_value": default_yield_value,
     "interpolatedStrain": interpolatedStrain,
     "sim": sim,
-    "mlp": mlp,
+    "mlp": mlp
 }
 
 hardeningOptimizeInfo = {
     "material": material,
     "CPLaw": CPLaw,
     "curveIndex": curveIndex,
-    "hardeningDev": hardeningDev,
+    "hardeningDevTrue": hardeningDevTrue,
+    "hardeningDevPredict": hardeningDevPredict,
     "algorithm": algorithm,
     "weights": weights,
     "convertUnit": convertUnit,
     "numberOfParams": numberOfParams,
     "param_range": param_range,
     "param_range_no_round": param_range_no_round,
+    "param_range_no_step": param_range_no_step,
     "exp_target": exp_target,
     "interpolatedStrain": interpolatedStrain,
     "sim": sim,
-    "mlp": mlp,
+    "mlp": mlp
 }
 
+# Set yield_stress_optimization_completed to False if you havent finished optimizing the yield stress yet
+# If you have obtained the optimized yield stress parameters already and has a saved file partial_result.npy, you can continue
+yield_stress_optimization_completed = False # Please change this 
+
 if algorithm == "GA": 
-    # Set yield_stress_optimization_completed to False if you havent finished optimizing the yield stress yet
-    # If you have obtained the optimized yield stress parameters already and has a saved file partial_result.npy, you can continue
-    yield_stress_optimization_completed = False # Please change this 
     if yield_stress_optimization_completed:
         partialResult = np.load(f'results_{material}/{CPLaw}{curveIndex}_{algorithm}/partial_result.npy', allow_pickle=True)
         partialResult = partialResult.tolist()
@@ -327,21 +339,30 @@ if algorithm == "GA":
 
 # -----------------------------------------------------------------------
 elif algorithm == "BA":
-    # -------------------------------------------------------------------
-    #   Stage 3: Optimize the yield stress parameters with BA
-    # -------------------------------------------------------------------
-    
-    print("--------------------------------")
-    print("Stage 3: Optimize the yield stress parameters with Bayesian algorithm")
-    partialResult = YieldStressOptimizationBA(CPLaw, param_range_no_round, mlp, exp_target, interpolatedStrain, sim, param_range, curveIndex, algorithm, convertUnit, numberOfParams)
-    
-    # -------------------------------------------------------------------
-    #   Stage 3: Optimize the hardening parameters with GA
-    # -------------------------------------------------------------------
-
-    print("--------------------------------")
-    print("Stage 4: Optimize the hardening parameters with Bayesian algorithm")
-    fullResult = HardeningOptimizationBA()
+    if yield_stress_optimization_completed:
+        partialResult = np.load(f'results_{material}/{CPLaw}{curveIndex}_{algorithm}/partial_result.npy', allow_pickle=True)
+        partialResult = partialResult.tolist()
+        # -------------------------------------------------------------------
+        #   Stage 4: Optimize the hardening parameters with GA
+        # -------------------------------------------------------------------
+        print("--------------------------------")
+        print("Stage 4: Optimize the hardening parameters with Bayesian algorithm")
+        hardeningOptimizeInfo["partialResult"] = partialResult
+        fullResult = HardeningOptimizationBA(hardeningOptimizeInfo)
+    else:
+        # -------------------------------------------------------------------
+        #   Stage 3: Optimize the yield stress parameters with GA
+        # -------------------------------------------------------------------
+        print("--------------------------------")
+        print("Stage 3: Optimize the yield stress parameters with Bayesian algorithm")
+        partialResult = YieldStressOptimizationBA(yieldStressOptimizeInfo)
+        # -------------------------------------------------------------------
+        #   Stage 4: Optimize the hardening parameters with GA
+        # -------------------------------------------------------------------
+        print("--------------------------------")
+        print("Stage 4: Optimize the hardening parameters with Bayesian algorithm")
+        hardeningOptimizeInfo["partialResult"] = partialResult
+        fullResult = HardeningOptimizationBA(hardeningOptimizeInfo)
 
 print("--------------------------------")
 print("Stage 5: CP Parameter Calibration completed")

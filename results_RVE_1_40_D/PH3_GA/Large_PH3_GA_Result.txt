@@ -228,3 +228,75 @@ files is:
 ['RVE_1_40_D_tensionX.txt']
 RMSE LOSS = 3.1261716330210585
 --------------------------------
+#### Iteration 36 ####
+Parameters of the best full solution : {'alpha': 0.3, 'h0': 800, 'tau0': 30, 'ta                                                                                                             ucs': 88}
+Fitness value of the best solution = 9.077654642974188
+Index of the best solution : 0
+Fitness given by the MLP estimate: 0.11016061299203178
+Submitted batch job 12675823
+path2txt is: ./simulations_RVE_1_40_D/PH3_GA/36/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+RMSE LOSS = 6.54791994681647
+--------------------------------
+#### Iteration 37 ####
+Parameters of the best full solution : {'alpha': 0.4, 'h0': 800, 'tau0': 30, 'ta                                                                                                             ucs': 92}
+Fitness value of the best solution = 18.003020381288383
+Index of the best solution : 0
+Fitness given by the MLP estimate: 0.055546234955072306
+Submitted batch job 12676281
+
+path2txt is: ./simulations_RVE_1_40_D/PH3_GA/37/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+RMSE LOSS = 7.713968668237541
+--------------------------------
+#### Iteration 38 ####
+Parameters of the best full solution : {'alpha': 0.3, 'h0': 750, 'tau0': 30, 'taucs': 64}
+Fitness value of the best solution = 10.164751548616929
+Index of the best solution : 0
+Fitness given by the MLP estimate: 0.09837918764832629
+Submitted batch job 12676832
+path2txt is: ./simulations_RVE_1_40_D/PH3_GA/38/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+RMSE LOSS = 42.43845147064317
+--------------------------------
+#### Iteration 39 ####
+Parameters of the best full solution : {'alpha': 0.3, 'h0': 600, 'tau0': 30, 'taucs': 98}
+Fitness value of the best solution = 5.9512483376090355
+Index of the best solution : 0
+Fitness given by the MLP estimate: 0.16803197300312264
+Submitted batch job 12677976
+path2txt is: ./simulations_RVE_1_40_D/PH3_GA/39/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+RMSE LOSS = 14.84951475329645
+--------------------------------
+#### Iteration 40 ####
+Parameters of the best full solution : {'alpha': 0.4, 'h0': 750, 'tau0': 30, 'taucs': 91}
+Fitness value of the best solution = 106.04207722210445
+Index of the best solution : 0
+Fitness given by the MLP estimate: 0.009430218892312967
+Submitted batch job 12678137
+path2txt is: ./simulations_RVE_1_40_D/PH3_GA/40/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+RMSE LOSS = 5.401988407271483
+--------------------------------
+#### Iteration 41 ####
+Parameters of the best full solution : {'alpha': 0.5, 'h0': 750, 'tau0': 30, 'taucs': 92}
+Fitness value of the best solution = 76.55785456812318
+Index of the best solution : 0
+Fitness given by the MLP estimate: 0.013062017028052608
+Submitted batch job 12681389
+path2txt is: ./simulations_RVE_1_40_D/PH3_GA/41/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+RMSE LOSS = 5.060072195468992
+--------------------------------
+--------------------------------
+Stage 5: CP Parameter Calibration completed
+The final parameter solution is:
+{'alpha': 0.5, 'h0': 750, 'tau0': 30, 'taucs': 92}
+(damask_py) [nguyenb5@puhti-login2 PH3GeneticLargeRVE]$
