@@ -141,7 +141,7 @@ def YieldStressOptimizationGA(yieldStressOptimizeInfo):
     y = np.array([interpolatedStressFunction(simStress, simStrain, interpolatedStrain) * convertUnit for (simStrain, simStress) in sim.simulations.values()])
     # If you want to find the best result from the initial random initial sims, you can set to true. It is likely that
     # one of the initial sims have yield stress close to the experimental yield stress so you can save time optimizing the yield stress
-    bestResultFromInitialSimsLucky = False
+    bestResultFromInitialSimsLucky = True
     if bestResultFromInitialSimsLucky:
         zipParamsStress = list(zip(list(sim.simulations.keys()), y))
         sortedClosestYieldStress = list(sorted(zipParamsStress, key=lambda pairs: fitness_yield(exp_target, pairs[1]), reverse=True))
@@ -251,7 +251,7 @@ def HardeningOptimizationGA(hardeningOptimizeInfo):
     print(partialResult)
     y = np.array([interpolatedStressFunction(simStress, simStrain, interpolatedStrain) * convertUnit for (simStrain, simStress) in sim.simulations.values()])
     # Iterative optimization.
-    while not insideHardeningDev(exp_target, y[-1], hardeningDevTrue):
+    while not insideHardeningDev(exp_target, y[-3], hardeningDevTrue):
         print("#### Iteration", sim.fileNumber + 1, "####")
         ga_instance.run()
         fullResults = output_resultsFullGA(ga_instance, param_range, partialResult, CPLaw)

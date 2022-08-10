@@ -144,99 +144,71 @@ files is:
 ['RVE_1_40_D_tensionX.txt']
 RMSE LOSS = 43.40692792550532
 #### Iteration 34 ####
-Parameters of the best full solution : {'dipole': 1, 'islip': 19, 'omega': 6, 'p': 0.2, 'q': 1.3, 'tausol': 0.3}
-Fitness value of the best solution = 25.155005615772318
-Index of the best solution : 0
-Fitness given by the MLP estimate: 0.039753519250776664
-Submitted batch job 12681746
-#### Iteration 35 ####
 Parameters of the best full solution : {'dipole': 4, 'islip': 18, 'omega': 41, 'p': 0.2, 'q': 1.3, 'tausol': 0.3}
 Fitness value of the best solution = 21.61084356907711
 Index of the best solution : 0
 Fitness given by the MLP estimate: 0.04627306642628689
 Submitted batch job 12683349
-
-path2txt is: ./simulations_RVE_1_40_D/DB1_GA/35/postProc/
+path2txt is: ./simulations_RVE_1_40_D/DB1_GA/34/postProc/
 files is:
 ['RVE_1_40_D_tensionX.txt']
 RMSE LOSS = 30.114040244828733
-#### Iteration 36 ####
+#### Iteration 35 ####
 Parameters of the best full solution : {'dipole': 3, 'islip': 17, 'omega': 41, 'p': 0.2, 'q': 1.3, 'tausol': 0.3}
 Fitness value of the best solution = 16.58518274188875
 Index of the best solution : 0
 Fitness given by the MLP estimate: 0.06029478333538809
 Submitted batch job 12683467
-path2txt is: ./simulations_RVE_1_40_D/DB1_GA/36/postProc/
+path2txt is: ./simulations_RVE_1_40_D/DB1_GA/35/postProc/
 files is:
 ['RVE_1_40_D_tensionX.txt']
 RMSE LOSS = 21.740608073962694
-#### Iteration 37 ####
+#### Iteration 36 ####
 Parameters of the best full solution : {'dipole': 1, 'islip': 23, 'omega': 1, 'p': 0.2, 'q': 1.3, 'tausol': 0.3}
 Fitness value of the best solution = 22.93568371985484
 Index of the best solution : 0
 Fitness given by the MLP estimate: 0.043600182676670124
 Submitted batch job 12687723
-path2txt is: ./simulations_RVE_1_40_D/DB1_GA/37/postProc/
+path2txt is: ./simulations_RVE_1_40_D/DB1_GA/36/postProc/
 files is:
 ['RVE_1_40_D_tensionX.txt']
 RMSE LOSS = 34.49736722292527
-#### Iteration 38 ####
+#### Iteration 37 ####
 Parameters of the best full solution : {'dipole': 2, 'islip': 22, 'omega': 2, 'p': 0.2, 'q': 1.3, 'tausol': 0.3}
 Fitness value of the best solution = 54.22867105126847
 Index of the best solution : 0
 Fitness given by the MLP estimate: 0.01844042976923752
 Submitted batch job 12689873
-path2txt is: ./simulations_RVE_1_40_D/DB1_GA/38/postProc/
+path2txt is: ./simulations_RVE_1_40_D/DB1_GA/37/postProc/
 files is:
 ['RVE_1_40_D_tensionX.txt']
 RMSE LOSS = 20.644411829388407
-#### Iteration 39 ####
+#### Iteration 38 ####
 Parameters of the best full solution : {'dipole': 1, 'islip': 30, 'omega': 1, 'p': 0.2, 'q': 1.3, 'tausol': 0.3}
 Fitness value of the best solution = 84.3568618885884
 Index of the best solution : 0
 Fitness given by the MLP estimate: 0.011854400194743112
 Submitted batch job 12691025
-path2txt is: ./simulations_RVE_1_40_D/DB1_GA/39/postProc/
+path2txt is: ./simulations_RVE_1_40_D/DB1_GA/38/postProc/
 files is:
 ['RVE_1_40_D_tensionX.txt']
 RMSE LOSS = 4.500412034513723
-#### Iteration 40 ####
+#### Iteration 39 ####
 Parameters of the best full solution : {'dipole': 2, 'islip': 25, 'omega': 2, 'p': 0.2, 'q': 1.3, 'tausol': 0.3}
 Fitness value of the best solution = 85.2593845800231
 Index of the best solution : 0
 Fitness given by the MLP estimate: 0.011728914123950966
 Submitted batch job 12692522
-path2txt is: ./simulations_RVE_1_40_D/DB1_GA/40/postProc/
+path2txt is: ./simulations_RVE_1_40_D/DB1_GA/39/postProc/
 files is:
 ['RVE_1_40_D_tensionX.txt']
 RMSE LOSS = 5.971743775466674
-#### Iteration 41 ####
-Parameters of the best full solution : {'dipole': 1, 'islip': 28, 'omega': 4, 'p': 0.2, 'q': 1.3, 'tausol': 0.3}
-Fitness value of the best solution = 119.25257177885035
-Index of the best solution : 0
-Fitness given by the MLP estimate: 0.008385563389395613
-Submitted batch job 12693058
-path2txt is: ./simulations_RVE_1_40_D/DB1_GA/41/postProc/
-files is:
-['RVE_1_40_D_tensionX.txt']
-RMSE LOSS = 7.1833679400104185
-#### Iteration 42 ####
-Parameters of the best full solution : {'dipole': 1, 'islip': 28, 'omega': 3, 'p': 0.2, 'q': 1.3, 'tausol': 0.3}
-Fitness value of the best solution = 105.3123424790366
-Index of the best solution : 0
-Fitness given by the MLP estimate: 0.009495563164394137
-Submitted batch job 12693250
-path2txt is: ./simulations_RVE_1_40_D/DB1_GA/42/postProc/
-files is:
-['RVE_1_40_D_tensionX.txt']
-RMSE LOSS = 2.7480888046328107
-#### Iteration 43 ####
-Parameters of the best full solution : {'dipole': 1, 'islip': 29, 'omega': 2, 'p': 0.2, 'q': 1.3, 'tausol': 0.3}
-Fitness value of the best solution = 108.95611530197723
-Index of the best solution : 0
-Fitness given by the MLP estimate: 0.009178007101560576
-Submitted batch job 12693590
-path2txt is: ./simulations_RVE_1_40_D/DB1_GA/43/postProc/
-files is:
-['RVE_1_40_D_tensionX.txt']
-RMSE LOSS = 1.2830390707137067
+--------------------------------
+Hardening parameters optimization completed
+The full parameter solution is:
+{'dipole': 2, 'islip': 25, 'omega': 2, 'p': 0.2, 'q': 1.3, 'tausol': 0.3}
+Succeeded iteration: 39
+--------------------------------
+Stage 5: CP Parameter Calibration completed
+The final parameter solution is:
+{'dipole': 2, 'islip': 25, 'omega': 2, 'p': 0.2, 'q': 1.3, 'tausol': 0.3}

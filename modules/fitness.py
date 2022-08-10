@@ -38,7 +38,7 @@ def insideYieldStressDev(exp_stress, sim_stress, percentDeviation):
 
 def insideHardeningDev(exp_target, sim_stress, percentDeviation):
     upperStress = exp_target * (1 + percentDeviation * 0.01) 
-    lowerStress = exp_target * (1 + percentDeviation * 0.01) 
+    lowerStress = exp_target * (1 - percentDeviation * 0.01) 
     for i in range(exp_target.size):
         if sim_stress[i] < lowerStress[i] or sim_stress[i] > upperStress[i]:
             return False 

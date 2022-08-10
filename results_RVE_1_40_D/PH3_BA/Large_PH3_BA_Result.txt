@@ -1,1 +1,242 @@
+login as: nguyenb5
+nguyenb5@puhti.csc.fi's password:
+Last login: Tue Aug  9 23:30:36 2022 from dzc096yjvbplpjxw-by6t-3.rev.dnainternet.fi
+┌─ Welcome ───────────────────────────────────────────────────────────────────┐
+│         CSC - Tieteen tietotekniikan keskus - IT Center for Science         │
+│            ____        __    __  _                                          │
+│           / __ \__  __/ /_  / /_(_)   - -  -   -                            │
+│          / /_/ / / / / __ \/ __/ /   - -  -   -                             │
+│         / ____/ /_/ / / / / /_/ /   - -  -   -                              │
+│        /_/    \__,_/_/ /_/\__/_/   - -  -   -                               │
+│                                                                             │
+│      Puhti.csc.fi - Atos BullSequana X400 - 682 CPU nodes - 80 GPU nodes    │
+├─ Contact ───────────────────────────────────────────────────────────────────┤
+│ Servicedesk : 09-457 2821, servicedesk@csc.fi   Switchboard : 09-457 2001   │
+├─ User Guide ────────────────────────────────────────────────────────────────┤
+│ https://docs.csc.fi                                                         │
+├─ Manage my account ─────────────────────────────────────────────────────────┤
+│ https://my.csc.fi/                                                          │
+├─ Billing ───────────────────────────────────────────────────────────────────┤
+│ Billing has changed significantly from Sisu/Taito. CPU, GPU, Memory, local  │
+│ disk and lustre scratch space are all billed. See for details:              │
+│ https://docs.csc.fi/accounts/billing/                                       │
+├─ Software ──────────────────────────────────────────────────────────────────┤
+│ Available modules can be listed with command: module avail and module spider│
+├─ Main Partitions ───────────────────────────────────────────────────────────┤
+│   small       : 1-40 cores    3 days max runtime                            │
+│   large       : 2-1040 cores  3 days max runtime                            │
+│   hugemem     : 1-160 cores   3 days max runtime                            │
+│   longrun     : 1-40 cores   14 days max runtime                            │
+│   gpu         : 1-80 GPUs     3 days max runtime                            │
+│                                                                             │
+│ See https://docs.csc.fi/computing/running/batch-job-partitions/             │
+├─ Storage ───────────────────────────────────────────────────────────────────┤
+│ In Puhti there are three main disk areas:                                   │
+│   home     Personal home folder                                             │
+│   projappl Per project folder where applications and libraries can be stored│
+│   scratch  Per project folder for running jobs. Files are removed           │
+│            after 90 days (not yet activated).                               │
+│                                                                             │
+│ Run csc-workspaces to see your folders and quotas                           │
+│ See https://docs.csc.fi/computing/disk/ for details                         │
+├─ News ──────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  2019-11-25: 90-day /scratch cleaning is not active yet, we'll inform       │
+│              users later with more detailed information when it's activated.│
+│                                                                             │
+│  2020-11-19: Puhti outgoing internet traffic is coming from new addresses,  │
+│              puhti-nat-1.csc.fi and puhti-nat-2.csc.fi                      │
+│                                                                             │
+│  2021-10-13: Limits of the interactive partition have been increased.       │
+│              Max two jobs, 8 cores, 76 GiB memory and 720 GiB of NVMe.      │
+│                                                                             │
+│  2021-10-18: An easy-to-use web interface for Puhti is now open for beta    │
+│              test use at https://www.puhti.csc.fi. User documentation at    │
+│              https://docs.csc.fi/computing/webinterface                     │
+│                                                                             │
+│  2022-06-28: Fast NVMe drives has been added to multiple node types, it can │
+│              improve IO-intensive job performance a lot.                    │
+│              https://docs.csc.fi/support/whats-new/                         │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+cd /scratch/project_2004956/Binh/PH3BayesLargeRVE
+source damask_py/bin/activate
+python optimize.py[nguyenb5@puhti-login1 ~]$ cd /scratch/project_2004956/Binh/PH3BayesLargeRVE
+[nguyenb5@puhti-login1 PH3BayesLargeRVE]$ source damask_py/bin/activate
+(damask_py) [nguyenb5@puhti-login1 PH3BayesLargeRVE]$ python optimize.py
+
+Welcome to Crystal Plasticity Parameter Calibration
+
+The configurations you have chosen:
+
+Material under study: RVE_1_40_D
+
+CP Law: phenomenological law
+
+The target curve: PH3
+
+Number of fitting parameters in PH law: 4
+
+Range and step of parameters:
+{'alpha': {'low': 0.1, 'high': 0.9, 'step': 0.1}, 'h0': {'low': 500, 'high': 1500, 'step': 50}, 'tau0': {'low': 10, 'high': 50, 'step': 1}, 'taucs': {'low': 20, 'high': 300, 'step': 1}}
+
+Default values of hardening parameters for yield stress optimization:
+{'alpha': 0.5, 'h0': 800, 'taucs': 200}
+
+Number of initial simulations: 30
+
+Chosen optimization algorithm: BA
+
+The optimization process is auto
+
+The true and predict yield stress deviation percentage is: 2% and 10%
+
+The true and predict hardening deviation percentage is 5% and 25%
+
+The weights of w1, w2, w3, w4 of hardening objective functions are:
+{'w1': 0.9, 'w2': 0.025, 'w3': 0.05, 'w4': 0.025}
+
+The optimization process is auto
+
+The path to your main project folder is:
+/scratch/project_2004956/Binh/PH3BayesLargeRVE
+--------------------------------
+Stage 1: Running initial simulations/Loading progress and preparing data
+30 initial simulations completed.
+No additional simulations completed.
+Experimental and simulated curves preparation completed
+--------------------------------
+Stage 2: Initialize and train the RSM (MLP) with the initial data
+Fitting response surface method (multilayer perceptron)...
+Input layer size is: 4
+Output layer size is: 28
+Hidden layer size is: [16, 20]
+MLP training finished
+--------------------------------
+Stage 3: Optimize the yield stress parameters with Bayesian algorithm
+{'tau0': (10, 50)}
+The experimental yield stress is:  79.14993330122302 MPa
+The simulated yield stress should lie in the range of (77.56693463519855, 80.73293196724748) MPa
+Maximum deviation: 1.5829986660244604 MPa
+#### Iteration 30 ####
+The initial candidate partial result:
+{'alpha': 0.5, 'h0': 350, 'tau0': 10, 'taucs': 237}
+The initial candidate simulated yield stress:
+28.29988812197012
+#### Iteration 31 ####
+#0 Result: {'tau0': 49}; f(x) = 0.02334692265653524.
+#1 Result: {'tau0': 32}; f(x) = 0.26713586946865364.
+#2 Result: {'tau0': 32}; f(x) = 0.26713586946865364.
+#3 Result: {'tau0': 23}; f(x) = 0.05949613872719125.
+#4 Result: {'tau0': 37}; f(x) = 0.06561630450738865.
+#5 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#6 Result: {'tau0': 29}; f(x) = 0.3169966693291946.
+#7 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#8 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#9 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#10 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#11 Result: {'tau0': 31}; f(x) = 0.6924856762515219.
+#12 Result: {'tau0': 10}; f(x) = 0.028524422167927502.
+#13 Result: {'tau0': 17}; f(x) = 0.033047752449564115.
+#14 Result: {'tau0': 43}; f(x) = 0.03443982047816028.
+#15 Result: {'tau0': 20}; f(x) = 0.04249256518954335.
+#16 Result: {'tau0': 13}; f(x) = 0.029705056985393077.
+#17 Result: {'tau0': 40}; f(x) = 0.045170922779612925.
+#18 Result: {'tau0': 46}; f(x) = 0.027828660394802623.
+#19 Result: {'tau0': 26}; f(x) = 0.09947647540728516.
+#20 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#21 Result: {'tau0': 34}; f(x) = 0.11987398042262853.
+#22 Result: {'tau0': 22}; f(x) = 0.05249421400496487.
+#23 Result: {'tau0': 18}; f(x) = 0.03569218361046735.
+#24 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#25 Result: {'tau0': 15}; f(x) = 0.030547984107717273.
+#26 Result: {'tau0': 12}; f(x) = 0.029300800531243686.
+#27 Result: {'tau0': 50}; f(x) = 0.022157454683241765.
+#28 Result: {'tau0': 47}; f(x) = 0.026155061844779122.
+#29 Result: {'tau0': 38}; f(x) = 0.05701431485409706.
+#30 Result: {'tau0': 41}; f(x) = 0.04092075708537426.
+#31 Result: {'tau0': 44}; f(x) = 0.031912690724436636.
+#32 Result: {'tau0': 25}; f(x) = 0.0811424644706644.
+#33 Result: {'tau0': 27}; f(x) = 0.12897754253548702.
+#34 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#35 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#36 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#37 Result: {'tau0': 36}; f(x) = 0.0772751283733908.
+#38 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#39 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#40 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#41 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#42 Result: {'tau0': 34}; f(x) = 0.11987398042262853.
+#43 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#44 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#45 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#46 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#47 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#48 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#49 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#50 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#51 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#52 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#53 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#54 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#55 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#56 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#57 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#58 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#59 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#60 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#61 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#62 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#63 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#64 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#65 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#66 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#67 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#68 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#69 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#70 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#71 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#72 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#73 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#74 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#75 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#76 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#77 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#78 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#79 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#80 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#81 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#82 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#83 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#84 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#85 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#86 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#87 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#88 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#89 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#90 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#91 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#92 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#93 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#94 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#95 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#96 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#97 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#98 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+#99 Result: {'tau0': 30}; f(x) = 1.169225457379652.
+Parameters of the best partial solution : {'alpha': 0.5, 'h0': 800, 'tau0': 30, 'taucs': 200}
+Fitness value of the best solution = 1.169225457379652
+Fitness given by the MLP estimate: 0.8552670433990527
+Submitted batch job 12703098
+path2txt is: ./simulations_RVE_1_40_D/PH3_BA/31/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+The simulated yield stress: 79.52907125519648 MPa
+--------------------------------
+Yield stress parameters optimization completed
+The partial parameter solution is:
+{'alpha': 0.5, 'h0': 800, 'tau0': 30, 'taucs': 200}
+Succeeded iteration: 31
+--------------------------------
 

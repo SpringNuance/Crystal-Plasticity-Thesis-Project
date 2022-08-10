@@ -27,31 +27,31 @@ from os import path
 
 # Type "PH" for phenomenological law
 # Type "DB" for dislocation-based law
-CPLaw = "PH" # Please change this
+CPLaw = "DB" # Please change this
 
 # Type "GA" for genetic algorithm
 # Type "BA" for Bayesian algorithm
-algorithm = "BA" # Please change this
+algorithm = "GA" # Please change this
 
 # Please choose the number of initial simulations
 initialSims = 30 # Please change this
 
 # Type the target experimental curve index (1,2,3)
-curveIndex = 1 # Please change this
+curveIndex = 3 # Please change this
 
 # Type the project path folder
 # projectPath = "/scratch/project_2004956/Binh/CrystalPlasticityProject"
 
 projectPath = "/scratch/project_2004956/Binh/PH1GeneticLargeRVE"
 # projectPath = "/scratch/project_2004956/Binh/PH2GeneticLargeRVE"
-# projectPath = "/scratch/project_2004956/Binh/PH31GeneticLargeRVE"
+# projectPath = "/scratch/project_2004956/Binh/PH3GeneticLargeRVE"
 # projectPath = "/scratch/project_2004956/Binh/DB1GeneticLargeRVE"
 # projectPath = "/scratch/project_2004956/Binh/DB2GeneticLargeRVE"
 # projectPath = "/scratch/project_2004956/Binh/DB3GeneticLargeRVE"
 
 # projectPath = "/scratch/project_2004956/Binh/PH1BayesLargeRVE"
 # projectPath = "/scratch/project_2004956/Binh/PH2BayesLargeRVE"
-# projectPath = "/scratch/project_2004956/Binh/PH31BayesLargeRVE"
+# projectPath = "/scratch/project_2004956/Binh/PH3BayesLargeRVE"
 # projectPath = "/scratch/project_2004956/Binh/DB1BayesLargeRVE"
 # projectPath = "/scratch/project_2004956/Binh/DB2BayesLargeRVE"
 # projectPath = "/scratch/project_2004956/Binh/DB3BayesLargeRVE"
