@@ -126,106 +126,6 @@ The initial candidate partial result:
 The initial candidate simulated yield stress:
 138.1420750415732
 #### Iteration 31 ####
-#0 Result: {'tau0': 98}; f(x) = 0.016427338402698933.
-#1 Result: {'tau0': 87}; f(x) = 0.02732494066415561.
-#2 Result: {'tau0': 87}; f(x) = 0.02732494066415561.
-#3 Result: {'tau0': 80}; f(x) = 0.047287439426228484.
-#4 Result: {'tau0': 78}; f(x) = 0.05976154614748988.
-#5 Result: {'tau0': 75}; f(x) = 0.09889217764898676.
-#6 Result: {'tau0': 74}; f(x) = 0.12650261452784475.
-#7 Result: {'tau0': 71}; f(x) = 0.7789192837026735.
-#8 Result: {'tau0': 71}; f(x) = 0.7789192837026735.
-#9 Result: {'tau0': 71}; f(x) = 0.7789192837026735.
-#10 Result: {'tau0': 68}; f(x) = 0.18736013046977018.
-#11 Result: {'tau0': 50}; f(x) = 0.02173636856041765.
-#12 Result: {'tau0': 59}; f(x) = 0.037365875274179415.
-#13 Result: {'tau0': 93}; f(x) = 0.020064651287232844.
-#14 Result: {'tau0': 72}; f(x) = 0.2864608544800194.
-#15 Result: {'tau0': 71}; f(x) = 0.7789192837026735.
-#16 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#17 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#18 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#19 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#20 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#21 Result: {'tau0': 64}; f(x) = 0.06916465833106467.
-#22 Result: {'tau0': 54}; f(x) = 0.02559736436329753.
-#23 Result: {'tau0': 84}; f(x) = 0.0333606246451959.
-#24 Result: {'tau0': 90}; f(x) = 0.02313864219101166.
-#25 Result: {'tau0': 96}; f(x) = 0.017711642517705458.
-#26 Result: {'tau0': 61}; f(x) = 0.04578601032242353.
-#27 Result: {'tau0': 66}; f(x) = 0.10254925758188542.
-#28 Result: {'tau0': 57}; f(x) = 0.031561630868808206.
-#29 Result: {'tau0': 52}; f(x) = 0.022733381670363872.
-#30 Result: {'tau0': 100}; f(x) = 0.01531669628956206.
-#31 Result: {'tau0': 69}; f(x) = 0.319461615783475.
-#32 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#33 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#34 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#35 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#36 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#37 Result: {'tau0': 85}; f(x) = 0.03107278201162306.
-#38 Result: {'tau0': 82}; f(x) = 0.03912154706487998.
-#39 Result: {'tau0': 67}; f(x) = 0.13254929348267078.
-#40 Result: {'tau0': 89}; f(x) = 0.024383880666977744.
-#41 Result: {'tau0': 91}; f(x) = 0.022014408175119123.
-#42 Result: {'tau0': 94}; f(x) = 0.01921379426198971.
-#43 Result: {'tau0': 97}; f(x) = 0.01704533278156982.
-#44 Result: {'tau0': 77}; f(x) = 0.06884150831008837.
-#45 Result: {'tau0': 65}; f(x) = 0.08335122575920063.
-#46 Result: {'tau0': 60}; f(x) = 0.041149622494666735.
-#47 Result: {'tau0': 62}; f(x) = 0.05159983927723809.
-#48 Result: {'tau0': 79}; f(x) = 0.05279770711178025.
-#49 Result: {'tau0': 56}; f(x) = 0.029286978156068715.
-#50 Result: {'tau0': 58}; f(x) = 0.03421937129270583.
-#51 Result: {'tau0': 51}; f(x) = 0.02201786907324206.
-#52 Result: {'tau0': 53}; f(x) = 0.024080516093044402.
-#53 Result: {'tau0': 73}; f(x) = 0.17550243433718088.
-#54 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#55 Result: {'tau0': 85}; f(x) = 0.03107278201162306.
-#56 Result: {'tau0': 81}; f(x) = 0.042818643342870895.
-#57 Result: {'tau0': 83}; f(x) = 0.03601214523182942.
-#58 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#59 Result: {'tau0': 86}; f(x) = 0.02907859710392443.
-#60 Result: {'tau0': 99}; f(x) = 0.015852588090910884.
-#61 Result: {'tau0': 74}; f(x) = 0.12650261452784475.
-#62 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#63 Result: {'tau0': 67}; f(x) = 0.13254929348267078.
-#64 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#65 Result: {'tau0': 68}; f(x) = 0.18736013046977018.
-#66 Result: {'tau0': 89}; f(x) = 0.024383880666977744.
-#67 Result: {'tau0': 91}; f(x) = 0.022014408175119123.
-#68 Result: {'tau0': 92}; f(x) = 0.02099435819014785.
-#69 Result: {'tau0': 76}; f(x) = 0.08117494861570577.
-#70 Result: {'tau0': 77}; f(x) = 0.06884150831008837.
-#71 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#72 Result: {'tau0': 94}; f(x) = 0.01921379426198971.
-#73 Result: {'tau0': 95}; f(x) = 0.018432164115346764.
-#74 Result: {'tau0': 96}; f(x) = 0.017711642517705458.
-#75 Result: {'tau0': 98}; f(x) = 0.016427338402698933.
-#76 Result: {'tau0': 88}; f(x) = 0.02577077083696175.
-#77 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#78 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#79 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#80 Result: {'tau0': 64}; f(x) = 0.06916465833106467.
-#81 Result: {'tau0': 65}; f(x) = 0.08335122575920063.
-#82 Result: {'tau0': 60}; f(x) = 0.041149622494666735.
-#83 Result: {'tau0': 61}; f(x) = 0.04578601032242353.
-#84 Result: {'tau0': 62}; f(x) = 0.05159983927723809.
-#85 Result: {'tau0': 63}; f(x) = 0.05910487476416492.
-#86 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#87 Result: {'tau0': 80}; f(x) = 0.047287439426228484.
-#88 Result: {'tau0': 78}; f(x) = 0.05976154614748988.
-#89 Result: {'tau0': 73}; f(x) = 0.17550243433718088.
-#90 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#91 Result: {'tau0': 56}; f(x) = 0.029286978156068715.
-#92 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#93 Result: {'tau0': 55}; f(x) = 0.02731815364997048.
-#94 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#95 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#96 Result: {'tau0': 58}; f(x) = 0.03421937129270583.
-#97 Result: {'tau0': 57}; f(x) = 0.031561630868808206.
-#98 Result: {'tau0': 70}; f(x) = 1.0831675268952794.
-#99 Result: {'tau0': 53}; f(x) = 0.024080516093044402.
 Parameters of the best partial solution : {'alpha': 1.5, 'h0': 800, 'tau0': 70, 'taucs': 200}
 Fitness value of the best solution = 1.0831675268952794
 Fitness given by the MLP estimate: 0.9232182235617187
@@ -240,4 +140,25 @@ The partial parameter solution is:
 {'alpha': 1.5, 'h0': 800, 'tau0': 70, 'taucs': 200}
 Succeeded iteration: 31
 --------------------------------
+Stage 4: Optimize the hardening parameters with Bayesian algorithm
+The partial result and also initial candidate full result:
+{'alpha': 1.5, 'h0': 800, 'tau0': 70, 'taucs': 200}
+#### Iteration 32 ####
+Parameters of the best full solution : {'alpha': 1.7, 'h0': 850, 'tau0': 70, 'taucs': 406}
+Fitness value of the best solution = 127.02958920531256
+Fitness given by the MLP estimate: 0.007872181640954079
+Submitted batch job 12706817
+path2txt is: ./simulations_RVE_1_40_D/PH2_BA/32/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+RMSE LOSS = 8.236249044749606
+--------------------------------
+Hardening parameters optimization completed
+The full parameter solution is:
+{'alpha': 1.7, 'h0': 850, 'tau0': 70, 'taucs': 406}
+Succeeded iteration: 32
+--------------------------------
+Stage 5: CP Parameter Calibration completed
+The final parameter solution is:
+{'alpha': 1.7, 'h0': 850, 'tau0': 70, 'taucs': 406}
 

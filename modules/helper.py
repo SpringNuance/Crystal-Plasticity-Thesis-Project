@@ -1,5 +1,6 @@
 from math import *
 import copy
+import numpy as np
 from scipy.interpolate import interp1d
 from modules.helper import *
 
@@ -95,3 +96,31 @@ def defaultParams(partialResult, CPLaw, default_yield_value):
             'tausol': partialResult["tausol"]
         }
     return solution_dict
+
+def getIndexBeforeStrainLevel(strain, level):
+    for i in range(len(strain)):
+        if strain[i] > level:
+            return i - 1
+
+def getIndexBeforeStrainLevelEqual(strain, level):
+    for i in range(len(strain)):
+        if strain[i] >= level:
+            return i
+
+def calculateInterpolatingStrains(mainStrain, limitingStrain, yieldStressStrainLevel, dropUpperEnd):
+    x_max = limitingStrain.max() 
+    indexUpper = getIndexBeforeStrainLevelEqual(mainStrain, x_max)
+    indexLower = getIndexBeforeStrainLevel(mainStrain, yieldStressStrainLevel) 
+    mainStrain = mainStrain[:indexUpper]
+    mainStrain = mainStrain[indexLower:]
+    # If the error: ValueError: A value in x_new is above the interpolation range occurs,
+    # it is due to the the strain value of some simulated curves is higher than the last stress value
+    # of the interpolated strain so it lies outside the range. You can increase the dropUpperEnd number to reduce the
+    # range of the simulated curves so their stress can be interpolated
+    # interpolatedStrain will be the interpolating strain for all curves (experimental, initial simulation and iterated simulation)
+    interpolatedStrain = mainStrain
+    if dropUpperEnd != 0:
+        interpolatedStrain = mainStrain[:-dropUpperEnd]
+    # Strain level is added to the interpolating strains
+    interpolatedStrain = np.insert(interpolatedStrain, 1, yieldStressStrainLevel)
+    return interpolatedStrain

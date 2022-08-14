@@ -31,13 +31,13 @@ CPLaw = "DB" # Please change this
 
 # Type "GA" for genetic algorithm
 # Type "BA" for Bayesian algorithm
-algorithm = "GA" # Please change this
+algorithm = "BA" # Please change this
 
 # Please choose the number of initial simulations
 initialSims = 30 # Please change this
 
 # Type the target experimental curve index (1,2,3)
-curveIndex = 3 # Please change this
+curveIndex = 2 # Please change this
 
 # Type the project path folder
 # projectPath = "/scratch/project_2004956/Binh/CrystalPlasticityProject"
@@ -63,15 +63,16 @@ material = "RVE_1_40_D"
 method = "auto"
 # method = "manual"
 
+# Setting the weights of the two yield stress objective functions:  
+weightsYield = {"wy1": 0.9999, "wy2": 0.0001}
+
 # Setting the weights of the four hardening objective functions:  
-weights = {"w1": 0.9, "w2": 0.025, "w3": 0.05, "w4": 0.025}
+weightsHardening = {"wh1": 0.9, "wh2": 0.025, "wh3": 0.05, "wh4": 0.025}
 # Define the yield stress deviation percentage for the first stage of yield stress optimization
-yieldStressDevTrue = 2  # deviation for the real simulated result
-yieldStressDevPredict = 10  # deviation predicted by the MLP
+yieldStressDev = 0.5  # deviation for the real simulated yield stress result
 
 # Define the hardening deviation percentage for the second stage of hardening optimization
-hardeningDevTrue = 5  # deviation for the real simulated result
-hardeningDevPredict = 25  # deviation predicted by the MLP
+hardeningDev = 2  # deviation for the real simulated global curve result
 
 if material == "RVE_1_40_D":
     param_ranges = param_ranges_RVE_1_40_D
@@ -136,14 +137,14 @@ print(default_yield_value)
 print("\nNumber of initial simulations:", initialSims)
 print("\nChosen optimization algorithm:", algorithm)
 print("\nThe optimization process is", method)
-yieldStressDevTruePercent = f"{yieldStressDevTrue}%"
-yieldStressDevPredictPercent = f"{yieldStressDevPredict}%"
-print("\nThe true and predict yield stress deviation percentage is:", yieldStressDevTruePercent,"and",yieldStressDevPredictPercent)
-hardeningDevTruePercent = f"{hardeningDevTrue}%"
-hardeningDevPredictPercent = f"{hardeningDevPredict}%"
-print("\nThe true and predict hardening deviation percentage is", hardeningDevTruePercent,"and",hardeningDevPredictPercent)
-print("\nThe weights of w1, w2, w3, w4 of hardening objective functions are:")
-print(weights)
+yieldStressDevPercent = f"{yieldStressDev}%"
+print("\nThe yield stress deviation percentage is:", yieldStressDevPercent)
+hardeningDevPercent = f"{hardeningDev}%"
+print("\nThe hardening deviation percentage is", hardeningDevPercent)
+print("\nThe weights wy1, wy2 of yield stress objective functions are:")
+print(weightsYield)
+print("\nThe weights wh1, wh2, wh3, wh4 of hardening objective functions are:")
+print(weightsHardening)
 print("\nThe optimization process is", method)
 print("\nThe path to your main project folder is: ")
 print(projectPath)
@@ -217,21 +218,14 @@ exp_stress = exp_curve.iloc[:,0] # Getting the experimental stress
 exp_strain = exp_curve.iloc[:,1] # Getting the experimental strain
 # The common strain points of experimental and simulated curves will be lying between 0.002 (strain of yield stress)
 # and the maximum strain value of experimental curve 
-x_min, x_max = 0.002, exp_strain.max() 
-# prune will be a list of True and False, which indicate which index of the strain to choose from
-prune = np.logical_and(sim.strain >= x_min, sim.strain <= x_max)
-# sim.strain is the average strains of the initial simulations 
-# Therefore sim.strain is the same for all simulated curves. Now it is pruned
-sim.strain = sim.strain[prune]
 # If the error: ValueError: A value in x_new is above the interpolation range occurs,
 # it is due to the the strain value of some simulated curves is higher than the last stress value
 # of the interpolated strain so it lies outside the range. You can increase the dropUpperEnd number to reduce the
 # range of the simulated curves so their stress can be interpolated
-dropUpperEnd = 2 # Please change this
-dropLowerEnd = 0 # Please change this
 # interpolatedStrain will be the interpolating strain for all curves (experimental, initial simulation and iterated simulation)
-interpolatedStrain = sim.strain[:-dropUpperEnd]
-interpolatedStrain = interpolatedStrain[dropLowerEnd:]
+#                                                     yield stress strain level   dropUpperENd
+interpolatedStrain = calculateInterpolatingStrains(sim.strain, exp_strain, 0.002, 2) # You can change the last param dropUpperEnd
+print(interpolatedStrain)
 # exp_target is now the refined interpolated experimental stress values for comparison 
 exp_target = interpolatedStressFunction(exp_stress, exp_strain, interpolatedStrain).reshape(-1) * convertUnit
 # print(exp_target)
@@ -257,10 +251,10 @@ inputSize = X.shape[1]
 outputSize = y.shape[1]
 print("Input layer size is:", inputSize)
 print("Output layer size is:", outputSize)
-hiddenSize1 = inputSize + round((1/2) * (outputSize - inputSize))
-hiddenSize2 = inputSize + round((2/3) * (outputSize - inputSize))
-hiddenSize = [hiddenSize1, hiddenSize2]
-# hiddenSize = round((2/3) * inputSize + outputSize)
+#hiddenSize1 = inputSize + round((1/2) * (outputSize - inputSize))
+#hiddenSize2 = inputSize + round((2/3) * (outputSize - inputSize))
+#hiddenSize = [hiddenSize1, hiddenSize2]
+hiddenSize = round((2/3) * inputSize + outputSize)
 print("Hidden layer size is:", hiddenSize)
 mlp = MLPRegressor(hidden_layer_sizes=hiddenSize, solver='adam', max_iter=100000, shuffle=True)
 mlp.fit(X, y)
@@ -273,10 +267,10 @@ yieldStressOptimizeInfo = {
     "material": material,
     "CPLaw": CPLaw,
     "curveIndex": curveIndex,
-    "yieldStressDevTrue": yieldStressDevTrue,
-    "yieldStressDevPredict": yieldStressDevPredict,
+    "yieldStressDev": yieldStressDev,
     "algorithm": algorithm,
     "convertUnit": convertUnit,
+    "weightsYield": weightsYield,
     "numberOfParams": numberOfParams,
     "param_range": param_range,
     "param_range_no_round": param_range_no_round,
@@ -292,10 +286,9 @@ hardeningOptimizeInfo = {
     "material": material,
     "CPLaw": CPLaw,
     "curveIndex": curveIndex,
-    "hardeningDevTrue": hardeningDevTrue,
-    "hardeningDevPredict": hardeningDevPredict,
+    "hardeningDev": hardeningDev,
     "algorithm": algorithm,
-    "weights": weights,
+    "weightsHardening": weightsHardening,
     "convertUnit": convertUnit,
     "numberOfParams": numberOfParams,
     "param_range": param_range,

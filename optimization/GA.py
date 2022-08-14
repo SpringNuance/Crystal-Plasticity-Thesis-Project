@@ -81,9 +81,9 @@ def YieldStressOptimizationGA(yieldStressOptimizeInfo):
     material = yieldStressOptimizeInfo["material"]
     CPLaw = yieldStressOptimizeInfo["CPLaw"]
     curveIndex = yieldStressOptimizeInfo["curveIndex"] 
-    yieldStressDevTrue = yieldStressOptimizeInfo["yieldStressDevTrue"]
-    yieldStressDevPredict = yieldStressOptimizeInfo["yieldStressDevPredict"]
+    yieldStressDev = yieldStressOptimizeInfo["yieldStressDev"]
     algorithm = yieldStressOptimizeInfo["algorithm"] 
+    weightsYield = yieldStressOptimizeInfo["weightsYield"]
     convertUnit = yieldStressOptimizeInfo["convertUnit"] 
     numberOfParams = yieldStressOptimizeInfo["numberOfParams"] 
     param_range = yieldStressOptimizeInfo["param_range"] 
@@ -93,7 +93,11 @@ def YieldStressOptimizationGA(yieldStressOptimizeInfo):
     interpolatedStrain = yieldStressOptimizeInfo["interpolatedStrain"] 
     sim = yieldStressOptimizeInfo["sim"] 
     mlp = yieldStressOptimizeInfo["mlp"] 
-    
+    wy1 = weightsYield["wy1"]
+    wy2 = weightsYield["wy2"]
+
+
+
     # -------------------------------
     #      Initialize GA
     # -------------------------------
@@ -111,7 +115,7 @@ def YieldStressOptimizationGA(yieldStressOptimizeInfo):
         elif CPLaw == "DB":
             partialSolution = np.array([default_yield_value['dipole'], default_yield_value['islip'], default_yield_value['omega'], solution[0], solution[1], solution[2]])
         predicted_sim_stress = mlp.predict(partialSolution.reshape((1, numberOfParams))).reshape(-1)
-        chromosomefit = fitness_yield(exp_target, predicted_sim_stress)
+        chromosomefit = fitness_yield(exp_target, predicted_sim_stress, interpolatedStrain, wy1, wy2)
         fitnessScore = 1/chromosomefit
         return fitnessScore
     
@@ -134,17 +138,17 @@ def YieldStressOptimizationGA(yieldStressOptimizeInfo):
                         mutation_num_genes=1)
 
     print("The experimental yield stress is: ", exp_target[0], "MPa")
-    rangeSimYield = (exp_target[0]* (1 - yieldStressDevTrue * 0.01), exp_target[0] * (1 + yieldStressDevTrue * 0.01)) 
+    rangeSimYield = (exp_target[0]* (1 - yieldStressDev * 0.01), exp_target[0] * (1 + yieldStressDev * 0.01)) 
     print("The simulated yield stress should lie in the range of", rangeSimYield, "MPa")
     print("Maximum deviation:", exp_target[0] * 0.02, "MPa")
     print("#### Iteration", sim.fileNumber, "####")
     y = np.array([interpolatedStressFunction(simStress, simStrain, interpolatedStrain) * convertUnit for (simStrain, simStress) in sim.simulations.values()])
     # If you want to find the best result from the initial random initial sims, you can set to true. It is likely that
     # one of the initial sims have yield stress close to the experimental yield stress so you can save time optimizing the yield stress
-    bestResultFromInitialSimsLucky = True
+    bestResultFromInitialSimsLucky = False
     if bestResultFromInitialSimsLucky:
         zipParamsStress = list(zip(list(sim.simulations.keys()), y))
-        sortedClosestYieldStress = list(sorted(zipParamsStress, key=lambda pairs: fitness_yield(exp_target, pairs[1]), reverse=True))
+        sortedClosestYieldStress = list(sorted(zipParamsStress, key=lambda pairs: fitness_yield(exp_target, pairs[1], interpolatedStrain, wy1, wy2), reverse=True))
         y = np.array(list(map(lambda x: x[1], sortedClosestYieldStress)))
         partialResult = sortedClosestYieldStress[-1][0]
         partialResult = tupleOrListToDict(partialResult, CPLaw)
@@ -156,7 +160,7 @@ def YieldStressOptimizationGA(yieldStressOptimizeInfo):
     print("The initial candidate simulated yield stress: ")
     print(y[-1][0])
     # Iterative optimization.
-    while not insideYieldStressDev(exp_target, y[-1], yieldStressDevTrue):
+    while not insideYieldStressDev(exp_target, y[-1], yieldStressDev):
         print("#### Iteration", sim.fileNumber + 1, "####")
         ga_instance.run()
         partialResults = output_resultsPartialGA(ga_instance, param_range, default_yield_value, CPLaw)
@@ -192,10 +196,9 @@ def HardeningOptimizationGA(hardeningOptimizeInfo):
     material = hardeningOptimizeInfo["material"]
     CPLaw = hardeningOptimizeInfo["CPLaw"]
     curveIndex = hardeningOptimizeInfo["curveIndex"] 
-    hardeningDevTrue = hardeningOptimizeInfo["hardeningDevTrue"] 
-    hardeningDevPredict = hardeningOptimizeInfo["hardeningDevPredict"] 
+    hardeningDev = hardeningOptimizeInfo["hardeningDev"] 
     algorithm = hardeningOptimizeInfo["algorithm"] 
-    weights = hardeningOptimizeInfo["weights"]
+    weightsHardening = hardeningOptimizeInfo["weightsHardening"]
     convertUnit = hardeningOptimizeInfo["convertUnit"] 
     numberOfParams = hardeningOptimizeInfo["numberOfParams"] 
     param_range = hardeningOptimizeInfo["param_range"] 
@@ -205,10 +208,10 @@ def HardeningOptimizationGA(hardeningOptimizeInfo):
     sim = hardeningOptimizeInfo["sim"] 
     mlp = hardeningOptimizeInfo["mlp"] 
     partialResult = hardeningOptimizeInfo["partialResult"] 
-    w1 = weights["w1"]
-    w2 = weights["w2"]
-    w3 = weights["w3"]
-    w4 = weights["w4"]
+    wh1 = weightsHardening["wh1"]
+    wh2 = weightsHardening["wh2"]
+    wh3 = weightsHardening["wh3"]
+    wh4 = weightsHardening["wh4"]
 
     if CPLaw == "PH":
         gene_space = [param_range_no_round['alpha'], param_range_no_round['h0'], param_range_no_round['taucs']]
@@ -224,7 +227,7 @@ def HardeningOptimizationGA(hardeningOptimizeInfo):
         elif CPLaw == "DB":
             fullSolution = np.array([solution[0], solution[1], solution[2], partialResult['p'], partialResult['q'], partialResult['tausol']])
         predicted_sim_stress = mlp.predict(fullSolution.reshape((1, numberOfParams))).reshape(-1)
-        chromosomefit = fitness_hardening(exp_target, predicted_sim_stress, interpolatedStrain, w1, w2, w3, w4)
+        chromosomefit = fitness_hardening(exp_target, predicted_sim_stress, interpolatedStrain, wh1, wh2, wh3, wh4)
         fitnessScore = 1/chromosomefit
         return fitnessScore
 
@@ -251,7 +254,7 @@ def HardeningOptimizationGA(hardeningOptimizeInfo):
     print(partialResult)
     y = np.array([interpolatedStressFunction(simStress, simStrain, interpolatedStrain) * convertUnit for (simStrain, simStress) in sim.simulations.values()])
     # Iterative optimization.
-    while not insideHardeningDev(exp_target, y[-3], hardeningDevTrue):
+    while not insideHardeningDev(exp_target, y[-3], hardeningDev):
         print("#### Iteration", sim.fileNumber + 1, "####")
         ga_instance.run()
         fullResults = output_resultsFullGA(ga_instance, param_range, partialResult, CPLaw)

@@ -1,4 +1,3 @@
-from functools import partial
 from modules.fitness import *
 from modules.helper import *
 import bayes_opt
@@ -88,9 +87,9 @@ def YieldStressOptimizationBA(yieldStressOptimizeInfo):
     material = yieldStressOptimizeInfo["material"]
     CPLaw = yieldStressOptimizeInfo["CPLaw"]
     curveIndex = yieldStressOptimizeInfo["curveIndex"] 
-    yieldStressDevTrue = yieldStressOptimizeInfo["yieldStressDevTrue"]
-    yieldStressDevPredict = yieldStressOptimizeInfo["yieldStressDevPredict"]
+    yieldStressDev = yieldStressOptimizeInfo["yieldStressDev"]
     algorithm = yieldStressOptimizeInfo["algorithm"] 
+    weightsYield = yieldStressOptimizeInfo["weightsYield"]
     convertUnit = yieldStressOptimizeInfo["convertUnit"] 
     numberOfParams = yieldStressOptimizeInfo["numberOfParams"] 
     param_range = yieldStressOptimizeInfo["param_range"] 
@@ -100,6 +99,8 @@ def YieldStressOptimizationBA(yieldStressOptimizeInfo):
     interpolatedStrain = yieldStressOptimizeInfo["interpolatedStrain"] 
     sim = yieldStressOptimizeInfo["sim"] 
     mlp = yieldStressOptimizeInfo["mlp"] 
+    wy1 = weightsYield["wy1"]
+    wy2 = weightsYield["wy2"]
     
     # -------------------------------
     #      Initialize BA
@@ -130,7 +131,7 @@ def YieldStressOptimizationBA(yieldStressOptimizeInfo):
             candidate_dict_round = round_params(params, param_range)
             solution = np.array(list(candidate_dict_round.values()))
             predicted_sim_stress = mlp.predict(solution.reshape(1, numberOfParams)).reshape(-1)
-            candidateScore = fitness_yield(exp_target, predicted_sim_stress)
+            candidateScore = fitness_yield(exp_target, predicted_sim_stress, interpolatedStrain, wy1, wy2)
             fitnessScore = 1/candidateScore
             return fitnessScore
     elif CPLaw == "DB":
@@ -148,27 +149,32 @@ def YieldStressOptimizationBA(yieldStressOptimizeInfo):
             candidate_dict_round = round_params(params, param_range)
             solution = np.array(list(candidate_dict_round.values()))
             predicted_sim_stress = mlp.predict(solution.reshape(1, numberOfParams)).reshape(-1)
-            candidateScore = fitness_yield(exp_target, predicted_sim_stress)
+            candidateScore = fitness_yield(exp_target, predicted_sim_stress, interpolatedStrain, wy1, wy2)
             fitnessScore = 1/candidateScore
             return fitnessScore
 
-    # Initialize BA Optimizer
-    ba_instance = bayes_opt.BayesianOptimization(f = surrogateYieldBA,
-                                    pbounds = pbounds, verbose = 2,
-                                    random_state = 4)
-    
-    # There are two ways of using BA: the sequential or automatic way. 
-    # To use sequential way, comment out automatic way, from init_points = ... until after the loop
-    # To use automatic way, comment out sequential way, from iterations = ... until after the loop
     def ba_instance_run():
-
+        # Initialize BA Optimizer
+        
+        ba_instance = bayes_opt.BayesianOptimization(f = surrogateYieldBA,
+                                        pbounds = pbounds, verbose = 2,
+                                        random_state = 4)
+        
+        # There are two ways of using BA: the sequential or automatic way. 
+        # To use sequential way, comment out automatic way, from init_points = ... until after the loop
+        # To use automatic way, comment out sequential way, from iterations = ... until after the loop
         # Sequential way  
-        iterations = 100
+        iterations = 200
         # Low kappa = 1 means more exploitation for UCB
         # High kappa = 10 means more exploration for UCB
         # Low xi = 0 means more exploitation for EI and POI
         # High xi = 0.1 means more exploration for EI and POI
-        utility = bayes_opt.UtilityFunction(kind="ei", kappa=10, xi = 0)
+        utility = bayes_opt.UtilityFunction(kind="ei", kappa=10, xi = 0.1)
+        init_points = 200
+        blockPrint()
+        ba_instance.maximize(
+            init_points = init_points, 
+            n_iter = 0)
         for i in range(iterations):
             next_point = ba_instance.suggest(utility)
             target = surrogateYieldBA(**next_point)
@@ -177,8 +183,8 @@ def YieldStressOptimizationBA(yieldStressOptimizeInfo):
                 original = next_point[param] * 10 ** - param_range[param]["round"]
                 next_point[param] = original
             next_point = round_params(next_point, param_range)
-            print("#{} Result: {}; f(x) = {}.".format(i, next_point, target))
-        
+            # print("#{} Result: {}; f(x) = {}.".format(i, next_point, target))
+        enablePrint()
         '''
         # Automatic way
         init_points = 100
@@ -189,24 +195,25 @@ def YieldStressOptimizationBA(yieldStressOptimizeInfo):
                 init_points = init_points, 
                 n_iter = iterations,    
                 # What follows are GP regressor parameters
-                acq="ucb", kappa=0.1, alpha=1)
-            #enablePrint()
-            ba_instance.set_gp_params(normalize_y=True)
-            print(ba_instance.max["params"])
-        '''   
-    
+                acq="ucb", kappa=1, alpha=1)
+        #enablePrint()
+        ba_instance.set_gp_params(normalize_y=True)
+        '''
+        return ba_instance
     print("The experimental yield stress is: ", exp_target[0], "MPa")
-    rangeSimYield = (exp_target[0]* (1 - yieldStressDevTrue * 0.01), exp_target[0] * (1 + yieldStressDevTrue * 0.01)) 
+    rangeSimYield = (exp_target[0]* (1 - yieldStressDev * 0.01), exp_target[0] * (1 + yieldStressDev * 0.01)) 
     print("The simulated yield stress should lie in the range of", rangeSimYield, "MPa")
     print("Maximum deviation:", exp_target[0] * 0.02, "MPa")
     print("#### Iteration", sim.fileNumber, "####")
     y = np.array([interpolatedStressFunction(simStress, simStrain, interpolatedStrain) * convertUnit for (simStrain, simStress) in sim.simulations.values()])
+    
     # If you want to find the best result from the initial random initial sims, you can set to true. It is likely that
     # one of the initial sims have yield stress close to the experimental yield stress so you can save time optimizing the yield stress
     bestResultFromInitialSimsLucky = False # You can change this
+    
     if bestResultFromInitialSimsLucky:
         zipParamsStress = list(zip(list(sim.simulations.keys()), y))
-        sortedClosestYieldStress = list(sorted(zipParamsStress, key=lambda pairs: fitness_yield(exp_target, pairs[1]), reverse=True))
+        sortedClosestYieldStress = list(sorted(zipParamsStress, key=lambda pairs: fitness_yield(exp_target, pairs[1], interpolatedStrain, wy1, wy2), reverse=True))
         y = np.array(list(map(lambda x: x[1], sortedClosestYieldStress)))
         partialResult = sortedClosestYieldStress[-1][0]
         partialResult = tupleOrListToDict(partialResult, CPLaw)
@@ -218,15 +225,15 @@ def YieldStressOptimizationBA(yieldStressOptimizeInfo):
     print("The initial candidate simulated yield stress: ")
     print(y[-1][0])
     # Iterative optimization.
-    while not insideYieldStressDev(exp_target, y[-1], yieldStressDevTrue):
+    while not insideYieldStressDev(exp_target, y[-1], yieldStressDev):
         print("#### Iteration", sim.fileNumber + 1, "####")
-        ba_instance_run()
+        ba_instance = ba_instance_run()
         partialResults = output_resultsPartialBA(ba_instance, param_range, default_yield_value, CPLaw)
         while tuple(partialResults['solution']) in sim.simulations.keys():
             print("The predicted solution is:")
             print(partialResults["solution_dict"])
             print("Parameters already probed. Algorithm needs to run again to obtain new parameters")
-            ba_instance_run()
+            ba_instance = ba_instance_run()
             partialResults = output_resultsPartialBA(ba_instance, param_range, default_yield_value, CPLaw)
         print_resultsPartialBA(partialResults)
         # Wait a moment so that you can check the parameters predicted by the algorithm 
@@ -254,10 +261,9 @@ def HardeningOptimizationBA(hardeningOptimizeInfo):
     material = hardeningOptimizeInfo["material"]
     CPLaw = hardeningOptimizeInfo["CPLaw"]
     curveIndex = hardeningOptimizeInfo["curveIndex"] 
-    hardeningDevTrue = hardeningOptimizeInfo["hardeningDevTrue"] 
-    hardeningDevPredict = hardeningOptimizeInfo["hardeningDevPredict"] 
+    hardeningDev = hardeningOptimizeInfo["hardeningDev"] 
     algorithm = hardeningOptimizeInfo["algorithm"] 
-    weights = hardeningOptimizeInfo["weights"]
+    weightsHardening = hardeningOptimizeInfo["weightsHardening"]
     convertUnit = hardeningOptimizeInfo["convertUnit"] 
     numberOfParams = hardeningOptimizeInfo["numberOfParams"] 
     param_range = hardeningOptimizeInfo["param_range"] 
@@ -267,10 +273,10 @@ def HardeningOptimizationBA(hardeningOptimizeInfo):
     sim = hardeningOptimizeInfo["sim"] 
     mlp = hardeningOptimizeInfo["mlp"] 
     partialResult = hardeningOptimizeInfo["partialResult"] 
-    w1 = weights["w1"]
-    w2 = weights["w2"]
-    w3 = weights["w3"]
-    w4 = weights["w4"]
+    wh1 = weightsHardening["wh1"]
+    wh2 = weightsHardening["wh2"]
+    wh3 = weightsHardening["wh3"]
+    wh4 = weightsHardening["wh4"]
 
     # -------------------------------
     #      Initialize BA
@@ -302,7 +308,7 @@ def HardeningOptimizationBA(hardeningOptimizeInfo):
             candidate_dict_round = round_params(params, param_range)
             solution = np.array(list(candidate_dict_round.values()))
             predicted_sim_stress = mlp.predict(solution.reshape(1, numberOfParams)).reshape(-1)
-            candidateScore = fitness_hardening(exp_target, predicted_sim_stress, interpolatedStrain, w1, w2, w3, w4)
+            candidateScore = fitness_hardening(exp_target, predicted_sim_stress, interpolatedStrain, wh1, wh2, wh3, wh4)
             fitnessScore = 1/candidateScore
             return fitnessScore
     elif CPLaw == "DB":
@@ -320,20 +326,25 @@ def HardeningOptimizationBA(hardeningOptimizeInfo):
             candidate_dict_round = round_params(params, param_range)
             solution = np.array(list(candidate_dict_round.values()))
             predicted_sim_stress = mlp.predict(solution.reshape(1, numberOfParams)).reshape(-1)
-            candidateScore = fitness_hardening(exp_target, predicted_sim_stress, interpolatedStrain, w1, w2, w3, w4)
+            candidateScore = fitness_hardening(exp_target, predicted_sim_stress, interpolatedStrain, wh1, wh2, wh3, wh4)
             fitnessScore = 1/candidateScore
             return fitnessScore
 
-    # Initialize BA Optimizer
-    ba_instance = bayes_opt.BayesianOptimization(f = surrogateHardeningBA,
-                                    pbounds = pbounds, verbose = 2,
-                                    random_state = 4)
+
     
     # There are two ways of using BA: the sequential or automatic way. 
     # To use sequential way, comment out automatic way, from init_points = ... until after the loop
     # To use automatic way, comment out sequential way, from iterations = ... until after the loop
     def ba_instance_run():
-    
+        # Initialize BA Optimizer
+        
+        ba_instance = bayes_opt.BayesianOptimization(f = surrogateHardeningBA,
+                                        pbounds = pbounds, verbose = 2,
+                                        random_state = 4)
+        
+        # There are two ways of using BA: the sequential or automatic way. 
+        # To use sequential way, comment out automatic way, from init_points = ... until after the loop
+        # To use automatic way, comment out sequential way, from iterations = ... until after the loop
         # Sequential way  
         iterations = 200
         # Low kappa = 1 means more exploitation for UCB
@@ -341,6 +352,11 @@ def HardeningOptimizationBA(hardeningOptimizeInfo):
         # Low xi = 0 means more exploitation for EI and POI
         # High xi = 0.1 means more exploration for EI and POI
         utility = bayes_opt.UtilityFunction(kind="ei", kappa=10, xi = 0.1)
+        init_points = 200
+        blockPrint()
+        ba_instance.maximize(
+            init_points = init_points, 
+            n_iter = 0)
         for i in range(iterations):
             next_point = ba_instance.suggest(utility)
             target = surrogateHardeningBA(**next_point)
@@ -349,11 +365,12 @@ def HardeningOptimizationBA(hardeningOptimizeInfo):
                 original = next_point[param] * 10 ** - param_range[param]["round"]
                 next_point[param] = original
             next_point = round_params(next_point, param_range)
-            print("#{} Result: {}; f(x) = {}.".format(i, next_point, target))
+            # print("#{} Result: {}; f(x) = {}.".format(i, next_point, target))
+        enablePrint()
         '''
         # Automatic way
-        init_points = 5000
-        iterations = 0
+        init_points = 100
+        iterations = 200
         #blockPrint()
         for i in range(1):
             ba_instance.maximize(
@@ -361,24 +378,24 @@ def HardeningOptimizationBA(hardeningOptimizeInfo):
                 n_iter = iterations,    
                 # What follows are GP regressor parameters
                 acq="ucb", kappa=1, alpha=1)
-            #enablePrint()
-            ba_instance.set_gp_params(normalize_y=True)
-            print(ba_instance.max["params"])
+        #enablePrint()
+        ba_instance.set_gp_params(normalize_y=True)
         '''
+        return ba_instance
     fullResult = partialResult
     print("The partial result and also initial candidate full result: ")
     print(partialResult)
     y = np.array([interpolatedStressFunction(simStress, simStrain, interpolatedStrain) * convertUnit for (simStrain, simStress) in sim.simulations.values()])
     # Iterative optimization.
-    while not insideHardeningDev(exp_target, y[-1], hardeningDevTrue):
+    while not insideHardeningDev(exp_target, y[-1], hardeningDev):
         print("#### Iteration", sim.fileNumber + 1, "####")
-        ba_instance_run()
+        ba_instance = ba_instance_run()
         fullResults = output_resultsFullBA(ba_instance, param_range, partialResult, CPLaw)
         while tuple(fullResults['solution']) in sim.simulations.keys():
             print("The predicted solution is:")
             print(fullResults["solution_dict"])
             print("Parameters already probed. Algorithm needs to run again to obtain new parameters")
-            ba_instance_run()
+            ba_instance = ba_instance_run()
             fullResults = output_resultsFullBA(ba_instance, param_range, partialResult, CPLaw)
         print_resultsFullBA(fullResults)
         # Wait a moment so that you can check the parameters predicted by the algorithm 
@@ -398,4 +415,3 @@ def HardeningOptimizationBA(hardeningOptimizeInfo):
     print("Succeeded iteration:", sim.fileNumber)
     np.save(f'results_{material}/{CPLaw}{curveIndex}_{algorithm}/full_result.npy', fullResult)
     return fullResult
-

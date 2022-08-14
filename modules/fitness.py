@@ -1,30 +1,48 @@
 import numpy as np
 from math import *
 
-def D1(exp_stress, sim_stress): 
-    return np.sqrt(np.sum(np.square(exp_stress - sim_stress))/np.sum(np.square(exp_stress)))
-
-def D2(exp_stress, sim_stress, sim_strain): 
-    exp_stress_d1 = np.diff(exp_stress)/np.diff(sim_strain)  
-    sim_stress_d1 = np.diff(sim_stress)/np.diff(sim_strain)
-    return np.sqrt(np.sum(np.square(sim_stress_d1 - exp_stress_d1))/np.sum(np.square(exp_stress_d1)))
-
-def D3(exp_stress, sim_stress):
-    return np.max(np.sqrt(np.square(exp_stress - sim_stress)/sum(np.square(exp_stress))))
-
-def D4(exp_stress, sim_stress, sim_strain):
-    exp_stress_d1 = np.diff(exp_stress)/np.diff(sim_strain)
-    sim_stress_d1 = np.diff(sim_stress)/np.diff(sim_strain)
-    return np.max(np.sqrt(np.square(sim_stress_d1 - exp_stress_d1)/np.sum(np.square(exp_stress_d1))))
-
-def fitness_yield(exp_stress, sim_stress):
-    expYieldStress = exp_stress[0]
-    simYieldStress = sim_stress[0] 
+################################################
+# Yield stress objective and fitness functions #
+################################################
+def Y1(exp_stress, sim_stress):
+    expYieldStress = exp_stress[1]
+    simYieldStress = sim_stress[1] 
     return abs(expYieldStress - simYieldStress)
 
-def fitness_hardening(exp_stress, sim_stress, sim_strain, w1, w2, w3, w4):
-    return ( w1*D1(exp_stress, sim_stress) + w2*D2(exp_stress, sim_stress, sim_strain) 
-            + w3*D3(exp_stress, sim_stress) + w4*D4(exp_stress, sim_stress, sim_strain))
+def Y2(exp_stress, sim_stress, interpolating_strain):
+    expSlope = (exp_stress[2] - exp_stress[0]) /(interpolating_strain[2] - interpolating_strain[0])
+    simSlope = (sim_stress[2] - sim_stress[0]) /(interpolating_strain[2] - interpolating_strain[0])
+    return abs(expSlope - simSlope)
+
+def fitness_yield(exp_stress, sim_stress, interpolating_strain, wy1, wy2):
+    return (wy1 * Y1(exp_stress, sim_stress) + wy2 * Y2(exp_stress, sim_stress, interpolating_strain))
+
+#############################################
+# Hardening objective and fitness functions #
+#############################################
+def H1(exp_stress, sim_stress): 
+    return np.sqrt(np.sum(np.square(exp_stress - sim_stress))/np.sum(np.square(exp_stress)))
+
+def H2(exp_stress, sim_stress, interpolating_strain): 
+    exp_stress_d1 = np.diff(exp_stress)/np.diff(interpolating_strain)  
+    sim_stress_d1 = np.diff(sim_stress)/np.diff(interpolating_strain)
+    return np.sqrt(np.sum(np.square(sim_stress_d1 - exp_stress_d1))/np.sum(np.square(exp_stress_d1)))
+
+def H3(exp_stress, sim_stress):
+    return np.max(np.sqrt(np.square(exp_stress - sim_stress)/sum(np.square(exp_stress))))
+
+def H4(exp_stress, sim_stress, interpolating_strain):
+    exp_stress_d1 = np.diff(exp_stress)/np.diff(interpolating_strain)
+    sim_stress_d1 = np.diff(sim_stress)/np.diff(interpolating_strain)
+    return np.max(np.sqrt(np.square(sim_stress_d1 - exp_stress_d1)/np.sum(np.square(exp_stress_d1))))
+
+def fitness_hardening(exp_stress, sim_stress, interpolating_strain, wh1, wh2, wh3, wh4):
+    return ( wh1*H1(exp_stress, sim_stress) + wh2*H2(exp_stress, sim_stress, interpolating_strain) 
+            + wh3*H3(exp_stress, sim_stress) + wh4*H4(exp_stress, sim_stress, interpolating_strain))
+
+###############################
+# Stopping criteria functions #
+###############################
 
 def insideYieldStressDev(exp_stress, sim_stress, percentDeviation):
     expYieldStress = exp_stress[0]

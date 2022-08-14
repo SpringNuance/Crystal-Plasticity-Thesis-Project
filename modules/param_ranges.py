@@ -98,7 +98,7 @@ default_yield_RVE_1_40_D = {
     "DB": [
         {'dipole': 5,'islip': 80, 'omega': 5}, # DB1 curve
         {'dipole': 5,'islip': 80, 'omega': 5}, # DB2 curve
-        {'dipole': 5,'islip': 80, 'omega': 5}  # DB3 curve
+        {'dipole': 5,'islip': 150, 'omega': 5}  # DB3 curve
     ],
 }
 

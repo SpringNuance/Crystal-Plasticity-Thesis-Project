@@ -1,6 +1,6 @@
 login as: nguyenb5
 nguyenb5@puhti.csc.fi's password:
-Last login: Sun Aug  7 16:08:20 2022 from dzc096yjvbplpjxw-by6t-3.rev.dnainternet.fi
+Last login: Sat Aug 13 02:04:50 2022 from dzc096yd4ykzydjw4qymt-3.rev.dnainterne          t.fi
 ┌─ Welcome ───────────────────────────────────────────────────────────────────┐
 │         CSC - Tieteen tietotekniikan keskus - IT Center for Science         │
 │            ____        __    __  _                                          │
@@ -34,18 +34,11 @@ Last login: Sun Aug  7 16:08:20 2022 from dzc096yjvbplpjxw-by6t-3.rev.dnainterne
 │ In Puhti there are three main disk areas:                                   │
 │   home     Personal home folder                                             │
 │   projappl Per project folder where applications and libraries can be stored│
-│   scratch  Per project folder for running jobs. Files are removed           │
-│            after 90 days (not yet activated).                               │
+│   scratch  Per project folder for running jobs.                             │
 │                                                                             │
 │ Run csc-workspaces to see your folders and quotas                           │
 │ See https://docs.csc.fi/computing/disk/ for details                         │
 ├─ News ──────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│  2019-11-25: 90-day /scratch cleaning is not active yet, we'll inform       │
-│              users later with more detailed information when it's activated.│
-│                                                                             │
-│  2020-11-19: Puhti outgoing internet traffic is coming from new addresses,  │
-│              puhti-nat-1.csc.fi and puhti-nat-2.csc.fi                      │
 │                                                                             │
 │  2021-10-13: Limits of the interactive partition have been increased.       │
 │              Max two jobs, 8 cores, 76 GiB memory and 720 GiB of NVMe.      │
@@ -63,10 +56,15 @@ Last login: Sun Aug  7 16:08:20 2022 from dzc096yjvbplpjxw-by6t-3.rev.dnainterne
 cd /scratch/project_2004956/Binh/DB3GeneticLargeRVE
 source damask_py/bin/activate
 python optimize.py
-[nguyenb5@puhti-login1 ~]$ cd /scratch/project_2004956/Binh/DB3GeneticLargeRVE
-[nguyenb5@puhti-login1 DB3GeneticLargeRVE]$ source damask_py/bin/activate
-(damask_py) [nguyenb5@puhti-login1 DB3GeneticLargeRVE]$ python optimize.py
 
+WARNING: Project disk quota exceeded
+        Path                            Capacity(used/max)      Files(used/max)
+        -----                           -----                   -----
+        /scratch/project_2001353        *4T/4T                  35k/3M
+
+[nguyenb5@puhti-login2 ~]$ cd /scratch/project_2004956/Binh/DB3GeneticLargeRVE
+[nguyenb5@puhti-login2 DB3GeneticLargeRVE]$ source damask_py/bin/activate
+(damask_py) [nguyenb5@puhti-login2 DB3GeneticLargeRVE]$ python optimize.py
 
 Welcome to Crystal Plasticity Parameter Calibration
 
@@ -81,181 +79,113 @@ The target curve: DB3
 Number of fitting parameters in DB law: 6
 
 Range and step of parameters:
-{'dipole': {'low': 1, 'high': 25, 'step': 1}, 'islip': {'low': 100, 'high': 200, 'step': 1}, 'omega': {'low': 1, 'high': 50, 'step': 1}, 'p': {'low': 0.05, 'high': 1, 'step': 0.05}, 'q': {'low': 1, 'high': 2, 'step': 0.05}, 'tausol': {'low': 1, 'high': 3, 'step': 0.05}}
+{'dipole': {'low': 1, 'high': 25, 'step': 1}, 'islip': {'low': 100, 'high': 200,           'step': 1}, 'omega': {'low': 1, 'high': 50, 'step': 1}, 'p': {'low': 0.05, 'hig          h': 1, 'step': 0.05}, 'q': {'low': 1, 'high': 2, 'step': 0.05}, 'tausol': {'low'          : 1, 'high': 3, 'step': 0.05}}
 
 Default values of hardening parameters for yield stress optimization:
-{'dipole': 5, 'islip': 80, 'omega': 5}
+{'dipole': 5, 'islip': 150, 'omega': 5}
 
-Number of initial simulations: 60
+Number of initial simulations: 30
 
 Chosen optimization algorithm: GA
 
-The optimization process is manual
+The optimization process is auto
 
-The yield stress deviation percentage is 2%
+The yield stress deviation percentage is: 0.5%
 
-The hardening deviation percentage is 5%
+The hardening deviation percentage is 2%
 
-The weights of w1, w2, w3, w4 of hardening objective functions are:
-{'w1': 0.9, 'w2': 0.025, 'w3': 0.05, 'w4': 0.025}
+The weights wy1, wy2 of yield stress objective functions are:
+{'wy1': 0.9999, 'wy2': 0.0001}
 
-The optimization process is manual
+The weights wh1, wh2, wh3, wh4 of hardening objective functions are:
+{'wh1': 0.9, 'wh2': 0.025, 'wh3': 0.05, 'wh4': 0.025}
+
+The optimization process is auto
 
 The path to your main project folder is:
 /scratch/project_2004956/Binh/DB3GeneticLargeRVE
 --------------------------------
 Stage 1: Running initial simulations/Loading progress and preparing data
 30 initial simulations completed.
-No additional simulations completed.
+1 additional simulations completed.
+Total: 31 simulations completed.
+[0.00197562 0.002      0.00242607 0.00288745 0.00335621 0.00383126
+ 0.00431181 0.00479636 0.00528343 0.00577201 0.00626148 0.0067515
+ 0.00724183 0.00773233 0.00822291 0.0087135  0.00920405 0.00969453
+ 0.01018491 0.01067516 0.01116529 0.01165526 0.01214507 0.01263471
+ 0.01312417 0.01361345 0.01410254 0.01459144 0.02214388 0.02964833
+ 0.03710494 0.04451329 0.05187288 0.05918327 0.06644425 0.07365574
+ 0.08081786 0.08793083 0.09499496 0.10201062 0.10897823 0.11589831
+ 0.12277137 0.1295979  0.13637843 0.14311352 0.14980372 0.15644958
+ 0.16071398 0.16496031 0.1691887 ]
 Experimental and simulated curves preparation completed
 --------------------------------
 Stage 2: Initialize and train the RSM (MLP) with the initial data
-Fitting response surface...
+Fitting response surface method (multilayer perceptron)...
 Input layer size is: 6
-Output layer size is: 49
-Hidden layer size is: 53
+Output layer size is: 51
+Hidden layer size is: 55
 MLP training finished
 --------------------------------
 Stage 3: Optimize the yield stress parameters with genetic algorithm
-The experimental yield stress is:  254.64691056930482 MPa
-The simulated yield stress should lie in the range of (249.55397235791872, 259.7398487806909) MPa
-Maximum deviation: 5.092938211386096 MPa
-#### Iteration 30 ####
-The initial candidate partial result:
-{'dipole': 7.0, 'islip': 125.0, 'omega': 42.0, 'p': 0.95, 'q': 1.65, 'tausol': 1.65}
-The initial candidate simulated yield stress:
-268.8605275094307
+The experimental yield stress is:  251.99506685799983 MPa
+The simulated yield stress should lie in the range of (250.73509152370983, 253.2          550421922898) MPa
+Maximum deviation: 5.039901337159996 MPa
 #### Iteration 31 ####
-Parameters of the best partial solution : {'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.55, 'q': 1.35, 'tausol': 1.45}
-Fitness value of the best solution = 177.84633958767617
-Index of the best solution : 0
-Fitness given by the MLP estimate: 0.0056228314977886384
-Submitted batch job 12687279
-path2txt is: ./simulations_RVE_1_40_D/DB3_GA/31/postProc/
-files is:
-['RVE_1_40_D_tensionX.txt']
-The simulated yield stress:
-203.7151641277857
+The initial candidate partial result:
+{'dipole': 5, 'islip': 150, 'omega': 5, 'p': 0.35, 'q': 1.2, 'tausol': 2.55}
+The initial candidate simulated yield stress:
+233.257768010584
 #### Iteration 32 ####
-Parameters of the best partial solution : {'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.4, 'q': 1.45, 'tausol': 2.2}
-Fitness value of the best solution = 45.8609711908437
+Parameters of the best partial solution : {'dipole': 5, 'islip': 150, 'omega': 5          , 'p': 0.7, 'q': 1.25, 'tausol': 1.0}
+Fitness value of the best solution = 4.930946601514986
 Index of the best solution : 0
-Fitness given by the MLP estimate: 0.021805033213070146
-Submitted batch job 12689523
+Fitness given by the MLP estimate: 0.20280081712764028
+Submitted batch job 12731214
 path2txt is: ./simulations_RVE_1_40_D/DB3_GA/32/postProc/
 files is:
 ['RVE_1_40_D_tensionX.txt']
-The simulated yield stress:
-195.34892033378432
+The simulated yield stress: 190.26102112249612 MPa
 #### Iteration 33 ####
-Parameters of the best partial solution : {'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.5, 'q': 1.7, 'tausol': 2.75}
-Fitness value of the best solution = 23.63184416436754
+Parameters of the best partial solution : {'dipole': 5, 'islip': 150, 'omega': 5          , 'p': 0.9, 'q': 1.75, 'tausol': 1.25}
+Fitness value of the best solution = 17.169742494547897
 Index of the best solution : 0
-Fitness given by the MLP estimate: 0.04231578344223408
-Submitted batch job 12690863
+Fitness given by the MLP estimate: 0.05824199170823566
+Submitted batch job 12731535
 path2txt is: ./simulations_RVE_1_40_D/DB3_GA/33/postProc/
 files is:
 ['RVE_1_40_D_tensionX.txt']
-The simulated yield stress:
-238.55669018470894
+The simulated yield stress: 207.54712026940192 MPa
 #### Iteration 34 ####
-Parameters of the best partial solution : {'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.5, 'q': 1.2, 'tausol': 2.1}
-Fitness value of the best solution = 18.545073422558808
+Parameters of the best partial solution : {'dipole': 5, 'islip': 150, 'omega': 5          , 'p': 0.95, 'q': 1.75, 'tausol': 1.0}
+Fitness value of the best solution = 62.32929372648502
 Index of the best solution : 0
-Fitness given by the MLP estimate: 0.053922676778597634
-Submitted batch job 12691996
+Fitness given by the MLP estimate: 0.016043820492948713
+Submitted batch job 12731701
 path2txt is: ./simulations_RVE_1_40_D/DB3_GA/34/postProc/
 files is:
 ['RVE_1_40_D_tensionX.txt']
-The simulated yield stress:
-270.36766710853783
+The simulated yield stress: 184.6347492618844 MPa
 #### Iteration 35 ####
-Parameters of the best partial solution : {'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.5, 'q': 1.35, 'tausol': 2.25}
-Fitness value of the best solution = 24.65585245425708
+The predicted solution is:
+{'dipole': 5, 'islip': 150, 'omega': 5, 'p': 0.95, 'q': 1.75, 'tausol': 1.0}
+Parameters already probed. Algorithm needs to run again to obtain new parameters
+Parameters of the best partial solution : {'dipole': 5, 'islip': 150, 'omega': 5          , 'p': 0.9, 'q': 1.1, 'tausol': 1.1}
+Fitness value of the best solution = 4.757337706358843
 Index of the best solution : 0
-Fitness given by the MLP estimate: 0.04055832187734154
-Submitted batch job 12692576
+Fitness given by the MLP estimate: 0.21020160050091904
+Submitted batch job 12731869
 path2txt is: ./simulations_RVE_1_40_D/DB3_GA/35/postProc/
 files is:
 ['RVE_1_40_D_tensionX.txt']
-The simulated yield stress:
-256.50233766140025
---------------------------------
-Yield stress parameters optimization completed
-The partial parameter solution is:
-{'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.5, 'q': 1.35, 'tausol': 2.25}
-Succeeded iteration: 35
---------------------------------
-Stage 4: Optimize the hardening parameters with genetic algorithm
-The partial result and also initial candidate full result:
-{'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.5, 'q': 1.35, 'tausol': 2.25}
+The simulated yield stress: 236.780394267536 MPa
 #### Iteration 36 ####
-Parameters of the best full solution : {'dipole': 5, 'islip': 160, 'omega': 3, 'p': 0.5, 'q': 1.35, 'tausol': 2.25}
-Fitness value of the best solution = 35.9465448904538
+Parameters of the best partial solution : {'dipole': 5, 'islip': 150, 'omega': 5          , 'p': 0.85, 'q': 1.45, 'tausol': 1.55}
+Fitness value of the best solution = 6.103564757771223
 Index of the best solution : 0
-Fitness given by the MLP estimate: 0.0278190853403985
-Submitted batch job 12693064
+Fitness given by the MLP estimate: 0.16383868111283215
+Submitted batch job 12731975
 path2txt is: ./simulations_RVE_1_40_D/DB3_GA/36/postProc/
 files is:
 ['RVE_1_40_D_tensionX.txt']
-RMSE LOSS = 11.30189579521104
-Forgot to record some iterations here
-#### Iteration 39 ####
-Parameters of the best full solution : {'dipole': 5, 'islip': 183, 'omega': 2, 'p': 0.5, 'q': 1.35, 'tausol': 2.25}
-Fitness value of the best solution = 30.688542668713225
-Index of the best solution : 0
-Fitness given by the MLP estimate: 0.032585450889445255
-Submitted batch job 12697429
-path2txt is: ./simulations_RVE_1_40_D/DB3_GA/39/postProc/
-files is:
-['RVE_1_40_D_tensionX.txt']
-RMSE LOSS = 11.040491539923083
-#### Iteration 40 ####
-Parameters of the best full solution : {'dipole': 5, 'islip': 182, 'omega': 2, 'p': 0.5, 'q': 1.35, 'tausol': 2.25}
-Fitness value of the best solution = 30.678838504588263
-Index of the best solution : 0
-Fitness given by the MLP estimate: 0.03259575814287891
-Submitted batch job 12699224
-path2txt is: ./simulations_RVE_1_40_D/DB3_GA/40/postProc/
-files is:
-['RVE_1_40_D_tensionX.txt']
-RMSE LOSS = 11.011861501952085
-#### Iteration 41 ####
-Parameters of the best full solution : {'dipole': 3, 'islip': 139, 'omega': 2, 'p': 0.5, 'q': 1.35, 'tausol': 2.25}
-Fitness value of the best solution = 28.452863129968204
-Index of the best solution : 0
-Fitness given by the MLP estimate: 0.0351458479040284
-Submitted batch job 12700885
-path2txt is: ./simulations_RVE_1_40_D/DB3_GA/41/postProc/
-files is:
-['RVE_1_40_D_tensionX.txt']
-RMSE LOSS = 7.4451459136811415
-#### Iteration 42 ####
-Parameters of the best full solution : {'dipole': 4, 'islip': 100, 'omega': 1, 'p': 0.5, 'q': 1.35, 'tausol': 2.25}
-Fitness value of the best solution = 24.47962537697088
-Index of the best solution : 0
-Fitness given by the MLP estimate: 0.040850298344056624
-Submitted batch job 12702076
-path2txt is: ./simulations_RVE_1_40_D/DB3_GA/42/postProc/
-files is:
-['RVE_1_40_D_tensionX.txt']
-RMSE LOSS = 9.055906770316692
-#### Iteration 43 ####
-Parameters of the best full solution : {'dipole': 3, 'islip': 146, 'omega': 3, 'p': 0.5, 'q': 1.35, 'tausol': 2.25}
-Fitness value of the best solution = 29.557826901107273
-Index of the best solution : 0
-Fitness given by the MLP estimate: 0.03383198647673719
-Submitted batch job 12702411
-path2txt is: ./simulations_RVE_1_40_D/DB3_GA/43/postProc/
-files is:
-['RVE_1_40_D_tensionX.txt']
-RMSE LOSS = 7.108881441696293
---------------------------------
-Hardening parameters optimization completed
-The full parameter solution is:
-{'dipole': 3, 'islip': 146, 'omega': 3, 'p': 0.5, 'q': 1.35, 'tausol': 2.25}
-Succeeded iteration: 43
---------------------------------
-Stage 5: CP Parameter Calibration completed
-The final parameter solution is:
-{'dipole': 3, 'islip': 146, 'omega': 3, 'p': 0.5, 'q': 1.35, 'tausol': 2.25}
+The simulated yield stress: 258.29294341147244 MPa
