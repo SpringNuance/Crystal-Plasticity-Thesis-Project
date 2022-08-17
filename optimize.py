@@ -31,13 +31,13 @@ CPLaw = "DB" # Please change this
 
 # Type "GA" for genetic algorithm
 # Type "BA" for Bayesian algorithm
-algorithm = "BA" # Please change this
+algorithm = "GA" # Please change this
 
 # Please choose the number of initial simulations
 initialSims = 30 # Please change this
 
 # Type the target experimental curve index (1,2,3)
-curveIndex = 2 # Please change this
+curveIndex = 1 # Please change this
 
 # Type the project path folder
 # projectPath = "/scratch/project_2004956/Binh/CrystalPlasticityProject"
@@ -64,7 +64,7 @@ method = "auto"
 # method = "manual"
 
 # Setting the weights of the two yield stress objective functions:  
-weightsYield = {"wy1": 0.9999, "wy2": 0.0001}
+weightsYield = {"wy1": 0.999, "wy2": 0.001}
 
 # Setting the weights of the four hardening objective functions:  
 weightsHardening = {"wh1": 0.9, "wh2": 0.025, "wh3": 0.05, "wh4": 0.025}

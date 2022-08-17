@@ -261,8 +261,7 @@ def HardeningOptimizationGA(hardeningOptimizeInfo):
         while tuple(fullResults['solution']) in sim.simulations.keys():
             print("The predicted solution is:")
             print(fullResults["solution_dict"])
-            print("There exist some simulated stress points not lying inside the hardening prediction deviation")
-            print("Algorithm needs to run again to obtain new parameters")
+            print("Parameters already probed. Algorithm needs to run again to obtain new parameters")
             ga_instance.run()
             fullResults = output_resultsFullGA(ga_instance, param_range, partialResult, CPLaw)
         print_resultsFullGA(fullResults)

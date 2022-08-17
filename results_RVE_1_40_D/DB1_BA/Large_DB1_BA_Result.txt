@@ -1,63 +1,232 @@
 login as: nguyenb5
 nguyenb5@puhti.csc.fi's password:
-Last login: Wed Aug 10 13:03:15 2022 from dzc096yjvbplpjxw-by6t-3.rev.dnainternet.fi
-┌─ Welcome ───────────────────────────────────────────────────────────────────┐
-│         CSC - Tieteen tietotekniikan keskus - IT Center for Science         │
-│            ____        __    __  _                                          │
-│           / __ \__  __/ /_  / /_(_)   - -  -   -                            │
-│          / /_/ / / / / __ \/ __/ /   - -  -   -                             │
-│         / ____/ /_/ / / / / /_/ /   - -  -   -                              │
-│        /_/    \__,_/_/ /_/\__/_/   - -  -   -                               │
-│                                                                             │
-│      Puhti.csc.fi - Atos BullSequana X400 - 682 CPU nodes - 80 GPU nodes    │
-├─ Contact ───────────────────────────────────────────────────────────────────┤
-│ Servicedesk : 09-457 2821, servicedesk@csc.fi   Switchboard : 09-457 2001   │
-├─ User Guide ────────────────────────────────────────────────────────────────┤
-│ https://docs.csc.fi                                                         │
-├─ Manage my account ─────────────────────────────────────────────────────────┤
-│ https://my.csc.fi/                                                          │
-├─ Billing ───────────────────────────────────────────────────────────────────┤
-│ Billing has changed significantly from Sisu/Taito. CPU, GPU, Memory, local  │
-│ disk and lustre scratch space are all billed. See for details:              │
-│ https://docs.csc.fi/accounts/billing/                                       │
-├─ Software ──────────────────────────────────────────────────────────────────┤
-│ Available modules can be listed with command: module avail and module spider│
-├─ Main Partitions ───────────────────────────────────────────────────────────┤
-│   small       : 1-40 cores    3 days max runtime                            │
-│   large       : 2-1040 cores  3 days max runtime                            │
-│   hugemem     : 1-160 cores   3 days max runtime                            │
-│   longrun     : 1-40 cores   14 days max runtime                            │
-│   gpu         : 1-80 GPUs     3 days max runtime                            │
-│                                                                             │
-│ See https://docs.csc.fi/computing/running/batch-job-partitions/             │
-├─ Storage ───────────────────────────────────────────────────────────────────┤
-│ In Puhti there are three main disk areas:                                   │
-│   home     Personal home folder                                             │
-│   projappl Per project folder where applications and libraries can be stored│
-│   scratch  Per project folder for running jobs.                             │
-│                                                                             │
-│ Run csc-workspaces to see your folders and quotas                           │
-│ See https://docs.csc.fi/computing/disk/ for details                         │
-├─ News ──────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│  2021-10-13: Limits of the interactive partition have been increased.       │
-│              Max two jobs, 8 cores, 76 GiB memory and 720 GiB of NVMe.      │
-│                                                                             │
-│  2021-10-18: An easy-to-use web interface for Puhti is now open for beta    │
-│              test use at https://www.puhti.csc.fi. User documentation at    │
-│              https://docs.csc.fi/computing/webinterface                     │
-│                                                                             │
-│  2022-06-28: Fast NVMe drives has been added to multiple node types, it can │
-│              improve IO-intensive job performance a lot.                    │
-│              https://docs.csc.fi/support/whats-new/                         │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
+Last login: Mon Aug 15 17:14:32 2022 from dzc096yjzsqqnd-jbbt.fi
+┌─ Welcome ─────────────────────────────────────────────────
+│         CSC - Tieteen tietotekniikan keskus - IT Center fo
+│            ____        __    __  _
+│           / __ \__  __/ /_  / /_(_)   - -  -   -
+│          / /_/ / / / / __ \/ __/ /   - -  -   -
+│         / ____/ /_/ / / / / /_/ /   - -  -   -
+│        /_/    \__,_/_/ /_/\__/_/   - -  -   -
+│
+│      Puhti.csc.fi - Atos BullSequana X400 - 682 CPU nodes
+├─ Contact ─────────────────────────────────────────────────
+│ Servicedesk : 09-457 2821, servicedesk@csc.fi   Switchboar
+├─ User Guide ──────────────────────────────────────────────
+│ https://docs.csc.fi
+├─ Manage my account ───────────────────────────────────────
+│ https://my.csc.fi/
+├─ Billing ─────────────────────────────────────────────────
+│ Billing has changed significantly from Sisu/Taito. CPU, GP
+│ disk and lustre scratch space are all billed. See for deta
+│ https://docs.csc.fi/accounts/billing/
+├─ Software ────────────────────────────────────────────────
+│ Available modules can be listed with command: module avail
+├─ Main Partitions ─────────────────────────────────────────
+│   small       : 1-40 cores    3 days max runtime
+│   large       : 2-1040 cores  3 days max runtime
+│   hugemem     : 1-160 cores   3 days max runtime
+│   longrun     : 1-40 cores   14 days max runtime
+│   gpu         : 1-80 GPUs     3 days max runtime
+│
+│ See https://docs.csc.fi/computing/running/batch-job-partit
+├─ Storage ─────────────────────────────────────────────────
+│ In Puhti there are three main disk areas:
+│   home     Personal home folder
+│   projappl Per project folder where applications and libra
+│   scratch  Per project folder for running jobs.
+│
+│ Run csc-workspaces to see your folders and quotas
+│ See https://docs.csc.fi/computing/disk/ for details
+├─ News ────────────────────────────────────────────────────
+│
+│  2021-10-13: Limits of the interactive partition have been
+│              Max two jobs, 8 cores, 76 GiB memory and 720
+│
+│  2021-10-18: An easy-to-use web interface for Puhti is now
+│              test use at https://www.puhti.csc.fi. User do
+│              https://docs.csc.fi/computing/webinterface
+│
+│  2022-06-28: Fast NVMe drives has been added to multiple n
+│              improve IO-intensive job performance a lot.
+│              https://docs.csc.fi/support/whats-new/
+│
+└───────────────────────────────────────────────────────────
 
 cd /scratch/project_2004956/Binh/DB1BayesLargeRVE
 source damask_py/bin/activate
-python optimize.py[nguyenb5@puhti-login1 ~]$ cd /scratch/project_2004956/Binh/DB1BayesLargeRVE
-[nguyenb5@puhti-login1 DB1BayesLargeRVE]$ source damask_py/bin/activate
-(damask_py) [nguyenb5@puhti-login1 DB1BayesLargeRVE]$ python optimize.py
+sinteractive -i[nguyenb5@puhti-login1 ~]$ cd /scratch/projecyesLargeRVE
+[nguyenb5@puhti-login1 DB1BayesLargeRVE]$ source damask_py/b
+(damask_py) [nguyenb5@puhti-login1 DB1BayesLargeRVE]$ sinter
+
+Define project with option: -A or --account
+or choose a project by giving an item number from the list b
+
+1) project_2001353 TOOLKIT for Damage Tolerant Microstructur
+2) project_2004956 Optimization of crystal plasticity parame
+3) Quit
+#? 2
+Give time reservation in format hours:minutes:seconds [24:00
+
+Give memory reservation in Megabytes(M) or Gigabytes(G) [200
+
+Give number of computing cores you want to use [1]
+
+Define the size of the temporary disk area [32]G
+
+Launching new interavtive job
+
+Interactive batch job is launched with following resources:
+  Maximum run time (hours:min:sec): 24:00:00
+  Maximum memory (MB): 2000
+  $TMPDIR size (GB): 32
+  Number of cores/threads: 1
+  Accounting project: project_2004956
+
+srun: job 12757008 queued and waiting for resources
+srun: job 12757008 has been allocated resources
+[nguyenb5@r18c03 DB1BayesLargeRVE]$ python optimize.py
+
+Welcome to Crystal Plasticity Parameter Calibration
+
+The configurations you have chosen:
+
+Material under study: RVE_1_40_D
+
+CP Law: dislocation-based law
+
+The target curve: DB1
+
+Number of fitting parameters in DB law: 6
+
+Range and step of parameters:
+{'dipole': {'low': 1, 'high': 25, 'step': 1}, 'islip': {'lowtep': 1}, 'omega': {'low': 1, 'high': 50, 'step': 1}, 'p': { 1, 'step': 0.05}, 'q': {'low': 1, 'high': 2, 'step': 0.05},.01, 'high': 0.5, 'step': 0.01}}
+
+Default values of hardening parameters for yield stress opti
+{'dipole': 5, 'islip': 80, 'omega': 5}
+
+Number of initial simulations: 30
+
+Chosen optimization algorithm: GA
+
+The optimization process is auto
+
+The yield stress deviation percentage is: 2%
+
+The hardening deviation percentage is 5%
+
+The weights wy1, wy2 of yield stress objective functions are
+{'wy1': 0.9999, 'wy2': 0.0001}
+
+The weights wh1, wh2, wh3, wh4 of hardening objective functi
+{'wh1': 0.9, 'wh2': 0.025, 'wh3': 0.05, 'wh4': 0.025}
+
+The optimization process is auto
+
+The path to your main project folder is:
+/scratch/project_2004956/Binh/DB1BayesLargeRVE
+--------------------------------
+Stage 1: Running initial simulations/Loading progress and pr
+30 initial simulations completed.
+No additional simulations completed.
+[0.00197344 0.002      0.0021629  0.0023528  0.00254306 0.00
+ 0.00321078 0.00368878 0.00416728 0.00464609 0.0051251  0.00
+ 0.00608348 0.00656277 0.00704209 0.00752142 0.00800075 0.00
+ 0.00895937 0.00943864 0.00991787 0.01039706 0.0108762  0.01
+ 0.01183432 0.01231328 0.01279217 0.01327099 0.01374974 0.01
+ 0.01470699 0.01518549 0.02258939 0.02996429 0.03730531 0.04
+ 0.05187385 0.05909738 0.06627853 0.0734163  0.08051009 0.08
+ 0.09456403 0.10152354 0.10843778 0.11530685 0.12213101 0.12
+ 0.13564567 0.14233678 0.14898422 0.15558842 0.15982644 0.16
+ 0.16824945]
+Experimental and simulated curves preparation completed
+--------------------------------
+Stage 2: Initialize and train the RSM (MLP) with the initial
+Fitting response surface method (multilayer perceptron)...
+Input layer size is: 6
+Output layer size is: 55
+Hidden layer size is: 59
+MLP training finished
+--------------------------------
+Stage 3: Optimize the yield stress parameters with genetic a
+The experimental yield stress is:  71.75221488371547 MPa
+The simulated yield stress should lie in the range of (70.3125918138978) MPa
+Maximum deviation: 1.4350442976743094 MPa
+#### Iteration 30 ####
+The initial candidate partial result:
+{'dipole': 16.0, 'islip': 50.0, 'omega': 32.0, 'p': 0.55, 'q.02}
+The initial candidate simulated yield stress:
+68.25048793116778
+#### Iteration 31 ####
+Parameters of the best partial solution : {'dipole': 5, 'isl 'p': 0.05, 'q': 1.95, 'tausol': 0.01}
+Fitness value of the best solution = 0.02812452810752921
+Index of the best solution : 0
+Fitness given by the MLP estimate: 35.55615213086154
+Submitted batch job 12757013
+path2txt is: ./simulations_RVE_1_40_D/DB1_GA/31/postProc/
+files is:
+[]
+Traceback (most recent call last):
+  File "optimize.py", line 324, in <module>
+    partialResult = YieldStressOptimizationGA(yieldStressOptimizeInfo)
+  File "/scratch/project_2004956/Binh/DB1BayesLargeRVE/optimization/GA.py", line 177, in YieldStressOptimizationGA
+    sim.run_single_test(tuple(partialResults['solution']))
+  File "/scratch/project_2004956/Binh/DB1BayesLargeRVE/modules/SIM.py", line 274, in run_single_test
+    self.save_single_output(simPath, params)
+  File "/scratch/project_2004956/Binh/DB1BayesLargeRVE/modules/SIM.py", line 314, in save_single_output
+    processed = preprocess(f'{path2txt}/{files[0]}')
+IndexError: list index out of range
+[nguyenb5@r18c03 DB1BayesLargeRVE]$ sinteractive -i
+bash: sinteractive: command not found
+[nguyenb5@r18c03 DB1BayesLargeRVE]$ python optimize.py
+
+Welcome to Crystal Plasticity Parameter Calibration
+
+The configurations you have chosen:
+
+Material under study: RVE_1_40_D
+
+CP Law: dislocation-based law
+
+The target curve: DB1
+
+Number of fitting parameters in DB law: 6
+
+Range and step of parameters:
+{'dipole': {'low': 1, 'high': 25, 'step': 1}, 'islip': {'low': 1, 'high': 50, 'step': 1}, 'omega': {'low': 1, 'high': 50, 'step': 1}, 'p': {'low': 0.05, 'high': 1, 'step': 0.05}, 'q': {'low': 1, 'high': 2, 'step': 0.05}, 'tausol': {'low': 0.01, 'high': 0.5, 'step': 0.01}}
+
+Default values of hardening parameters for yield stress optimization:
+{'dipole': 5, 'islip': 80, 'omega': 5}
+
+Number of initial simulations: 30
+
+Chosen optimization algorithm: GA
+
+The optimization process is auto
+
+The yield stress deviation percentage is: 2%
+
+The hardening deviation percentage is 5%
+
+The weights wy1, wy2 of yield stress objective functions are:
+{'wy1': 0.9999, 'wy2': 0.0001}
+
+The weights wh1, wh2, wh3, wh4 of hardening objective functions are:
+{'wh1': 0.9, 'wh2': 0.025, 'wh3': 0.05, 'wh4': 0.025}
+
+The optimization process is auto
+
+The path to your main project folder is:
+/scratch/project_2004956/Binh/DB1BayesLargeRVE
+--------------------------------
+Stage 1: Running initial simulations/Loading progress and preparing data
+Traceback (most recent call last):
+  File "optimize.py", line 177, in <module>
+    initial_data = np.load(f'results_{material}/{CPLaw}{curveIndex}_{algorithm}/initial_simulations.npy', allow_pickle=True)
+  File "/scratch/project_2004956/Ilari/JobFiles/damask_py/lib64/python3.6/site-packages/numpy/lib/npyio.py", line 416, in load
+    fid = stack.enter_context(open(os_fspath(file), "rb"))
+FileNotFoundError: [Errno 2] No such file or directory: 'results_RVE_1_40_D/DB1_GA/initial_simulations.npy'
+[nguyenb5@r18c03 DB1BayesLargeRVE]$ python optimize.py
 
 Welcome to Crystal Plasticity Parameter Calibration
 
@@ -83,12 +252,15 @@ Chosen optimization algorithm: BA
 
 The optimization process is auto
 
-The true and predict yield stress deviation percentage is: 2% and 10%
+The yield stress deviation percentage is: 2%
 
-The true and predict hardening deviation percentage is 5% and 25%
+The hardening deviation percentage is 5%
 
-The weights of w1, w2, w3, w4 of hardening objective functions are:
-{'w1': 0.9, 'w2': 0.025, 'w3': 0.05, 'w4': 0.025}
+The weights wy1, wy2 of yield stress objective functions are:
+{'wy1': 0.9999, 'wy2': 0.0001}
+
+The weights wh1, wh2, wh3, wh4 of hardening objective functions are:
+{'wh1': 0.9, 'wh2': 0.025, 'wh3': 0.05, 'wh4': 0.025}
 
 The optimization process is auto
 
@@ -97,158 +269,107 @@ The path to your main project folder is:
 --------------------------------
 Stage 1: Running initial simulations/Loading progress and preparing data
 30 initial simulations completed.
-No additional simulations completed.
+1 additional simulations completed.
+Total: 31 simulations completed.
+[0.00197344 0.002      0.0021629  0.0023528  0.00254306 0.00273359
+ 0.00321078 0.00368878 0.00416728 0.00464609 0.0051251  0.00560425
+ 0.00608348 0.00656277 0.00704209 0.00752142 0.00800075 0.00848007
+ 0.00895937 0.00943864 0.00991787 0.01039706 0.0108762  0.01135529
+ 0.01183432 0.01231328 0.01279217 0.01327099 0.01374974 0.0142284
+ 0.01470699 0.01518549 0.02258939 0.02996429 0.03730531 0.04460925
+ 0.05187385 0.05909738 0.06627853 0.0734163  0.08051009 0.08755945
+ 0.09456403 0.10152354 0.10843778 0.11530685 0.12213101 0.12891052
+ 0.13564567 0.14233678 0.14898422 0.15558842 0.15982644 0.16404675
+ 0.16824945]
 Experimental and simulated curves preparation completed
 --------------------------------
 Stage 2: Initialize and train the RSM (MLP) with the initial data
 Fitting response surface method (multilayer perceptron)...
 Input layer size is: 6
-Output layer size is: 53
-Hidden layer size is: [30, 37]
+Output layer size is: 55
+Hidden layer size is: 59
 MLP training finished
 --------------------------------
 Stage 3: Optimize the yield stress parameters with Bayesian algorithm
 {'p': (5, 100), 'q': (100, 200), 'tausol': (1, 50)}
-The experimental yield stress is:  72.57221212231732 MPa
-The simulated yield stress should lie in the range of (71.12076787987098, 74.02365636476367) MPa
-Maximum deviation: 1.4514442424463465 MPa
-#### Iteration 30 ####
-The initial candidate partial result:
-{'dipole': 16.0, 'islip': 50.0, 'omega': 32.0, 'p': 0.55, 'q': 1.35, 'tausol': 0.02}
-The initial candidate simulated yield stress:
-68.84059450615192
+The experimental yield stress is:  71.75221488371547 MPa
+The simulated yield stress should lie in the range of (70.31717058604116, 73.18725918138978) MPa
+Maximum deviation: 1.4350442976743094 MPa
 #### Iteration 31 ####
-Parameters of the best partial solution : {'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.15, 'q': 1.8, 'tausol': 0.05}
-Fitness value of the best solution = 0.01766008421365463
-Fitness given by the MLP estimate: 56.62487154091871
-Submitted batch job 12706707
-
-
-path2txt is: ./simulations_RVE_1_40_D/DB1_BA/31/postProc/
-files is:
-['RVE_1_40_D_tensionX.txt']
-The simulated yield stress: 66.50332357108594 MPa
+The initial candidate partial result:
+{'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.15, 'q': 1.3, 'tausol': 0.28}
+The initial candidate simulated yield stress:
+68.70483201119886
 #### Iteration 32 ####
-Parameters of the best partial solution : {'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.35, 'q': 1.0, 'tausol': 0.1}
-Fitness value of the best solution = 514.5227243512327
-Fitness given by the MLP estimate: 0.0019435487543546515
-Submitted batch job 12708437
+Parameters of the best partial solution : {'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.55, 'q': 1.6, 'tausol': 0.04}
+Fitness value of the best solution = 8.030053850449033
+Fitness given by the MLP estimate: 0.12453216611294343
+Submitted batch job 12757305
 path2txt is: ./simulations_RVE_1_40_D/DB1_BA/32/postProc/
 files is:
 ['RVE_1_40_D_tensionX.txt']
-The simulated yield stress: 75.93597306289396 MPa
+The simulated yield stress: 69.15488469835965 MPa
 #### Iteration 33 ####
-Parameters of the best partial solution : {'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.5, 'q': 2.0, 'tausol': 0.05}
-Fitness value of the best solution = 11.64177209250527
-Fitness given by the MLP estimate: 0.08589757573452061
-Submitted batch job 12709122
+Parameters of the best partial solution : {'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.6, 'q': 1.25, 'tausol': 0.08}
+Fitness value of the best solution = 7.232014419678768
+Fitness given by the MLP estimate: 0.13827406058247574
+Submitted batch job 12757658
 path2txt is: ./simulations_RVE_1_40_D/DB1_BA/33/postProc/
 files is:
 ['RVE_1_40_D_tensionX.txt']
-The simulated yield stress: 69.1193312212126 MPa
+The simulated yield stress: 75.2248264953344 MPa
 #### Iteration 34 ####
-Parameters of the best partial solution : {'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.3, 'q': 1.1, 'tausol': 0.06}
-Fitness value of the best solution = 62.13470919317495
-Fitness given by the MLP estimate: 0.016094064219259963
-Submitted batch job 12709487
+Parameters of the best partial solution : {'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.4, 'q': 1.7, 'tausol': 0.14}
+Fitness value of the best solution = 4.870379899868636
+Fitness given by the MLP estimate: 0.20532279217622673
+Submitted batch job 12757952
 path2txt is: ./simulations_RVE_1_40_D/DB1_BA/34/postProc/
 files is:
 ['RVE_1_40_D_tensionX.txt']
-The simulated yield stress: 70.54662137781153 MPa
-#### Iteration 35 ####
-Parameters of the best partial solution : {'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.55, 'q': 1.95, 'tausol': 0.03}
-Fitness value of the best solution = 15.031240643392055
-Fitness given by the MLP estimate: 0.06652810794028596
-Submitted batch job 12709689
-path2txt is: ./simulations_RVE_1_40_D/DB1_BA/35/postProc/
-files is:
-['RVE_1_40_D_tensionX.txt']
-The simulated yield stress: 68.3344576064774 MPa
-#### Iteration 36 ####
-Parameters of the best partial solution : {'dipole': 5, 'islip': 80, ' 'p': 0.45, 'q': 1.5, 'tausol': 0.03}
-Fitness value of the best solution = 47.17767844122271
-Fitness given by the MLP estimate: 0.021196464790989467
-Submitted batch job 12713698
-path2txt is: ./simulations_RVE_1_40_D/DB1_BA/36/postProc/
-files is:
-['RVE_1_40_D_tensionX.txt']
-The simulated yield stress: 68.52391401896541 MPa
-#### Iteration 37 ####
-Parameters of the best partial solution : {'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.65, 'q': 1.65, 'tausol': 0.03}
-Fitness value of the best solution = 35.432524455364316
-Fitness given by the MLP estimate: 0.028222657441745017
-Submitted batch job 12715380
-path2txt is: ./simulations_RVE_1_40_D/DB1_BA/37/postProc/
-files is:
-['RVE_1_40_D_tensionX.txt']
-The simulated yield stress: 69.25843651622657 MPa
-#### Iteration 40 ####
-Parameters of the best partial solution : {'dipole': 5, 'islip': 80, 'omega': 5,  'p': 0.55, 'q': 1.5, 'tausol': 0.06}
-Fitness value of the best solution = 45.432524455364316
-Fitness given by the MLP estimate: 0.028222654374745017
-Submitted batch job 12715380
-path2txt is: ./simulations_RVE_1_40_D/DB1_BA/40/postProc/
-files is:
-['RVE_1_40_D_tensionX.txt']
-The simulated yield stress: 71.29100660432408 MPa
+The simulated yield stress: 72.72726881126385 MPa
 --------------------------------
 Yield stress parameters optimization completed
 The partial parameter solution is:
-{'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.55, 'q': 1.5, 'tausol': 0.06}
-Succeeded iteration: 32
+{'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.4, 'q': 1.7, 'tausol': 0.14}
+Succeeded iteration: 34
 --------------------------------
-#### Iteration 44 ####
-Parameters of the best full solution : {'dipole': 6, 'islip': 1': 0.55, 'q': 1.5, 'tausol': 0.06}
-Fitness value of the best solution = 25.803945740966995
-Fitness given by the MLP estimate: 0.03875376308873471
-Submitted batch job 12731230
-path2txt is: ./simulations_RVE_1_40_D/DB1_BA/44/postProc/
+Stage 4: Optimize the hardening parameters with Bayesian algorithm
+The partial result and also initial candidate full result:
+{'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.4, 'q': 1.7, 'tausol': 0.14}
+#### Iteration 35 ####
+Parameters of the best full solution : {'dipole': 6, 'islip': 24, 'omega': 3, 'p': 0.4, 'q': 1.7, 'tausol': 0.14}
+Fitness value of the best solution = 22.53284143622343
+Fitness given by the MLP estimate: 0.044379667022039056
+Submitted batch job 12758206
+path2txt is: ./simulations_RVE_1_40_D/DB1_BA/35/postProc/
 files is:
 ['RVE_1_40_D_tensionX.txt']
-RMSE LOSS = 12.468152146642211
-#### Iteration 45 ####
-Parameters of the best full solution : {'dipole': 3, 'islip': 2': 0.55, 'q': 1.5, 'tausol': 0.06}
-Fitness value of the best solution = 34.79383459829609
-Fitness given by the MLP estimate: 0.028740724083598755
-Submitted batch job 12731577
-path2txt is: ./simulations_RVE_1_40_D/DB1_BA/45/postProc/
+RMSE LOSS = 26.932916449326488
+#### Iteration 36 ####
+Parameters of the best full solution : {'dipole': 1, 'islip': 21, 'omega': 1, 'p': 0.4, 'q': 1.7, 'tausol': 0.14}
+Fitness value of the best solution = 36.93228321307415
+Fitness given by the MLP estimate: 0.027076582139010475
+Submitted batch job 12758452
+path2txt is: ./simulations_RVE_1_40_D/DB1_BA/36/postProc/
 files is:
 ['RVE_1_40_D_tensionX.txt']
-RMSE LOSS = 17.08386299042621
-#### Iteration 46 ####
-Parameters of the best full solution : {'dipole': 5, 'islip': 1': 0.55, 'q': 1.5, 'tausol': 0.06}
-Fitness value of the best solution = 27.849927601844982
-Fitness given by the MLP estimate: 0.035906736071147013
-Submitted batch job 12731740
-path2txt is: ./simulations_RVE_1_40_D/DB1_BA/46/postProc/
+RMSE LOSS = 47.19143878714455
+#### Iteration 37 ####
+Parameters of the best full solution : {'dipole': 1, 'islip': 28, 'omega': 3, 'p': 0.4, 'q': 1.7, 'tausol': 0.14}
+Fitness value of the best solution = 52.99350641029885
+Fitness given by the MLP estimate: 0.018870236520255212
+Submitted batch job 12796887
+path2txt is: ./simulations_RVE_1_40_D/DB1_BA/37/postProc/
 files is:
 ['RVE_1_40_D_tensionX.txt']
-RMSE LOSS = 9.338371212124553
-#### Iteration 47 ####
-Parameters of the best full solution : {'dipole': 1, 'islip': 2': 0.55, 'q': 1.5, 'tausol': 0.06}
-Fitness value of the best solution = 36.90650988331963
-Fitness given by the MLP estimate: 0.027095490826998053
-Submitted batch job 12731961
-path2txt is: ./simulations_RVE_1_40_D/DB1_BA/47/postProc/
-files is:
-['RVE_1_40_D_tensionX.txt']
-RMSE LOSS = 15.750996020920525
-#### Iteration 48 ####
-Parameters of the best full solution : {'dipole': 2, 'islip': 2': 0.55, 'q': 1.5, 'tausol': 0.06}
-Fitness value of the best solution = 63.490421773599074
-Fitness given by the MLP estimate: 0.01575040725931711
-Submitted batch job 12732111
-path2txt is: ./simulations_RVE_1_40_D/DB1_BA/48/postProc/
-files is:
-['RVE_1_40_D_tensionX.txt']
-RMSE LOSS = 8.248843715977559
+RMSE LOSS = 2.9615513110562124
 --------------------------------
 Hardening parameters optimization completed
 The full parameter solution is:
-{'dipole': 2, 'islip': 26, 'omega': 1, 'p': 0.55, 'q': 1.5, 'tausol': 0.06}
-Succeeded iteration: 48
+{'dipole': 1, 'islip': 28, 'omega': 3, 'p': 0.4, 'q': 1.7, 'tausol': 0.14}
+Succeeded iteration: 37
 --------------------------------
 Stage 5: CP Parameter Calibration completed
 The final parameter solution is:
-{'dipole': 2, 'islip': 26, 'omega': 1, 'p': 0.55, 'q': 1.5, 'tausol': 0.06}
-
+{'dipole': 1, 'islip': 28, 'omega': 3, 'p': 0.4, 'q': 1.7, 'tausol': 0.14}
+[nguyenb5@r18c02 DB1BayesLargeRVE]$
