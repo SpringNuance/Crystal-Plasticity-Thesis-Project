@@ -305,7 +305,7 @@ The simulated yield stress: 72.30356082541407 MPa
 --------------------------------
 Yield stress parameters optimization completed
 The partial parameter solution is:
-{'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.45, 'q': 1.6, 'ta                                    usol': 0.1}
+{'dipole': 5, 'islip': 80, 'omega': 5, 'p': 0.45, 'q': 1.6, 'tausol': 0.1}
 Succeeded iteration: 38
 --------------------------------
 Stage 4: Optimize the hardening parameters with genetic algorit                                    hm
@@ -352,7 +352,7 @@ files is:
 ['RVE_1_40_D_tensionX.txt']
 RMSE LOSS = 12.673984309084101
 #### Iteration 43 ####
-Parameters of the best full solution : {'dipole': 1, 'islip': 29, 'omega': 2, '                    p': 0.45, 'q': 1.6, 'tausol': 0.1}
+Parameters of the best full solution : {'dipole': 1, 'islip': 29, 'omega': 2, 'p': 0.45, 'q': 1.6, 'tausol': 0.1}
 Fitness value of the best solution = 68.8085817660355
 Index of the best solution : 0
 Fitness given by the MLP estimate: 0.014533070938741663
@@ -361,3 +361,22 @@ path2txt is: ./simulations_RVE_1_40_D/DB1_GA/43/postProc/
 files is:
 ['RVE_1_40_D_tensionX.txt']
 RMSE LOSS = 2.0677363868978382
+Parameters of the best full solution : {'dipole': 1, 'islip': 27, 'omega': 3, 'p': 0.45, 'q': 1.6, 'tausol': 0.1}
+Fitness value of the best solution = 44.29323483423559
+Index of the best solution : 0
+Fitness given by the MLP estimate: 0.022576811193457235
+Submitted batch job 12823162
+path2txt is: ./simulations_RVE_1_40_D/DB1_GA/44/postProc/
+files is:
+['RVE_1_40_D_tensionX.txt']
+RMSE LOSS = 4.195095969781607
+--------------------------------
+Hardening parameters optimization completed
+The full parameter solution is:
+(1, 27, 3, 0.45, 1.6, 0.1)
+Succeeded iteration: 44
+--------------------------------
+Stage 5: CP Parameter Calibration completed
+The final parameter solution is:
+(1, 27, 3, 0.45, 1.6, 0.1)
+(damask_py) [nguyenb5@puhti-login2 DB1GeneticLargeRVE]$

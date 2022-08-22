@@ -203,7 +203,7 @@ def YieldStressOptimizationBA(yieldStressOptimizeInfo):
     print("The experimental yield stress is: ", exp_target[0], "MPa")
     rangeSimYield = (exp_target[0]* (1 - yieldStressDev * 0.01), exp_target[0] * (1 + yieldStressDev * 0.01)) 
     print("The simulated yield stress should lie in the range of", rangeSimYield, "MPa")
-    print("Maximum deviation:", exp_target[0] * 0.02, "MPa")
+    print("Maximum deviation:", exp_target[0] * yieldStressDev * 0.01, "MPa")
     print("#### Iteration", sim.fileNumber, "####")
     y = np.array([interpolatedStressFunction(simStress, simStrain, interpolatedStrain) * convertUnit for (simStrain, simStress) in sim.simulations.values()])
     
@@ -382,10 +382,12 @@ def HardeningOptimizationBA(hardeningOptimizeInfo):
         ba_instance.set_gp_params(normalize_y=True)
         '''
         return ba_instance
-    fullResult = partialResult
-    print("The partial result and also initial candidate full result: ")
+    print("The partial result: ")
     print(partialResult)
     y = np.array([interpolatedStressFunction(simStress, simStrain, interpolatedStrain) * convertUnit for (simStrain, simStress) in sim.simulations.values()])
+    fullResult = list(sim.simulations.keys())[-1]
+    print("The initial candidate full result: ")
+    print(fullResult)
     # Iterative optimization.
     while not insideHardeningDev(exp_target, y[-1], hardeningDev):
         print("#### Iteration", sim.fileNumber + 1, "####")
