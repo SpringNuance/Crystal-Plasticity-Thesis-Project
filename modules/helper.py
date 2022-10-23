@@ -46,7 +46,7 @@ def param_range_no_step_func(param_range_no_round):
 
 def rearrangePH(params):
     newParams = {}
-    newParams['alpha'] = params['alpha']
+    newParams['a'] = params['a']
     newParams['h0'] = params['h0']
     newParams['tau0'] = params['tau0']
     newParams['taucs'] = params['taucs']
@@ -65,7 +65,7 @@ def rearrangeDB(params):
 def tupleOrListToDict(params, CPLaw):
     newParams = {}
     if CPLaw == "PH":
-        newParams['alpha'] = params[0]
+        newParams['a'] = params[0]
         newParams['h0'] = params[1]
         newParams['tau0'] = params[2]
         newParams['taucs'] = params[3]
@@ -81,7 +81,7 @@ def tupleOrListToDict(params, CPLaw):
 def defaultParams(partialResult, CPLaw, default_yield_value):
     if CPLaw == "PH":
         solution_dict = {
-            'alpha': default_yield_value['alpha'],
+            'a': default_yield_value['a'],
             'h0': default_yield_value['h0'],
             'tau0': partialResult['tau0'],
             'taucs': default_yield_value['taucs']

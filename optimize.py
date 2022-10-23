@@ -39,22 +39,10 @@ initialSims = 30 # Please change this
 # Type the target experimental curve index (1,2,3)
 curveIndex = 1 # Please change this
 
-# Type the project path folder
-# projectPath = "/scratch/project_2004956/Binh/CrystalPlasticityProject"
+# The current path folder
 
-projectPath = "/scratch/project_2004956/Binh/PH1GeneticLargeRVE"
-# projectPath = "/scratch/project_2004956/Binh/PH2GeneticLargeRVE"
-# projectPath = "/scratch/project_2004956/Binh/PH3GeneticLargeRVE"
-# projectPath = "/scratch/project_2004956/Binh/DB1GeneticLargeRVE"
-# projectPath = "/scratch/project_2004956/Binh/DB2GeneticLargeRVE"
-# projectPath = "/scratch/project_2004956/Binh/DB3GeneticLargeRVE"
+projectPath = os.getcwd()
 
-# projectPath = "/scratch/project_2004956/Binh/PH1BayesLargeRVE"
-# projectPath = "/scratch/project_2004956/Binh/PH2BayesLargeRVE"
-# projectPath = "/scratch/project_2004956/Binh/PH3BayesLargeRVE"
-# projectPath = "/scratch/project_2004956/Binh/DB1BayesLargeRVE"
-# projectPath = "/scratch/project_2004956/Binh/DB2BayesLargeRVE"
-# projectPath = "/scratch/project_2004956/Binh/DB3BayesLargeRVE"
 # Type the material name
 material = "RVE_1_40_D"
 # material = "512grains512"
@@ -74,12 +62,15 @@ yieldStressDev = 0.5  # deviation for the real simulated yield stress result
 # Define the hardening deviation percentage for the second stage of hardening optimization
 hardeningDev = 2  # deviation for the real simulated global curve result
 
+# If you haven't run initial simulations, set it to False. Otherwise set it to True
+initial_simulations_completed = True # Please change this
+
 if material == "RVE_1_40_D":
     param_ranges = param_ranges_RVE_1_40_D
     default_yield_values = default_yield_RVE_1_40_D 
     # These number are obtained from material.config files, where each number is the line number of the parameter minus 1
-    # For example, the line of the parameter alpha in RVE_1_40_D in the material.config file template is 34 => 33
-    # Lines of   alpha, h0, tau0, taucs 
+    # For example, the line of the parameter a in RVE_1_40_D in the material.config file template is 34 => 33
+    # Lines of     a, h0, tau0, taucs 
     editlinesPH = [33,  34,  31,   32]
     # Lines of   dipole, islip, omega, p,  q, tausol
     editLinesDB = [66,    62,    65,  58,  59,  49]
@@ -88,7 +79,7 @@ if material == "RVE_1_40_D":
 elif material == "512grains512":
     param_ranges = param_ranges_512grains512
     default_yield_values = default_yield_512grains512 
-    # Lines of   alpha, h0, tau0, taucs 
+    # Lines of     a, h0, tau0, taucs 
     editlinesPH = [54,  46,  36,   37]
     # Lines of   dipole, islip, omega, p,  q, tausol
     editLinesDB = [48,    44,    47,  40,  41,  31]
@@ -171,8 +162,6 @@ sim = SIM(info)
 
 print("--------------------------------")
 print("Stage 1: Running initial simulations/Loading progress and preparing data")
-# If you haven't run initial simulations, set it to False. Otherwise set it to True
-initial_simulations_completed = True # Please change this
 if initial_simulations_completed:
     initial_data = np.load(f'results_{material}/{CPLaw}{curveIndex}_{algorithm}/initial_simulations.npy', allow_pickle=True)
     initial_data = initial_data.tolist()

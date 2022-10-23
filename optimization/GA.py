@@ -12,7 +12,7 @@ def output_resultsPartialGA(ga_instance, param_range, default_yield_value, CPLaw
     fitness = 1/solution_fitness
     if CPLaw == "PH":
         solution_dict = {
-            'alpha': default_yield_value['alpha'],
+            'a': default_yield_value['a'],
             'h0': default_yield_value['h0'],
             'tau0': solution[0],
             'taucs': default_yield_value['taucs']
@@ -41,7 +41,7 @@ def output_resultsFullGA(ga_instance, param_range, partialResult, CPLaw):
     fitness = 1/solution_fitness
     if CPLaw == "PH":
         solution_dict = {
-            'alpha': solution[0],
+            'a': solution[0],
             'h0': solution[1],
             'tau0': partialResult['tau0'],
             'taucs': solution[2]
@@ -111,7 +111,7 @@ def YieldStressOptimizationGA(yieldStressOptimizeInfo):
     
     def fitnessYieldGA(solution, solution_idx):
         if CPLaw == "PH":
-            partialSolution = np.array([default_yield_value['alpha'], default_yield_value['h0'], solution[0], default_yield_value['taucs']])
+            partialSolution = np.array([default_yield_value['a'], default_yield_value['h0'], solution[0], default_yield_value['taucs']])
         elif CPLaw == "DB":
             partialSolution = np.array([default_yield_value['dipole'], default_yield_value['islip'], default_yield_value['omega'], solution[0], solution[1], solution[2]])
         predicted_sim_stress = mlp.predict(partialSolution.reshape((1, numberOfParams))).reshape(-1)
@@ -214,7 +214,7 @@ def HardeningOptimizationGA(hardeningOptimizeInfo):
     wh4 = weightsHardening["wh4"]
 
     if CPLaw == "PH":
-        gene_space = [param_range_no_round['alpha'], param_range_no_round['h0'], param_range_no_round['taucs']]
+        gene_space = [param_range_no_round['a'], param_range_no_round['h0'], param_range_no_round['taucs']]
         numberOfHardeningParams = 3
     elif CPLaw == "DB":
         gene_space = [param_range_no_round['dipole'], param_range_no_round['islip'], param_range_no_round['omega']]

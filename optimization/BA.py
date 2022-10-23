@@ -21,7 +21,7 @@ def output_resultsPartialBA(ba_instance, param_range, default_yield_value, CPLaw
     fitness = 1/solution_fitness
     if CPLaw == "PH":
         solution_dict = {
-            'alpha': default_yield_value['alpha'],
+            'a': default_yield_value['a'],
             'h0': default_yield_value['h0'],
             'tau0': solution_dict_original['tau0'] * (10 ** - param_range["tau0"]["round"]),
             'taucs': default_yield_value['taucs']
@@ -49,7 +49,7 @@ def output_resultsFullBA(ba_instance, param_range, partialResult, CPLaw):
     fitness = 1/solution_fitness
     if CPLaw == "PH":
         solution_dict = {
-            'alpha': solution_dict_original['alpha'] * (10 ** - param_range["alpha"]["round"]),
+            'a': solution_dict_original['a'] * (10 ** - param_range["a"]["round"]),
             'h0': solution_dict_original['h0'] * (10 ** - param_range["h0"]["round"]),
             'tau0': partialResult['tau0'],
             'taucs': solution_dict_original['taucs'] * (10 ** - param_range["taucs"]["round"])
@@ -121,7 +121,7 @@ def YieldStressOptimizationBA(yieldStressOptimizeInfo):
     if CPLaw == "PH":
         def surrogateYieldBA(tau0):
             params = {
-                'alpha': default_yield_value["alpha"],
+                'a': default_yield_value["a"],
                 'h0': default_yield_value["h0"],
                 'tau0': tau0 * (10 ** - param_range["tau0"]["round"]),
                 'taucs': default_yield_value["taucs"]
@@ -195,7 +195,7 @@ def YieldStressOptimizationBA(yieldStressOptimizeInfo):
                 init_points = init_points, 
                 n_iter = iterations,    
                 # What follows are GP regressor parameters
-                acq="ucb", kappa=1, alpha=1)
+                acq="ucb", kappa=1, a=1)
         #enablePrint()
         ba_instance.set_gp_params(normalize_y=True)
         '''
@@ -283,7 +283,7 @@ def HardeningOptimizationBA(hardeningOptimizeInfo):
     # -------------------------------
     if CPLaw == "PH":
         pbounds = {
-            "alpha": multiply(param_range_no_step['alpha'], 10 ** param_range["alpha"]["round"]), 
+            "a": multiply(param_range_no_step['a'], 10 ** param_range["a"]["round"]), 
             "h0": multiply(param_range_no_step['h0'], 10 ** param_range["h0"]["round"]), 
             "taucs": multiply(param_range_no_step['taucs'], 10 ** param_range["taucs"]["round"])
         }
@@ -296,9 +296,9 @@ def HardeningOptimizationBA(hardeningOptimizeInfo):
 
     # Initialize surrogate function
     if CPLaw == "PH":
-        def surrogateHardeningBA(alpha, h0, taucs):
+        def surrogateHardeningBA(a, h0, taucs):
             params = {
-                'alpha': alpha * (10 ** - param_range["alpha"]["round"]),
+                'a': a * (10 ** - param_range["a"]["round"]),
                 'h0': h0 * (10 ** - param_range["h0"]["round"]),
                 'tau0': partialResult["tau0"],
                 'taucs': taucs * (10 ** - param_range["taucs"]["round"])
@@ -377,7 +377,7 @@ def HardeningOptimizationBA(hardeningOptimizeInfo):
                 init_points = init_points, 
                 n_iter = iterations,    
                 # What follows are GP regressor parameters
-                acq="ucb", kappa=1, alpha=1)
+                acq="ucb", kappa=1, a=1)
         #enablePrint()
         ba_instance.set_gp_params(normalize_y=True)
         '''

@@ -33,21 +33,21 @@ param_ranges_RVE_1_40_D = {
     "PH": [
     # PH1 curve
     {
-        'alpha':{'low': 1.1, 'high': 3, 'step': 0.1, 'round': 1},
+        'a':{'low': 1.1, 'high': 3, 'step': 0.1, 'round': 1},
         'h0':{'low': 100, 'high': 5000, 'step': 50, 'round': 0},
         'tau0':{'low': 20, 'high': 100, 'step': 1, 'round': 0},
         'taucs':{'low': 100, 'high': 1000, 'step': 10, 'round': 0} 
     },
     # PH2 curve
     {
-        'alpha':{'low': 1.1, 'high': 3, 'step': 0.1, 'round': 1},
+        'a':{'low': 1.1, 'high': 3, 'step': 0.1, 'round': 1},
         'h0':{'low': 100, 'high': 1000, 'step': 50, 'round': 0},
         'tau0':{'low': 50, 'high': 100, 'step': 1, 'round': 0},
         'taucs':{'low': 100, 'high': 600, 'step': 1, 'round': 0} 
     },
     # PH3 curve
     {
-        'alpha':{'low': 0.1, 'high': 0.9, 'step': 0.1, 'round': 1},
+        'a':{'low': 0.1, 'high': 0.9, 'step': 0.1, 'round': 1},
         'h0':{'low': 500, 'high': 1500, 'step': 50, 'round': 0},
         'tau0':{'low': 10, 'high': 50, 'step': 1, 'round': 0},
         'taucs':{'low': 20, 'high': 300, 'step': 1, 'round': 0}
@@ -89,9 +89,9 @@ default_yield_RVE_1_40_D = {
 
 # Phenomenological parameters
     "PH": [
-        {'alpha': 1.5,'h0': 800,'taucs': 200}, # PH1 curve
-        {'alpha': 1.5,'h0': 800,'taucs': 200}, # PH2 curve
-        {'alpha': 0.5,'h0': 800,'taucs': 200}  # PH3 curve
+        {'a': 1.5,'h0': 800,'taucs': 200}, # PH1 curve
+        {'a': 1.5,'h0': 800,'taucs': 200}, # PH2 curve
+        {'a': 0.5,'h0': 800,'taucs': 200}  # PH3 curve
     ],
 
 # Dislocation-based parameters
@@ -115,21 +115,21 @@ param_ranges_512grains512 = {
     "PH": [
     # PH1 curve
     {
-        'alpha':{'low': 1.2, 'high': 5, 'step': 0.2, 'round': 1},
+        'a':{'low': 1.2, 'high': 5, 'step': 0.2, 'round': 1},
         'h0':{'low': 500, 'high': 1000, 'step': 50, 'round': 0},
         'tau0':{'low': 100, 'high': 200, 'step': 1, 'round': 0},
         'taucs':{'low': 200, 'high': 400, 'step': 1, 'round': 0} 
     },
     # PH2 curve
     {
-        'alpha':{'low': 3, 'high': 4, 'step': 0.1, 'round': 1},
+        'a':{'low': 3, 'high': 4, 'step': 0.1, 'round': 1},
         'h0':{'low': 1100, 'high': 1300, 'step': 50, 'round': 0},
         'tau0':{'low': 350, 'high': 380, 'step': 1, 'round': 0},
         'taucs':{'low': 1150, 'high': 1250, 'step': 1, 'round': 0} 
     },
     # PH3 curve
     {
-        'alpha':{'low': 2.1, 'high': 3.1, 'step': 0.2, 'round': 1},
+        'a':{'low': 2.1, 'high': 3.1, 'step': 0.2, 'round': 1},
         'h0':{'low': 30000, 'high': 50000, 'step': 2000, 'round': 0},
         'tau0':{'low': 660, 'high': 700, 'step': 5, 'round': 0},
         'taucs':{'low': 500, 'high': 1000, 'step': 50, 'round': 0}
@@ -172,9 +172,9 @@ default_yield_512grains512 = {
 
 # Phenomenological parameters
     "PH": [
-        {'alpha': 2, 'h0': 1000, 'taucs': 250}, # PH1 curve
-        {'alpha': 2, 'h0': 1000, 'taucs': 250}, # PH2 curve
-        {'alpha': 2, 'h0': 1000, 'taucs': 250} # PH3 curve
+        {'a': 2, 'h0': 1000, 'taucs': 250}, # PH1 curve
+        {'a': 2, 'h0': 1000, 'taucs': 250}, # PH2 curve
+        {'a': 2, 'h0': 1000, 'taucs': 250} # PH3 curve
     ],
 
 # Dislocation-based parameters

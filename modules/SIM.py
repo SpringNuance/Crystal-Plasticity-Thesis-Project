@@ -74,7 +74,7 @@ class SIM:
     
     def edit_material_parameters_PH_RVE_1_40_D(self, params, job_path):
         # Edit the material.config file.
-        def alpha_edit(num):
+        def a_edit(num):
             return f'a_slip                  {num}\n'
 
         def h0_edit(num):
@@ -90,7 +90,7 @@ class SIM:
         with open(path) as f:
             lines = f.readlines()
         index = self.info["editLinesPH"]
-        lines[index[0]] = alpha_edit(params[0])
+        lines[index[0]] = a_edit(params[0])
         lines[index[1]] = h0_edit(params[1])
         lines[index[2]] = tau0_edit(params[2])
         lines[index[3]] = tausat_edit(params[3])
@@ -99,7 +99,7 @@ class SIM:
     
     def edit_material_parameters_PH_512grains512(self, params, job_path):
         # Edit the material.config file.
-        def alpha_edit(num):
+        def a_edit(num):
             return f'a_slip                  {num}\n'
 
         def h0_edit(num):
@@ -115,7 +115,7 @@ class SIM:
         with open(path) as f:
             lines = f.readlines()
         index = self.info["editLinesPH"]
-        lines[index[0]] = alpha_edit(params[0])
+        lines[index[0]] = a_edit(params[0])
         lines[index[1]] = h0_edit(params[1])
         lines[index[2]] = tau0_edit(params[2])
         lines[index[3]] = tausat_edit(params[3])
